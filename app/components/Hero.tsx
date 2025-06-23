@@ -5,7 +5,7 @@ import Image from "next/image";
 import duoPicMain from "@/public/img/duo-picmain.svg";
 export default function Hero() {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center w-full md:pt-36 pt-20 px-7 md:px-0 space-y-7 md:space-y-0 md:gap-2 text-left bg-gradient-to-b from-cyan-100/70">
+    <div className="flex flex-col md:flex-row items-center justify-center w-full md:pt-36 pt-20 px-7 md:px-0 space-y-7 md:space-y-0 md:gap-2 text-left bg-gradient-to-b from-cyan-100/70 pb-20 md:pb-36">
       {/* Left: Text Content */}
       <div className="flex-1 max-w-lg flex flex-col items-start justify-center space-y-7">
         <h1 className="relative font-extrabold tracking-tight leading-tight text-4xl text-gray-800 text-left">
