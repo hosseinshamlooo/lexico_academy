@@ -5,14 +5,16 @@ import Image from "next/image";
 import duoPicMain from "@/public/img/duo-picmain.svg";
 export default function Hero() {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center w-full md:pt-36 pt-20 px-7 md:px-0 space-y-7 md:space-y-0 md:gap-2 text-left bg-gradient-to-b from-cyan-100/70 pb-20 md:pb-36">
+    <div className="flex flex-col md:flex-row items-center justify-center w-full md:pt-36 pt-20 px-7 md:px-0 space-y-7 md:space-y-0 md:gap-2 text-left bg-gradient-to-b from-cyan-100/70 via-white to-cyan-100/70 pb-20 md:pb-36">
       {/* Left: Text Content */}
       <div className="flex-1 max-w-lg flex flex-col items-start justify-center space-y-7">
-        <h1 className="relative font-extrabold tracking-tight leading-tight text-6xl text-gray-800 text-left">
-          Prep smart. Score hard.
+        <h1 className="relative font-extrabold tracking-tight leading-tight text-5xl text-gray-800 text-left">
+          Prep smart.
+          <br />
+          Score hard.
           <br />
           Let&apos;s. Get.{" "}
-          <span className="relative inline-block text-primary">
+          <span className="relative inline-block text-primary text-5xl font-black">
             Cookin&apos;.
           </span>
         </h1>

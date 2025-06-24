@@ -69,3 +69,25 @@
   border-color: #1D5554;
   transition: transform 0.01s, box-shadow 0.01s;
 }
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.2);
+    opacity: 0.5;
+  }
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-pop {
+  animation: popIn 0.18s cubic-bezier(0.4,1.4,0.6,1);
+}
