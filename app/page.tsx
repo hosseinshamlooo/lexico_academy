@@ -11,6 +11,7 @@ import TableComparison from "./components/Table";
 import VideoSegment from "./components/Video";
 import Testimonials from "./components/Testimonials";
 import Pricing from "./components/Pricing";
+import Faqs from "./components/Faqs";
 
 const page = () => {
   return (
@@ -24,6 +25,7 @@ const page = () => {
       <VideoSegment />
       <Testimonials />
       <Pricing />
+      <Faqs />
     </div>
   );
 };
