@@ -68,7 +68,10 @@ export default function Faqs() {
   }
 
   return (
-    <section className="w-full py-16 flex justify-center bg-white" id="faqs">
+    <section
+      className="w-full py-16 flex justify-center bg-white relative overflow-hidden"
+      id="faqs"
+    >
       <div className="max-w-4xl w-full flex flex-col items-center px-4">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center tracking-tighter mb-4 text-primary font-[var(--font-body)]">
           Frequently Asked Questions
@@ -115,6 +118,8 @@ export default function Faqs() {
           ))}
         </div>
       </div>
+      {/* Gradient overlay at the bottom */}
+      <div className="pointer-events-none absolute left-0 right-0 bottom-0 h-16 md:h-20 bg-gradient-to-b from-transparent to-cyan-100/70 z-10" />
     </section>
   );
 }

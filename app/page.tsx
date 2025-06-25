@@ -12,6 +12,7 @@ import VideoSegment from "./components/Video";
 import Testimonials from "./components/Testimonials";
 import Pricing from "./components/Pricing";
 import Faqs from "./components/Faqs";
+import Cta from "./components/Cta";
 
 const page = () => {
   return (
@@ -26,6 +27,7 @@ const page = () => {
       <Testimonials />
       <Pricing />
       <Faqs />
+      <Cta />
     </div>
   );
 };
