@@ -91,3 +91,19 @@
 .animate-pop {
   animation: popIn 0.18s cubic-bezier(0.4,1.4,0.6,1);
 }
+
+.btn-lifted-green {
+  box-shadow: 0 6px 0 #219653 !important;
+  border-radius: 0.75rem !important;
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 0.5rem 1.5rem;
+  background: #215d5a;
+  color: #fff;
+  border: none;
+  transition: transform 0.05s, box-shadow 0.05s;
+}
+.btn-lifted-green:active {
+  transform: translateY(6px);
+  box-shadow: none !important;
+}

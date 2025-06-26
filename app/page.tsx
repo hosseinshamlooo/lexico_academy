@@ -13,6 +13,7 @@ import Testimonials from "./components/Testimonials";
 import Pricing from "./components/Pricing";
 import Faqs from "./components/Faqs";
 import Cta from "./components/Cta";
+import Footer from "./components/Footer";
 
 const page = () => {
   return (
@@ -28,6 +29,7 @@ const page = () => {
       <Pricing />
       <Faqs />
       <Cta />
+      <Footer />
     </div>
   );
 };

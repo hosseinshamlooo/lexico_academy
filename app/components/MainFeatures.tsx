@@ -122,7 +122,10 @@ const features = [
 
 const MainFeatures = () => {
   return (
-    <section className="w-full py-16 bg-cyan-100/70 flex justify-center">
+    <section
+      className="w-full py-16 bg-cyan-100/70 flex justify-center"
+      id="features"
+    >
       <div className="max-w-5xl w-full flex flex-col md:flex-row justify-between items-center gap-12 md:gap-0 px-7 md:px-0">
         {features.map((feature, idx) => (
           <div
