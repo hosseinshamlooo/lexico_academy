@@ -1,6 +1,10 @@
 "use client";
 
-import { useUser, RedirectToSignIn, UserButton } from "@clerk/nextjs";
+import { useUser, RedirectToSignIn } from "@clerk/nextjs";
+import DashboardHeader from "../components/DashboardHeader";
+import CardProfileSummary from "../components/CardProfileSummary";
+import SidebarMenu from "../components/SidebarMenu";
+import CardPracticeQuestions from "../components/CardPracticeQuestions";
 
 export default function DashboardPage() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -9,22 +13,31 @@ export default function DashboardPage() {
   if (!isSignedIn) return <RedirectToSignIn />;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-cyan-100/70 relative">
-      <div className="absolute top-6 right-6">
-        <UserButton afterSignOutUrl="/" />
-      </div>
-      <div className="bg-white rounded-2xl shadow-xl p-10 border-2 border-cyan-200 max-w-lg w-full text-center">
-        <h1 className="text-3xl font-extrabold text-[#1D5554] mb-4">
-          Welcome, {user?.firstName || user?.username || "User"}!
-        </h1>
-        <p className="text-lg text-gray-600 mb-2">
-          This is your dashboard. You are signed in.
-        </p>
-        <div className="mt-6">
-          <span className="block text-gray-400 text-sm">Email:</span>
-          <span className="block text-[#1D5554] font-bold">
-            {user?.emailAddresses?.[0]?.emailAddress}
-          </span>
+    <div className="min-h-screen">
+      {/* Header at the top */}
+      <DashboardHeader
+        userName={
+          user?.username ||
+          user?.firstName ||
+          user?.emailAddresses?.[0]?.emailAddress
+        }
+      />
+      <CardProfileSummary
+        name={user?.firstName || user?.username || "User"}
+        username={user?.username || "User"}
+        streak={10}
+        xp={100}
+        level={2}
+        skillsUnlocked={3}
+        totalSkills={10}
+      />
+      {/* Flex container for sidebar and main content */}
+      <div className="flex flex-col md:flex-row gap-6 mt-6">
+        <div className="md:w-1/4">
+          <SidebarMenu />
+        </div>
+        <div className="flex-1">
+          <CardPracticeQuestions />
         </div>
       </div>
     </div>
