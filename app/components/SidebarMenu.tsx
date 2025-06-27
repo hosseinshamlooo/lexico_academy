@@ -41,11 +41,11 @@ export default function SidebarMenu() {
         {mainMenuItems.map((item) => (
           <button
             key={item.label}
-            className={`flex items-center gap-4 px-4 py-3 rounded-xl text-lg font-bold transition-all duration-150
+            className={`flex items-center gap-4 px-4 py-3 rounded-xl text-lg font-bold transition-all duration-200
               ${
                 item.active
-                  ? "bg-cyan-100 border-2 border-cyan-400 text-cyan-900 shadow"
-                  : "hover:bg-cyan-50 hover:text-cyan-900"
+                  ? "bg-[#1D5554] text-white shadow-md"
+                  : "hover:bg-[#E8F5F5] hover:text-[#1D5554]"
               }
             `}
           >
@@ -60,8 +60,8 @@ export default function SidebarMenu() {
         {bottomMenuItems.map((item) => (
           <button
             key={item.label}
-            className={`flex items-center gap-4 px-4 py-3 rounded-xl text-lg font-bold transition-all duration-150
-              hover:bg-cyan-50 hover:text-cyan-900
+            className={`flex items-center gap-4 px-4 py-3 rounded-xl text-lg font-bold transition-all duration-200
+              hover:bg-[#E8F5F5] hover:text-[#1D5554]
             `}
           >
             {item.icon}
