@@ -4,6 +4,7 @@ import { useState } from "react";
 import DashboardHeader from "@/app/components/DashboardHeader";
 import ProgressBarOnboarding from "@/app/components/ProgressBarOnboarding";
 import OnboardingContinueButton from "@/app/components/OnboardingContinueButton";
+import { useRouter } from "next/navigation";
 
 const englishLevels = [
   { label: "I'm new to English", value: "beginner", icon: "📶" },
@@ -34,6 +35,13 @@ const ieltsFamiliarity = [
 export default function PageSkillOnboarding() {
   const [english, setEnglish] = useState<string | null>(null);
   const [ielts, setIelts] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleContinue = () => {
+    if (english && ielts) {
+      router.push("/onboarding/plan");
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -111,7 +119,7 @@ export default function PageSkillOnboarding() {
             </div>
           </div>
           <OnboardingContinueButton
-            onClick={() => {}}
+            onClick={handleContinue}
             disabled={!(english && ielts)}
           >
             Continue
