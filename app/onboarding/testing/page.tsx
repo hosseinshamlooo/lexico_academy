@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import DashboardHeader from "@/app/components/DashboardHeader";
-import ProgressBarOnboarding from "@/app/components/ProgressBarOnboarding";
 import OnboardingContinueButton from "@/app/components/OnboardingContinueButton";
+import { useRouter } from "next/navigation";
 
 export default function PageTestingOnboarding() {
   const [testDate, setTestDate] = useState("");
@@ -15,6 +14,7 @@ export default function PageTestingOnboarding() {
     writing: "",
     speaking: "",
   });
+  const router = useRouter();
 
   const isContinueEnabled =
     testDate &&
@@ -24,13 +24,17 @@ export default function PageTestingOnboarding() {
     targetScores.writing &&
     targetScores.speaking;
 
+  const handleContinue = () => {
+    if (isContinueEnabled) {
+      router.push("/onboarding/plan");
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
-      <DashboardHeader />
       <main className="flex flex-col items-center w-full max-w-2xl mx-auto px-4 py-8 flex-1">
-        <ProgressBarOnboarding step={4} total={5} />
         <div className="w-full bg-white p-8 flex flex-col items-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#1D5554] text-center tracking-tight whitespace-nowrap mt-8">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-[#1D5554] text-center tracking-tight whitespace-nowrap">
             Test History & Goals
           </h1>
           <p className="text-2xl text-gray-600 mb-10 mt-8 text-center font-bold tracking-tighter">
@@ -146,7 +150,7 @@ export default function PageTestingOnboarding() {
             </div>
           </div>
           <OnboardingContinueButton
-            onClick={() => {}}
+            onClick={handleContinue}
             disabled={!isContinueEnabled}
           >
             Continue

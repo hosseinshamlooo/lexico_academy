@@ -2,39 +2,44 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import DashboardHeader from "@/app/components/DashboardHeader";
-
-// Progress bar component
-function ProgressBarOnboarding({
-  step,
-  total,
-}: {
-  step: number;
-  total: number;
-  forceZeroStart: boolean;
-}) {
-  const percent = (step / total) * 100;
-  return (
-    <div className="w-full flex justify-center">
-      <div className="w-full h-3 bg-gray-200 rounded-full">
-        <div
-          className="h-3 bg-[#1D5554] transition-all duration-500 rounded-full"
-          style={{ width: `${percent}%` }}
-        />
-      </div>
-    </div>
-  );
-}
+import { FaUserFriends } from "react-icons/fa";
+import { FaTv } from "react-icons/fa6";
+import { FaYoutube } from "react-icons/fa";
+import { FiInstagram } from "react-icons/fi";
+import { FaGoogle } from "react-icons/fa";
+import { FaTiktok } from "react-icons/fa6";
+import { MdArticle } from "react-icons/md";
+import { IoSparkles } from "react-icons/io5";
 
 const options = [
-  { label: "Friends/Family", value: "friends-family", icon: "🧑‍🤝‍🧑" },
-  { label: "TV", value: "tv", icon: "📺" },
-  { label: "YouTube", value: "youtube", icon: "📺" },
-  { label: "Instagram/Facebook", value: "instagram-facebook", icon: "📱" },
-  { label: "Google Search", value: "google-search", icon: "🌐" },
-  { label: "TikTok", value: "tiktok", icon: "🎵" },
-  { label: "News, Articles, Blogs", value: "news-articles-blogs", icon: "📰" },
-  { label: "Other", value: "other", icon: "✨" },
+  {
+    label: "Friends/Family",
+    value: "friends-family",
+    icon: <FaUserFriends className="w-6 h-6" />,
+  },
+  { label: "TV", value: "tv", icon: <FaTv className="w-6 h-6" /> },
+  {
+    label: "YouTube",
+    value: "youtube",
+    icon: <FaYoutube className="w-6 h-6" />,
+  },
+  {
+    label: "Instagram/Facebook",
+    value: "instagram-facebook",
+    icon: <FiInstagram className="w-6 h-6" />,
+  },
+  {
+    label: "Google Search",
+    value: "google-search",
+    icon: <FaGoogle className="w-6 h-6" />,
+  },
+  { label: "TikTok", value: "tiktok", icon: <FaTiktok className="w-6 h-6" /> },
+  {
+    label: "News, Articles, Blogs",
+    value: "news-articles-blogs",
+    icon: <MdArticle className="w-6 h-6" />,
+  },
+  { label: "Other", value: "other", icon: <IoSparkles className="w-6 h-6" /> },
 ];
 
 export default function PageWelcomeOnboarding() {
@@ -50,16 +55,9 @@ export default function PageWelcomeOnboarding() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <DashboardHeader />
       <main className="flex flex-col items-center w-full max-w-xl mx-auto px-4 py-8 flex-1">
-        <ProgressBarOnboarding
-          key="welcome-progress-bar"
-          step={1}
-          total={5}
-          forceZeroStart
-        />
         <div className="w-full bg-white p-8 flex flex-col items-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#1D5554] text-center tracking-tight whitespace-nowrap mt-8">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-[#1D5554] text-center tracking-tight whitespace-nowrap">
             Welcome to Lexico Academy!
           </h1>
           <p className="text-3xl text-gray-600 mb-4 mt-8 text-center font-bold tracking-tighter">
@@ -75,17 +73,25 @@ export default function PageWelcomeOnboarding() {
                   key={opt.value}
                   type="button"
                   onClick={() => setSelected(opt.value)}
-                  className={`flex items-center gap-3 px-8 py-5 rounded-2xl border-2 transition-all duration-200 font-bold text-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D9F061] focus:border-[#D9F061] bg-white w-[340px] break-words
+                  className={`relative rounded-3xl p-6 w-[340px] transition-all duration-300 border shadow-md flex items-center gap-3 group focus:outline-none
                     ${
                       selected === opt.value
-                        ? "border-[#1D5554] bg-[#D9F061]/80 text-[#1D5554] scale-105 shadow-lg"
-                        : "border-gray-200 text-gray-700 hover:border-[#1D5554] hover:bg-[#D9F061]/40"
+                        ? "bg-[#1D5554] border-[#1D5554] text-white scale-105 shadow-2xl -translate-y-2"
+                        : "bg-white border-gray-200 text-gray-700 hover:-translate-y-2 hover:shadow-2xl hover:bg-[#1D5554] hover:border-[#1D5554] hover:text-white"
                     }
                   `}
                   aria-pressed={selected === opt.value}
                 >
-                  <span className="text-2xl">{opt.icon}</span>
-                  <span className="flex-1 text-left break-words">
+                  <span
+                    className={`transition-all duration-300 ${
+                      selected === opt.value
+                        ? "text-white"
+                        : "text-gray-600 group-hover:text-white"
+                    }`}
+                  >
+                    {opt.icon}
+                  </span>
+                  <span className="flex-1 text-left break-words font-bold text-xl">
                     {opt.label}
                   </span>
                 </button>
@@ -95,8 +101,10 @@ export default function PageWelcomeOnboarding() {
           <button
             type="button"
             onClick={handleContinue}
-            className={`w-[450px] h-[60px] mt-4 btn-lifted-green rounded-xl py-6 text-2xl font-bold transition-all duration-200 mx-auto ${
-              !selected ? "opacity-60 cursor-not-allowed" : ""
+            className={`w-[450px] h-[60px] mt-4 rounded-full font-bold py-3 px-8 transition-all duration-300 text-base shadow-md mx-auto ${
+              !selected
+                ? "opacity-60 cursor-not-allowed bg-gray-300 text-gray-500"
+                : "bg-[#1D5554] text-white border-2 border-[#1D5554] hover:bg-[#17403f] hover:text-white hover:-translate-y-1 hover:shadow-lg"
             }`}
             disabled={!selected}
           >

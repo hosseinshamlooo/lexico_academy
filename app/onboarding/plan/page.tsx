@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import DashboardHeader from "@/app/components/DashboardHeader";
-import ProgressBarOnboarding from "@/app/components/ProgressBarOnboarding";
 import OnboardingContinueButton from "@/app/components/OnboardingContinueButton";
 
 const planOptions = [
@@ -27,11 +25,9 @@ export default function PagePlanOnboarding() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <DashboardHeader />
       <main className="flex flex-col items-center w-full max-w-xl mx-auto px-4 py-8 flex-1">
-        <ProgressBarOnboarding step={5} total={5} />
         <div className="w-full bg-white p-8 flex flex-col items-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#1D5554] text-center tracking-tight whitespace-nowrap mt-8">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-[#1D5554] text-center tracking-tight whitespace-nowrap">
             Learning Plan
           </h1>
           <p className="text-2xl text-gray-600 mb-10 mt-8 text-center font-bold tracking-tighter">

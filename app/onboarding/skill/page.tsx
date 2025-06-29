@@ -1,35 +1,61 @@
 "use client";
 
 import { useState } from "react";
-import DashboardHeader from "@/app/components/DashboardHeader";
-import ProgressBarOnboarding from "@/app/components/ProgressBarOnboarding";
 import OnboardingContinueButton from "@/app/components/OnboardingContinueButton";
 import { useRouter } from "next/navigation";
+import {
+  TbAntennaBars1,
+  TbAntennaBars2,
+  TbAntennaBars3,
+  TbAntennaBars4,
+  TbAntennaBars5,
+} from "react-icons/tb";
+import { FaCircleQuestion, FaLightbulb, FaBookOpen } from "react-icons/fa6";
 
 const englishLevels = [
-  { label: "I'm new to English", value: "beginner", icon: "📶" },
-  { label: "I know some common words", value: "common-words", icon: "📶" },
+  {
+    label: "I'm new to English",
+    value: "beginner",
+    icon: <TbAntennaBars1 className="w-10 h-10" strokeWidth={3} />,
+  },
+  {
+    label: "I know some common words",
+    value: "common-words",
+    icon: <TbAntennaBars2 className="w-10 h-10" strokeWidth={3} />,
+  },
   {
     label: "I can have basic conversations",
     value: "basic-conversations",
-    icon: "📶",
+    icon: <TbAntennaBars3 className="w-10 h-10" strokeWidth={3} />,
   },
   {
     label: "I can talk about various topics",
     value: "various-topics",
-    icon: "📶",
+    icon: <TbAntennaBars4 className="w-10 h-10" strokeWidth={3} />,
   },
   {
     label: "I can discuss most topics in detail",
     value: "detailed-topics",
-    icon: "📶",
+    icon: <TbAntennaBars5 className="w-10 h-10" strokeWidth={3} />,
   },
 ];
 
 const ieltsFamiliarity = [
-  { label: "Never heard of it", value: "never-heard", icon: "❓" },
-  { label: "Know a little", value: "know-little", icon: "📖" },
-  { label: "Taken prep classes", value: "prep-classes", icon: "🏫" },
+  {
+    label: "Never heard of it",
+    value: "never-heard",
+    icon: <FaCircleQuestion className="w-8 h-8" />,
+  },
+  {
+    label: "Know a little",
+    value: "know-little",
+    icon: <FaLightbulb className="w-8 h-8" />,
+  },
+  {
+    label: "Taken prep classes",
+    value: "prep-classes",
+    icon: <FaBookOpen className="w-8 h-8" />,
+  },
 ];
 
 export default function PageSkillOnboarding() {
@@ -39,17 +65,15 @@ export default function PageSkillOnboarding() {
 
   const handleContinue = () => {
     if (english && ielts) {
-      router.push("/onboarding/plan");
+      router.push("/onboarding/testing");
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col">
-      <DashboardHeader />
       <main className="flex flex-col items-center w-full max-w-3xl mx-auto px-4 py-8 flex-1">
-        <ProgressBarOnboarding step={3} total={5} />
         <div className="w-full bg-white p-8 flex flex-col items-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#1D5554] text-center tracking-tight whitespace-nowrap mt-8">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-[#1D5554] text-center tracking-tight whitespace-nowrap">
             Your English & IELTS Skills
           </h1>
           <p className="text-2xl text-gray-600 mb-10 mt-8 text-center font-bold tracking-tighter">
@@ -68,17 +92,27 @@ export default function PageSkillOnboarding() {
                       key={opt.value}
                       type="button"
                       onClick={() => setEnglish(opt.value)}
-                      className={`flex items-center gap-4 px-8 py-5 rounded-2xl border-2 transition-all duration-200 font-bold text-lg shadow-sm w-[400px] text-left
+                      className={`relative rounded-3xl p-6 w-[400px] transition-all duration-300 border shadow-md flex items-center gap-4 group focus:outline-none
                         ${
                           english === opt.value
-                            ? "border-[#1D5554] bg-[#D9F061]/80 text-[#1D5554]"
-                            : "border-gray-200 bg-white text-gray-700 hover:border-[#1D5554] hover:bg-[#D9F061]/40"
+                            ? "bg-[#1D5554] border-[#1D5554] text-white scale-105 shadow-2xl -translate-y-2"
+                            : "bg-white border-gray-200 text-gray-700 hover:-translate-y-2 hover:shadow-2xl hover:bg-[#1D5554] hover:border-[#1D5554] hover:text-white"
                         }
                       `}
                       aria-pressed={english === opt.value}
                     >
-                      <span className="text-2xl text-blue-400">{opt.icon}</span>
-                      <span className="flex-1 font-semibold">{opt.label}</span>
+                      <span
+                        className={`transition-all duration-300 ${
+                          english === opt.value
+                            ? "text-white"
+                            : "text-gray-600 group-hover:text-white"
+                        }`}
+                      >
+                        {opt.icon}
+                      </span>
+                      <span className="flex-1 text-left break-words font-bold text-xl">
+                        {opt.label}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -98,18 +132,26 @@ export default function PageSkillOnboarding() {
                       key={opt.value}
                       type="button"
                       onClick={() => english && setIelts(opt.value)}
-                      className={`flex items-center gap-3 px-8 py-5 rounded-2xl border-2 transition-all duration-200 font-bold text-lg shadow-sm w-[400px] focus:outline-none focus:ring-2 focus:ring-[#D9F061] focus:border-[#D9F061] bg-white 
+                      className={`relative rounded-3xl p-6 w-[400px] transition-all duration-300 border shadow-md flex items-center gap-4 group focus:outline-none
                         ${
                           ielts === opt.value
-                            ? "border-[#1D5554] bg-[#D9F061]/80 text-[#1D5554]"
-                            : "border-gray-200 text-gray-700 hover:border-[#1D5554] hover:bg-[#D9F061]/40"
+                            ? "bg-[#1D5554] border-[#1D5554] text-white scale-105 shadow-2xl -translate-y-2"
+                            : "bg-white border-gray-200 text-gray-700 hover:-translate-y-2 hover:shadow-2xl hover:bg-[#1D5554] hover:border-[#1D5554] hover:text-white"
                         }
                       `}
                       aria-pressed={ielts === opt.value}
                       disabled={!english}
                     >
-                      <span className="text-2xl">{opt.icon}</span>
-                      <span className="flex-1 text-left font-semibold">
+                      <span
+                        className={`transition-all duration-300 ${
+                          ielts === opt.value
+                            ? "text-white"
+                            : "text-gray-600 group-hover:text-white"
+                        }`}
+                      >
+                        {opt.icon}
+                      </span>
+                      <span className="flex-1 text-left break-words font-bold text-xl">
                         {opt.label}
                       </span>
                     </button>

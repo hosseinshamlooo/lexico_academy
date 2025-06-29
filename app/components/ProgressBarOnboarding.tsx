@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 
 export default function ProgressBarOnboarding(props: {
@@ -35,10 +36,10 @@ export default function ProgressBarOnboarding(props: {
   }, [step, percent, forceZeroStart]);
 
   return (
-    <div className="w-full flex justify-center">
-      <div className="w-full h-3 bg-gray-200 rounded-full">
+    <div className="w-full">
+      <div className="w-[600px] mx-auto h-3 bg-gray-200 rounded-full mt-12">
         <div
-          className="h-3 bg-[#1D5554] transition-all duration-1000 rounded-full"
+          className="h-3 bg-[#1D5554] transition-all duration-[900ms] rounded-full"
           style={{ width: `${fill}%` }}
         />
       </div>
