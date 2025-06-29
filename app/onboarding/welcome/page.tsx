@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import OnboardingContinueButton from "@/app/components/OnboardingContinueButton";
 import { FaUserFriends } from "react-icons/fa";
 import { FaTv } from "react-icons/fa6";
 import { FaYoutube } from "react-icons/fa";
-import { FiInstagram } from "react-icons/fi";
 import { FaGoogle } from "react-icons/fa";
 import { FaTiktok } from "react-icons/fa6";
+import { AiFillInstagram } from "react-icons/ai";
 import { MdArticle } from "react-icons/md";
 import { IoSparkles } from "react-icons/io5";
 
@@ -26,7 +27,7 @@ const options = [
   {
     label: "Instagram/Facebook",
     value: "instagram-facebook",
-    icon: <FiInstagram className="w-6 h-6" />,
+    icon: <AiFillInstagram className="w-6 h-6" />,
   },
   {
     label: "Google Search",
@@ -98,18 +99,12 @@ export default function PageWelcomeOnboarding() {
               ))}
             </div>
           </div>
-          <button
-            type="button"
+          <OnboardingContinueButton
             onClick={handleContinue}
-            className={`w-[450px] h-[60px] mt-4 rounded-full font-bold py-3 px-8 transition-all duration-300 text-base shadow-md mx-auto ${
-              !selected
-                ? "opacity-60 cursor-not-allowed bg-gray-300 text-gray-500"
-                : "bg-[#1D5554] text-white border-2 border-[#1D5554] hover:bg-[#17403f] hover:text-white hover:-translate-y-1 hover:shadow-lg"
-            }`}
             disabled={!selected}
           >
-            <span className="text-xl">Continue</span>
-          </button>
+            Continue
+          </OnboardingContinueButton>
         </div>
       </main>
     </div>

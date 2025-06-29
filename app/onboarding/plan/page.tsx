@@ -4,24 +4,35 @@ import { useState } from "react";
 import OnboardingContinueButton from "@/app/components/OnboardingContinueButton";
 
 const planOptions = [
-  { value: "15", label: "15 min / day", tag: "Casual" },
-  { value: "30", label: "30 min / day", tag: "Regular" },
-  { value: "45", label: "45 min / day", tag: "Serious" },
-  { value: "60", label: "1 hr+ / day", tag: "Intense" },
+  { value: "30", label: "30 min / day", tag: "Casual" },
+  { value: "60", label: "60 min / day", tag: "Regular" },
+  { value: "90", label: "90 min / day", tag: "Serious" },
+  { value: "120", label: "120 min / day", tag: "Intense" },
 ];
 
 export default function PagePlanOnboarding() {
   const [selected, setSelected] = useState<string | null>(null);
 
-  // Example motivational text (could be dynamic)
-  const motivation = selected
-    ? `With ${planOptions
-        .find((o) => o.value === selected)
-        ?.label.replace(
-          " / day",
-          ""
-        )} a day, you could boost your score by 1.5 bands by your test date!`
-    : "With 30 mins a day, you could boost your score by 1.5 bands by your test date!";
+  // Conditional motivational text based on selected study time
+  const getMotivationText = (selectedValue: string | null) => {
+    if (!selectedValue) {
+      return "With 30 mins a day, you could boost your score by 0.25 bands by your test date!";
+    }
+
+    const timeMap: { [key: string]: string } = {
+      "30": "0.25 band increase",
+      "60": "0.5 band increase",
+      "90": "1 band increase",
+      "120": "1.5 band increase",
+    };
+
+    const bandIncrease = timeMap[selectedValue];
+    const selectedOption = planOptions.find(
+      (opt) => opt.value === selectedValue
+    );
+
+    return `With ${selectedOption?.label}, you could boost your score by ${bandIncrease} by your test date!`;
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -43,17 +54,25 @@ export default function PagePlanOnboarding() {
                   key={opt.value}
                   type="button"
                   onClick={() => setSelected(opt.value)}
-                  className={`flex items-center justify-between px-8 py-5 rounded-2xl border-2 transition-all duration-200 font-bold text-xl shadow-sm w-full text-left
+                  className={`relative rounded-3xl p-6 w-full transition-all duration-300 border shadow-md flex items-center justify-between group focus:outline-none
                     ${
                       selected === opt.value
-                        ? "border-[#1D5554] bg-[#D9F061]/80 text-[#1D5554]"
-                        : "border-gray-200 bg-white text-gray-700 hover:border-[#1D5554] hover:bg-[#D9F061]/40"
+                        ? "bg-[#1D5554] border-[#1D5554] text-white scale-105 shadow-2xl -translate-y-2"
+                        : "bg-white border-gray-200 text-gray-700 hover:-translate-y-2 hover:shadow-2xl hover:bg-[#1D5554] hover:border-[#1D5554] hover:text-white"
                     }
                   `}
                   aria-pressed={selected === opt.value}
                 >
-                  <span className="font-semibold">{opt.label}</span>
-                  <span className="text-lg font-bold text-gray-400 ml-8">
+                  <span className="flex-1 text-left font-bold text-xl">
+                    {opt.label}
+                  </span>
+                  <span
+                    className={`text-lg font-bold ml-8 transition-all duration-300 ${
+                      selected === opt.value
+                        ? "text-white"
+                        : "text-gray-400 group-hover:text-white"
+                    }`}
+                  >
                     {opt.tag}
                   </span>
                 </button>
@@ -61,8 +80,8 @@ export default function PagePlanOnboarding() {
             </div>
           </div>
           <div className="w-full flex flex-col items-center mb-8">
-            <div className="text-xl md:text-2xl font-bold text-[#1D5554] text-center bg-[#D9F061]/60 rounded-xl px-6 py-4 shadow mt-2">
-              {motivation}
+            <div className="text-xl md:text-2xl font-bold text-[#1D5554] text-center bg-[#D9F061]/60 rounded-xl px-6 py-4 shadow mt-2 tracking-tighter motivation-text">
+              {getMotivationText(selected)}
             </div>
           </div>
           <OnboardingContinueButton onClick={() => {}} disabled={!selected}>
