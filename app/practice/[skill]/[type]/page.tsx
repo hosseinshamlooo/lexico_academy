@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import PracticeHeader from "@/app/components/PracticeHeader";
 import CardPracticePassage from "@/app/components/CardPracticePassage";
 import CardPracticeQuestions from "@/app/components/CardPracticeQuestionsItem";
@@ -25,11 +26,13 @@ type Question = PracticeData["questionSet"]["questions"][0];
 export default function PracticePage() {
   const [data, setData] = useState<PracticeData | null>(null);
   const [loading, setLoading] = useState(true);
+  const params = useParams();
+  const type = params?.type as string;
 
   useEffect(() => {
     async function fetchPracticeData() {
       try {
-        const response = await fetch("/api/practice");
+        const response = await fetch(`/api/practice?type=${type}`);
         const practiceData = await response.json();
         setData(practiceData);
       } catch (error) {
@@ -39,8 +42,10 @@ export default function PracticePage() {
       }
     }
 
-    fetchPracticeData();
-  }, []);
+    if (type) {
+      fetchPracticeData();
+    }
+  }, [type]);
 
   if (loading) {
     return (

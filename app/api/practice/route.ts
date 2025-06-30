@@ -5,18 +5,52 @@ interface QuestionData {
   id: string;
   question: string;
   options?: string[];
-  answer: string;
+  answer: string | string[];
 }
 
-export async function GET() {
+interface QuestionSet {
+  type: string;
+  instructions: string;
+  questions: QuestionData[];
+}
+
+interface Passage {
+  passageId: string;
+  title: string;
+  passage: string;
+  questionSets: QuestionSet[];
+}
+
+export async function GET(request: Request) {
   try {
-    // Get the first passage from the reading data
-    const passage = readingData[0];
-    
-    // For now, let's use the first question set (TrueFalseNotGiven)
-    const questionSet = passage.questionSets[0];
-    
-    // Transform the data to match the frontend's expected format
+    const { searchParams } = new URL(request.url);
+    const type = searchParams.get('type');
+
+    let passage: Passage | undefined;
+    let questionSet: QuestionSet | undefined;
+
+    if (type) {
+      passage = (readingData as Passage[]).find((p) =>
+        p.questionSets.some((qs) => qs.type === type)
+      );
+      if (!passage) {
+        return NextResponse.json(
+          { error: `No passage found for type '${type}'` },
+          { status: 404 }
+        );
+      }
+      questionSet = passage.questionSets.find((qs) => qs.type === type);
+      if (!questionSet) {
+        return NextResponse.json(
+          { error: `No question set found for type '${type}'` },
+          { status: 404 }
+        );
+      }
+    } else {
+      passage = (readingData as Passage[])[0];
+      questionSet = passage.questionSets[0];
+    }
+
     const responseData = {
       passage: {
         title: passage.title,
@@ -31,7 +65,7 @@ export async function GET() {
         }))
       }
     };
-    
+
     return NextResponse.json(responseData);
   } catch (error) {
     console.error('Error fetching practice data:', error);
