@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
 import PracticeHeader from "@/app/components/PracticeHeader";
+import { useParams } from "next/navigation";
 import CardPracticePassage from "@/app/components/CardPracticePassage";
-import CardPracticeQuestions from "@/app/components/CardPracticeQuestionsItem";
+import CardPracticeQuestionsMCQ from "@/app/components/CardPracticeQuestionsMCQ";
+import CardPracticeQuestionsCompletion from "@/app/components/CardPracticeQuestionsCompletion";
 
 interface PracticeData {
   passage: {
@@ -16,18 +17,20 @@ interface PracticeData {
       id: number;
       question: string;
       options?: string[];
-      answer: string;
+      answer?: string;
+      correctAnswer?: number;
     }>;
+    type?: string;
   };
 }
 
 type Question = PracticeData["questionSet"]["questions"][0];
 
 export default function PracticePage() {
-  const [data, setData] = useState<PracticeData | null>(null);
-  const [loading, setLoading] = useState(true);
   const params = useParams();
   const type = params?.type as string;
+  const [data, setData] = useState<PracticeData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchPracticeData() {
@@ -42,9 +45,7 @@ export default function PracticePage() {
       }
     }
 
-    if (type) {
-      fetchPracticeData();
-    }
+    if (type) fetchPracticeData();
   }, [type]);
 
   if (loading) {
@@ -58,7 +59,7 @@ export default function PracticePage() {
     );
   }
 
-  if (!data) {
+  if (!data || !data.questionSet) {
     return (
       <div className="min-h-screen bg-cyan-50 flex items-center justify-center">
         <div className="text-center">
@@ -69,15 +70,37 @@ export default function PracticePage() {
   }
 
   const { passage, questionSet } = data;
+  const questionType = questionSet.type || "mcq";
 
   // Transform the data to match the component's expected format
+  const isMCQType = ["MultipleChoice", "TrueFalseNotGiven", "mcq"].includes(
+    questionType
+  );
   const transformedQuestionSet = {
-    questions: questionSet.questions.map((q: Question, index: number) => ({
-      id: index + 1,
-      question: q.question,
-      options: q.options || [q.answer], // For table completion, use answer as option
-      correctAnswer: q.options ? q.options.indexOf(q.answer) : 0,
-    })),
+    questions: questionSet.questions.map((q: Question, index: number) => {
+      if (isMCQType) {
+        return {
+          id: index + 1,
+          question: q.question,
+          options: q.options || [],
+          correctAnswer:
+            typeof q.correctAnswer === "number"
+              ? q.correctAnswer
+              : q.options
+              ? q.options.indexOf(typeof q.answer === "string" ? q.answer : "")
+              : 0,
+          answer: typeof q.answer === "string" ? q.answer : "",
+        };
+      } else {
+        return {
+          id: index + 1,
+          question: q.question,
+          answer: typeof q.answer === "string" ? q.answer : "",
+          options: [],
+          correctAnswer: 0,
+        };
+      }
+    }),
   };
 
   return (
@@ -91,7 +114,13 @@ export default function PracticePage() {
           />
         </div>
         <div className="flex-1">
-          <CardPracticeQuestions questionSet={transformedQuestionSet} />
+          {isMCQType ? (
+            <CardPracticeQuestionsMCQ questionSet={transformedQuestionSet} />
+          ) : (
+            <CardPracticeQuestionsCompletion
+              questionSet={transformedQuestionSet}
+            />
+          )}
         </div>
       </div>
     </div>

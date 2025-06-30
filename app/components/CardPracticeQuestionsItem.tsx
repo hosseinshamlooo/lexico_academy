@@ -3,29 +3,33 @@ import React, { useState } from "react";
 interface Question {
   id: number;
   question: string;
-  options: string[];
+  options?: string[];
   correctAnswer: number;
+  answer?: string; // For completion types
 }
 
 interface CardPracticeQuestionsItemProps {
   questionSet: {
     questions: Question[];
   };
+  type: string;
 }
 
 function CardPracticeQuestionsItem({
   questionSet,
+  type,
 }: CardPracticeQuestionsItemProps) {
   const [selectedAnswers, setSelectedAnswers] = useState<{
-    [key: number]: number;
+    [key: number]: number | string;
   }>({});
   const [submitted, setSubmitted] = useState(false);
 
-  const handleAnswerSelect = (questionId: number, optionIndex: number) => {
+  // Accept value as number (for MCQ) or string (for completion)
+  const handleAnswerSelect = (questionId: number, value: number | string) => {
     if (!submitted) {
       setSelectedAnswers((prev) => ({
         ...prev,
-        [questionId]: optionIndex,
+        [questionId]: value,
       }));
     }
   };
@@ -57,8 +61,19 @@ function CardPracticeQuestionsItem({
   const calculateScore = () => {
     let correct = 0;
     questionSet.questions.forEach((question) => {
-      if (selectedAnswers[question.id] === question.correctAnswer) {
-        correct++;
+      if (type === "NoteCompletion" || type === "TableCompletion") {
+        if (
+          (selectedAnswers[question.id] || "")
+            .toString()
+            .trim()
+            .toLowerCase() === (question.answer || "").trim().toLowerCase()
+        ) {
+          correct++;
+        }
+      } else {
+        if (selectedAnswers[question.id] === question.correctAnswer) {
+          correct++;
+        }
       }
     });
     return { correct, total: questionSet.questions.length };
@@ -97,30 +112,49 @@ function CardPracticeQuestionsItem({
             </h3>
 
             <div className="space-y-2">
-              {question.options.map((option, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleAnswerSelect(question.id, index)}
+              {(type === "TrueFalseNotGiven" || type === "MatchingHeadings") &&
+                question.options &&
+                question.options.map((option, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswerSelect(question.id, index)}
+                    disabled={submitted}
+                    className={`w-full text-left p-3 rounded-lg border-2 transition-all duration-200 ${getOptionStyle(
+                      question.id,
+                      index
+                    )}`}
+                  >
+                    <span className="font-medium mr-2">
+                      {String.fromCharCode(65 + index)}.
+                    </span>
+                    {option}
+                  </button>
+                ))}
+              {type === "NoteCompletion" && (
+                <input
+                  type="text"
+                  value={selectedAnswers[question.id] || ""}
+                  onChange={(e) =>
+                    handleAnswerSelect(question.id, e.target.value)
+                  }
                   disabled={submitted}
-                  className={`w-full text-left p-3 rounded-lg border-2 transition-all duration-200 ${getOptionStyle(
-                    question.id,
-                    index
-                  )}`}
-                >
-                  <span className="font-medium mr-2">
-                    {String.fromCharCode(65 + index)}.
-                  </span>
-                  {option}
-                </button>
-              ))}
+                  className="w-full p-3 rounded-lg border-2 border-gray-300 hover:border-blue-500 focus:border-blue-500"
+                />
+              )}
             </div>
 
             {submitted && (
               <div className="mt-3 p-3 rounded-lg bg-gray-50">
                 <p className="text-sm text-gray-700">
                   <span className="font-medium">Correct answer:</span>{" "}
-                  {String.fromCharCode(65 + question.correctAnswer)}.{" "}
-                  {question.options[question.correctAnswer]}
+                  {type === "NoteCompletion" || type === "TableCompletion"
+                    ? question.answer
+                    : question.options &&
+                      question.options[question.correctAnswer] !== undefined
+                    ? `${String.fromCharCode(65 + question.correctAnswer)}. ${
+                        question.options[question.correctAnswer]
+                      }`
+                    : null}
                 </p>
               </div>
             )}

@@ -112,21 +112,22 @@
         "type": "NoteCompletion",
         "instructions": "Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.",
         "questions": [
-          { "id": "q1", "question": "The complex that includes the Step Pyramid and its surroundings is considered to be as big as an Egyptian ________ of the past.", "answer": "city" },
+          { "id": 1, "question": "The complex that includes the Step Pyramid and its surroundings is considered to be as big as an Egyptian ________ of the past.", "answer": "city", "options": [] },
           { "id": "q2", "question": "The area outside the pyramid included accommodation that was occupied by ________.", "answer": "priests" },
           { "id": "q3", "question": "A wall ran around the outside of the complex and a number of false entrances were built into this. In addition, a long ________ encircled the wall.", "answer": "trench" },
           { "id": "q4", "question": "Any visitors who had not been invited were cleverly prevented from entering the pyramid grounds unless they knew the ________ of the real entrance.", "answer": "location" }
         ]
       },
       {
-        "type": "MultipleChoice",
+        "type": "mcq",
         "instructions": "Choose TWO letters, A-E.",
         "questions": [
           {
             "id": "q1",
             "question": "Which TWO points does the writer make about King Djoser?",
-            "options": ["A", "B", "C", "D", "E"],
-            "answer": ["B", "D"]
+            "options": ["Initially he had to be persuaded to build in stone rather than clay.", "There is a disagreement concerning the length of his reign.", "He failed to appreciate Imhotep's part in the design of the Step Pyramid.", "A few of his possessions were still in his tomb when archaeologists found it.", "He criticised the design and construction of other pyramids in Egypt."],
+            "correctAnswer": 1,
+            "answer": "B, D"
           }
         ]
       }
