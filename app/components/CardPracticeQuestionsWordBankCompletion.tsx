@@ -180,7 +180,7 @@ function CardPracticeQuestionsWordBankCompletion({
                             </span>
                           ) : (
                             <span className="text-gray-400 font-semibold">
-                              {31 + uniqueIdx}
+                              {uniqueIdx + 1}
                             </span>
                           )}
                         </button>
@@ -225,7 +225,7 @@ function CardPracticeQuestionsWordBankCompletion({
             <ul className="list-decimal list-inside text-gray-700">
               {answers.map((answer, idx) => (
                 <li key={idx}>
-                  <span className="font-medium">{31 + idx}:</span> {answer}
+                  <span className="font-medium">{idx + 1}:</span> {answer}
                 </li>
               ))}
             </ul>

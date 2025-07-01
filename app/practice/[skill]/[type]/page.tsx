@@ -7,6 +7,7 @@ import CardPracticePassage from "@/app/components/CardPracticePassage";
 import CardPracticeQuestionsMCQ from "@/app/components/CardPracticeQuestionsMCQ";
 import CardPracticeQuestionsCompletion from "@/app/components/CardPracticeQuestionsCompletion";
 import CardPracticeQuestionsWordBankCompletion from "@/app/components/CardPracticeQuestionsWordBankCompletion";
+import CardPracticeQuestionsMatchingInfo from "@/app/components/CardPracticeQuestionsMatchingInfo";
 
 interface QuestionSet {
   type?: string;
@@ -18,6 +19,7 @@ interface QuestionSet {
     correctAnswer?: number;
   }>;
   wordBank?: string[];
+  people?: string[];
 }
 
 interface PracticeData {
@@ -81,6 +83,7 @@ export default function PracticePage() {
     if (type === "multiple-choice") return "MultipleChoice";
     if (type === "t-f-ng-or-y-n-ng") return "TrueFalseNotGiven";
     if (type === "word-bank-completion") return "WordBankCompletion";
+    if (type === "matching-info") return "MatchingInfo";
     return type;
   }
 
@@ -89,6 +92,7 @@ export default function PracticePage() {
     normalizedType
   );
   const isWordBankType = normalizedType === "WordBankCompletion";
+  const isMatchingInfoType = normalizedType === "MatchingInfo";
 
   // Prepare question sets for each type
   const mcqQuestionSet = {
@@ -123,6 +127,34 @@ export default function PracticePage() {
     })),
   };
 
+  // For matching-info type
+  function isPeopleObjectArray(
+    arr: unknown[]
+  ): arr is { id: string; name: string }[] {
+    return (
+      arr.length > 0 &&
+      typeof arr[0] === "object" &&
+      arr[0] !== null &&
+      "id" in arr[0] &&
+      "name" in arr[0]
+    );
+  }
+  const matchingInfoPeople = Array.isArray(questionSet.people)
+    ? isPeopleObjectArray(questionSet.people)
+      ? questionSet.people
+      : questionSet.people.map((p: string) => ({ id: p, name: p }))
+    : [];
+  const matchingInfoQuestions = questionSet.questions.map(
+    (
+      q: { id: string | number; question: string; answer?: string },
+      index: number
+    ) => ({
+      id: index + 1,
+      question: q.question,
+      answer: typeof q.answer === "string" ? q.answer : "",
+    })
+  );
+
   return (
     <div className="min-h-screen bg-cyan-50 pb-10">
       <PracticeHeader title={passage.title} />
@@ -139,6 +171,11 @@ export default function PracticePage() {
           ) : isWordBankType ? (
             <CardPracticeQuestionsWordBankCompletion
               questionSet={wordBankQuestionSet}
+            />
+          ) : isMatchingInfoType ? (
+            <CardPracticeQuestionsMatchingInfo
+              people={matchingInfoPeople}
+              questions={matchingInfoQuestions}
             />
           ) : (
             <CardPracticeQuestionsCompletion

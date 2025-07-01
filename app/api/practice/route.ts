@@ -13,6 +13,7 @@ interface QuestionSet {
   instructions: string;
   questions: QuestionData[];
   wordBank?: string[];
+  people?: { id: string; name: string }[];
 }
 
 interface Passage {
@@ -61,13 +62,14 @@ export async function GET(request: Request) {
       },
       questionSet: {
         type: questionSet.type,
-        questions: questionSet.questions.map((q: QuestionData) => ({
-          id: parseInt(q.id.replace('q', '')),
+        questions: questionSet.questions.map((q: QuestionData, idx: number) => ({
+          id: idx + 1,
           question: q.question,
           options: q.options,
           answer: q.answer
         })),
-        ...(questionSet.wordBank ? { wordBank: questionSet.wordBank } : {})
+        ...(questionSet.wordBank ? { wordBank: questionSet.wordBank } : {}),
+        ...(questionSet.people ? { people: questionSet.people } : {})
       }
     };
 
