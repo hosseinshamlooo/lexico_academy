@@ -30,22 +30,24 @@ export async function GET(request: Request) {
     let questionSet: QuestionSet | undefined;
 
     if (type) {
-      passage = (readingData as Passage[]).find((p) =>
-        p.questionSets.some((qs) => qs.type === type)
-      );
-      if (!passage) {
-        return NextResponse.json(
-          { error: `No passage found for type '${type}'` },
-          { status: 404 }
-        );
+      // Collect all passages with a question set matching the requested type
+      const matches: { passage: Passage; questionSet: QuestionSet }[] = [];
+      for (const p of readingData as Passage[]) {
+        const qs = p.questionSets.find((qs) => qs.type === type);
+        if (qs) {
+          matches.push({ passage: p, questionSet: qs });
+        }
       }
-      questionSet = passage.questionSets.find((qs) => qs.type === type);
-      if (!questionSet) {
+      if (matches.length === 0) {
         return NextResponse.json(
           { error: `No question set found for type '${type}'` },
           { status: 404 }
         );
       }
+      // Pick a random match
+      const randomIdx = Math.floor(Math.random() * matches.length);
+      passage = matches[randomIdx].passage;
+      questionSet = matches[randomIdx].questionSet;
     } else {
       passage = (readingData as Passage[])[0];
       questionSet = passage.questionSets[0];
@@ -57,6 +59,7 @@ export async function GET(request: Request) {
         passage: passage.passage
       },
       questionSet: {
+        type: questionSet.type,
         questions: questionSet.questions.map((q: QuestionData) => ({
           id: parseInt(q.id.replace('q', '')),
           question: q.question,

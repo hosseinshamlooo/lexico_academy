@@ -4,15 +4,19 @@ function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function CardPracticeType({ title, progress, questionTypes }) {
+function CardPracticeType({ title, progress, questionTypes, onClick }) {
   return (
     <div
-      className={`relative bg-white rounded-3xl p-6 w-full min-w-[320px] max-w-md transition-all duration-300 border border-gray-200 shadow-md flex flex-col group  hover:-translate-y-2 hover:shadow-2xl hover:bg-[#1D5554] hover:border-[#1D5554] hover:text-white`}
+      className={`relative bg-white rounded-3xl p-6 w-full min-w-[320px] max-w-md transition-all duration-300 border border-gray-200 shadow-md flex flex-col group hover:min-w-[380px] hover:-translate-y-2 hover:shadow-2xl hover:bg-[#1D5554] hover:border-[#1D5554] hover:text-white cursor-pointer`}
+      onClick={onClick}
+      tabIndex={0}
+      role="button"
+      onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') onClick && onClick(e); }}
     >
       {/* Title and progress */}
       <div className="flex items-center justify-between mb-2">
         <h3
-          className="text-2xl font-extrabold text-gray-900 truncate pr-2 transition-all duration-200 group-hover:whitespace-normal group-hover:text-clip-unset group-hover:overflow-visible group-hover:truncate-none group-hover:text-white"
+          className="text-2xl font-extrabold text-gray-900 pr-2 transition-all duration-200 truncate group-hover:whitespace-normal group-hover:overflow-visible group-hover:truncate-none group-hover:text-white"
           title={title}
         >
           {title}

@@ -70,12 +70,20 @@ export default function PracticePage() {
   }
 
   const { passage, questionSet } = data;
-  const questionType = questionSet.type || "mcq";
 
-  // Transform the data to match the component's expected format
+  // Map kebab-case route types to expected type strings
+  function normalizeType(type: string) {
+    if (!type) return "mcq";
+    if (type === "multiple-choice") return "MultipleChoice";
+    if (type === "t-f-ng-or-y-n-ng") return "TrueFalseNotGiven";
+    return type;
+  }
+
+  const normalizedType = normalizeType(type);
   const isMCQType = ["MultipleChoice", "TrueFalseNotGiven", "mcq"].includes(
-    questionType
+    normalizedType
   );
+
   const transformedQuestionSet = {
     questions: questionSet.questions.map((q: Question, index: number) => {
       if (isMCQType) {

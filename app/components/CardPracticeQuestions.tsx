@@ -6,6 +6,7 @@ import {
   FaMicrophone,
 } from "react-icons/fa";
 import CardPracticeType from "./CardPracticeType";
+import { useRouter } from "next/navigation";
 
 interface PracticeTypeData {
   title: string;
@@ -148,9 +149,9 @@ const readingPracticeTypesData = [
     questionTypes: ["Find phrases", "word limit", "synonyms"],
   },
   {
-    title: "Summary/Table/Flowchart",
+    title: "Form, Note, Table, Flowchart, Summary Completion",
     progress: "0/65",
-    questionTypes: ["Summarize", "sequence", "paraphrase"],
+    questionTypes: ["Summarize", "sequence", "paraphrase", "notes"],
   },
   {
     title: "Diagram Label",
@@ -164,7 +165,21 @@ const readingPracticeTypesData = [
   },
 ];
 
+function toKebabCase(str: string): string {
+  return (
+    (str &&
+      str
+        .match(
+          /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g
+        )
+        ?.map((x: string) => x.toLowerCase())
+        .join("-")) ||
+    ""
+  );
+}
+
 function CardPracticeQuestions() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState(0);
   const [showAll, setShowAll] = useState(false);
   const { heading, description } = tabs[activeTab];
@@ -225,14 +240,43 @@ function CardPracticeQuestions() {
       <p className="text-lg text-gray-600 font-semibold mb-14">{description}</p>
       {/* Practice Type Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {visibleCards.map((item: PracticeTypeData) => (
-          <CardPracticeType
-            key={item.title}
-            title={item.title}
-            progress={item.progress}
-            questionTypes={item.questionTypes}
-          />
-        ))}
+        {visibleCards.map((item: PracticeTypeData) => {
+          const isReadingTab = activeTab === 1;
+          const isMultipleChoice = item.title === "Multiple Choice";
+          const isTFNG = item.title === "T/F/NG or Y/N/NG";
+          const isSummaryTableFlowchartNote =
+            item.title === "Form, Note, Table, Flowchart, Summary Completion";
+          const summaryTypes = [
+            "SummaryCompletion",
+            "TableCompletion",
+            "FlowchartCompletion",
+            "NoteCompletion",
+          ];
+          const handleClick =
+            isReadingTab &&
+            (isMultipleChoice || isTFNG || isSummaryTableFlowchartNote)
+              ? () => {
+                  if (isSummaryTableFlowchartNote) {
+                    const randomType =
+                      summaryTypes[
+                        Math.floor(Math.random() * summaryTypes.length)
+                      ];
+                    router.push(`/practice/reading/${randomType}`);
+                  } else {
+                    router.push(`/practice/reading/${toKebabCase(item.title)}`);
+                  }
+                }
+              : undefined;
+          return (
+            <CardPracticeType
+              key={item.title}
+              title={item.title}
+              progress={item.progress}
+              questionTypes={item.questionTypes}
+              onClick={handleClick}
+            />
+          );
+        })}
       </div>
       {/* See All / Hide Button - Only show if more than 6 cards */}
       {hasMoreThan6Cards && (

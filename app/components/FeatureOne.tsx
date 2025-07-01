@@ -15,6 +15,7 @@ export default function FeatureOne() {
             height={400}
             className="w-full max-w-md rounded-3xl object-cover shadow-lg"
             priority={false}
+            unoptimized
           />
         </div>
         {/* Right: Text */}

@@ -27,6 +27,7 @@ export default function FeatureTwo() {
             height={400}
             className="w-full max-w-md rounded-3xl object-cover shadow-lg"
             priority={false}
+            unoptimized
           />
         </div>
       </div>

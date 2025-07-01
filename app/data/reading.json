@@ -5,7 +5,7 @@
     "passage": "Polar bears are being increasingly threatened by the effects of climate change, but their disappearance could have far-reaching consequences. They are uniquely adapted to the extreme conditions of the Arctic Circle, where temperatures can reach -40°C. One reason for this is that they have up to 11 centimetres of fat underneath their skin. Humans with comparative levels of adipose tissue would be considered obese and would be likely to suffer from diabetes and heart disease. Yet the polar bear experiences no such consequences.\n\nA 2014 study by Shi Ping Liu and colleagues sheds light on this mystery. They compared the genetic structure of polar bears with that of their closest relatives from a warmer climate, the brown bears. This allowed them to determine the genes that have allowed polar bears to survive in one of the toughest environments on Earth. Liu and his colleagues found the polar bears had a gene known as APOB, which reduces levels of low-density lipoproteins (LDLs) - a form of 'bad' cholesterol. In humans, mutations of this gene are associated with increased risk of heart disease. Polar bears may therefore be an important study model to understand heart disease in humans.\n\nThe genome of the polar bear may also provide the solution for another condition, one that particularly affects our older generation: osteoporosis. This is a disease where bones show reduced density, usually caused by insufficient exercise, reduced calcium intake or food starvation. Bone tissue is constantly being remodelled, meaning that bone is added or removed, depending on nutrient availability and the stress that the bone is under. Female polar bears, however, undergo extreme conditions during every pregnancy. Once autumn comes around, these females will dig maternity dens in the snow and will remain there throughout the winter, both before and after the birth of their cubs. This process results in about six months of fasting, where the female bears have to keep themselves and their cubs alive, depleting their own calcium and calorie reserves. Despite this, their bones remain strong and dense.\n\nPhysiologists Alanda Lennox and Allen Goodship found an explanation for this paradox in 2008. They discovered that pregnant bears were able to increase the density of their bones before they started to build their dens. In addition, six months later, when they finally emerged from the den with their cubs, there was no evidence of significant loss of bone density. Hibernating brown bears do not have this capacity and must therefore resort to major bone reformation in the following spring. If the mechanism of bone remodelling in polar bears can be understood, many bedridden humans, and even astronauts, could potentially benefit.",
     "questionSets": [
       {
-        "type": "TrueFalseNotGiven",
+        "type": "t-f-ng-or-y-n-ng",
         "instructions": "Do the following statements agree with the information given in Reading Passage 1?",
         "questions": [
           {
@@ -53,37 +53,37 @@
         ]
       },
       {
-        "type": "TableCompletion",
+        "type": "form-note-table-flowchart-summary-completion",
         "instructions": "Complete the table below. Choose ONE WORD ONLY from the passage for each answer.",
         "questions": [
           {
             "id": "q1",
-            "question": "People think of bears as unintelligent and ________",
+            "question": "People think of bears as unintelligent and [blank]",
             "answer": "clumsy"
           },
           {
             "id": "q2",
-            "question": "In Tennoji Zoo, a bear has been seen using a branch as a ________",
+            "question": "In Tennoji Zoo, a bear has been seen using a branch as a [blank]",
             "answer": "tool"
           },
           {
             "id": "q3",
-            "question": "This allowed him to knock down some ________",
+            "question": "This allowed him to knock down some [blank]",
             "answer": "fish"
           },
           {
             "id": "q4",
-            "question": "A wild polar bear worked out a method of reaching a platform where a ________ was located.",
+            "question": "A wild polar bear worked out a method of reaching a platform where a [blank] was located.",
             "answer": "seal"
           },
           {
             "id": "q5",
-            "question": "Polar bears have displayed behaviour such as conscious manipulation of objects and activity similar to a ________",
+            "question": "Polar bears have displayed behaviour such as conscious manipulation of objects and activity similar to a [blank]",
             "answer": "game"
           },
           {
             "id": "q6",
-            "question": "They may make movements suggesting ________ when hunting if disappointed",
+            "question": "They may make movements suggesting [blank] when hunting if disappointed",
             "answer": "frustration"
           }
         ]
@@ -109,17 +109,17 @@
         ]
       },
       {
-        "type": "NoteCompletion",
+        "type": "form-note-table-flowchart-summary-completion",
         "instructions": "Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.",
         "questions": [
-          { "id": 1, "question": "The complex that includes the Step Pyramid and its surroundings is considered to be as big as an Egyptian ________ of the past.", "answer": "city", "options": [] },
-          { "id": "q2", "question": "The area outside the pyramid included accommodation that was occupied by ________.", "answer": "priests" },
-          { "id": "q3", "question": "A wall ran around the outside of the complex and a number of false entrances were built into this. In addition, a long ________ encircled the wall.", "answer": "trench" },
-          { "id": "q4", "question": "Any visitors who had not been invited were cleverly prevented from entering the pyramid grounds unless they knew the ________ of the real entrance.", "answer": "location" }
+          { "id": "q1", "question": "The complex that includes the Step Pyramid and its surroundings is considered to be as big as an Egyptian [blank] of the past.", "answer": "city", "options": [] },
+          { "id": "q2", "question": "The area outside the pyramid included accommodation that was occupied by [blank].", "answer": "priests" },
+          { "id": "q3", "question": "A wall ran around the outside of the complex and a number of false entrances were built into this. In addition, a long [blank] encircled the wall.", "answer": "trench" },
+          { "id": "q4", "question": "Any visitors who had not been invited were cleverly prevented from entering the pyramid grounds unless they knew the [blank] of the real entrance.", "answer": "location" }
         ]
       },
       {
-        "type": "mcq",
+        "type": "multiple-choice",
         "instructions": "Choose TWO letters, A-E.",
         "questions": [
           {
