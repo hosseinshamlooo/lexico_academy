@@ -6,22 +6,26 @@ import { useParams } from "next/navigation";
 import CardPracticePassage from "@/app/components/CardPracticePassage";
 import CardPracticeQuestionsMCQ from "@/app/components/CardPracticeQuestionsMCQ";
 import CardPracticeQuestionsCompletion from "@/app/components/CardPracticeQuestionsCompletion";
+import CardPracticeQuestionsWordBankCompletion from "@/app/components/CardPracticeQuestionsWordBankCompletion";
+
+interface QuestionSet {
+  type?: string;
+  questions: Array<{
+    id: number;
+    question: string;
+    options?: string[];
+    answer?: string;
+    correctAnswer?: number;
+  }>;
+  wordBank?: string[];
+}
 
 interface PracticeData {
   passage: {
     title: string;
     passage: string;
   };
-  questionSet: {
-    questions: Array<{
-      id: number;
-      question: string;
-      options?: string[];
-      answer?: string;
-      correctAnswer?: number;
-    }>;
-    type?: string;
-  };
+  questionSet: QuestionSet;
 }
 
 type Question = PracticeData["questionSet"]["questions"][0];
@@ -76,6 +80,7 @@ export default function PracticePage() {
     if (!type) return "mcq";
     if (type === "multiple-choice") return "MultipleChoice";
     if (type === "t-f-ng-or-y-n-ng") return "TrueFalseNotGiven";
+    if (type === "word-bank-completion") return "WordBankCompletion";
     return type;
   }
 
@@ -83,32 +88,39 @@ export default function PracticePage() {
   const isMCQType = ["MultipleChoice", "TrueFalseNotGiven", "mcq"].includes(
     normalizedType
   );
+  const isWordBankType = normalizedType === "WordBankCompletion";
 
-  const transformedQuestionSet = {
-    questions: questionSet.questions.map((q: Question, index: number) => {
-      if (isMCQType) {
-        return {
-          id: index + 1,
-          question: q.question,
-          options: q.options || [],
-          correctAnswer:
-            typeof q.correctAnswer === "number"
-              ? q.correctAnswer
-              : q.options
-              ? q.options.indexOf(typeof q.answer === "string" ? q.answer : "")
-              : 0,
-          answer: typeof q.answer === "string" ? q.answer : "",
-        };
-      } else {
-        return {
-          id: index + 1,
-          question: q.question,
-          answer: typeof q.answer === "string" ? q.answer : "",
-          options: [],
-          correctAnswer: 0,
-        };
-      }
-    }),
+  // Prepare question sets for each type
+  const mcqQuestionSet = {
+    questions: questionSet.questions.map((q: Question, index: number) => ({
+      id: index + 1,
+      question: q.question,
+      options: q.options || [],
+      correctAnswer:
+        typeof q.correctAnswer === "number"
+          ? q.correctAnswer
+          : q.options
+          ? q.options.indexOf(typeof q.answer === "string" ? q.answer : "")
+          : 0,
+      answer: typeof q.answer === "string" ? q.answer : "",
+    })),
+  };
+
+  const wordBankQuestionSet = {
+    wordBank: questionSet.wordBank || [],
+    questions: questionSet.questions.map((q: Question, index: number) => ({
+      id: index + 1,
+      question: q.question,
+      answer: typeof q.answer === "string" ? q.answer : "",
+    })),
+  };
+
+  const completionQuestionSet = {
+    questions: questionSet.questions.map((q: Question, index: number) => ({
+      id: index + 1,
+      question: q.question,
+      answer: typeof q.answer === "string" ? q.answer : "",
+    })),
   };
 
   return (
@@ -123,10 +135,14 @@ export default function PracticePage() {
         </div>
         <div className="flex-1">
           {isMCQType ? (
-            <CardPracticeQuestionsMCQ questionSet={transformedQuestionSet} />
+            <CardPracticeQuestionsMCQ questionSet={mcqQuestionSet} />
+          ) : isWordBankType ? (
+            <CardPracticeQuestionsWordBankCompletion
+              questionSet={wordBankQuestionSet}
+            />
           ) : (
             <CardPracticeQuestionsCompletion
-              questionSet={transformedQuestionSet}
+              questionSet={completionQuestionSet}
             />
           )}
         </div>

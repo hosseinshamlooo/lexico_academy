@@ -12,6 +12,7 @@ interface QuestionSet {
   type: string;
   instructions: string;
   questions: QuestionData[];
+  wordBank?: string[];
 }
 
 interface Passage {
@@ -65,7 +66,8 @@ export async function GET(request: Request) {
           question: q.question,
           options: q.options,
           answer: q.answer
-        }))
+        })),
+        ...(questionSet.wordBank ? { wordBank: questionSet.wordBank } : {})
       }
     };
 
