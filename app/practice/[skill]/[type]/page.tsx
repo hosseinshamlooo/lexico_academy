@@ -8,6 +8,7 @@ import CardPracticeQuestionsMCQ from "@/app/components/CardPracticeQuestionsMCQ"
 import CardPracticeQuestionsCompletion from "@/app/components/CardPracticeQuestionsCompletion";
 import CardPracticeQuestionsWordBankCompletion from "@/app/components/CardPracticeQuestionsWordBankCompletion";
 import CardPracticeQuestionsMatchingInfo from "@/app/components/CardPracticeQuestionsMatchingInfo";
+import CardPracticeQuestionsDiagramLabelling from "@/app/components/CardPracticeQuestionsDiagramLabelling";
 
 interface QuestionSet {
   type?: string;
@@ -20,6 +21,10 @@ interface QuestionSet {
   }>;
   wordBank?: string[];
   people?: string[];
+  // Add these for diagram labelling
+  diagramUrl?: string;
+  labels?: string[];
+  answers?: string[];
 }
 
 interface PracticeData {
@@ -41,9 +46,15 @@ export default function PracticePage() {
   useEffect(() => {
     async function fetchPracticeData() {
       try {
-        const response = await fetch(`/api/practice?type=${type}`);
+        const response = await fetch(`/api/questions/${type}?skill=reading`);
         const practiceData = await response.json();
-        setData(practiceData);
+        setData({
+          passage: {
+            title: practiceData.title,
+            passage: practiceData.passage,
+          },
+          questionSet: practiceData.questionSet,
+        });
       } catch (error) {
         console.error("Failed to fetch practice data:", error);
       } finally {
@@ -84,6 +95,7 @@ export default function PracticePage() {
     if (type === "t-f-ng-or-y-n-ng") return "TrueFalseNotGiven";
     if (type === "word-bank-completion") return "WordBankCompletion";
     if (type === "matching-info") return "MatchingInfo";
+    if (type === "diagram-labelling") return "DiagramLabelling";
     return type;
   }
 
@@ -93,6 +105,7 @@ export default function PracticePage() {
   );
   const isWordBankType = normalizedType === "WordBankCompletion";
   const isMatchingInfoType = normalizedType === "MatchingInfo";
+  const isDiagramLabellingType = normalizedType === "DiagramLabelling";
 
   // Prepare question sets for each type
   const mcqQuestionSet = {
@@ -176,6 +189,14 @@ export default function PracticePage() {
             <CardPracticeQuestionsMatchingInfo
               people={matchingInfoPeople}
               questions={matchingInfoQuestions}
+            />
+          ) : isDiagramLabellingType ? (
+            <CardPracticeQuestionsDiagramLabelling
+              questionSet={{
+                diagramUrl: questionSet.diagramUrl,
+                questions: questionSet.questions,
+                answers: questionSet.answers || [],
+              }}
             />
           ) : (
             <CardPracticeQuestionsCompletion
