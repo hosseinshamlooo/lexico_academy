@@ -5,7 +5,6 @@ import PracticeHeader from "@/app/components/PracticeHeader";
 import { useParams } from "next/navigation";
 import CardPracticePassage from "@/app/components/CardPracticePassage";
 import CardPracticeQuestionsMCQ from "@/app/components/CardPracticeQuestionsMCQ";
-import CardPracticeQuestionsCompletion from "@/app/components/CardPracticeQuestionsCompletion";
 import CardPracticeQuestionsWordBankCompletion from "@/app/components/CardPracticeQuestionsWordBankCompletion";
 import CardPracticeQuestionsMatchingInfo from "@/app/components/CardPracticeQuestionsMatchingInfo";
 import CardPracticeQuestionsDiagramLabelling from "@/app/components/CardPracticeQuestionsDiagramLabelling";
@@ -108,31 +107,29 @@ export default function PracticePage() {
   const isDiagramLabellingType = normalizedType === "DiagramLabelling";
 
   // Prepare question sets for each type
-  const mcqQuestionSet = {
-    questions: questionSet.questions.map((q: Question, index: number) => ({
-      id: index + 1,
-      question: q.question,
-      options: q.options || [],
-      correctAnswer:
-        typeof q.correctAnswer === "number"
-          ? q.correctAnswer
-          : q.options
-          ? q.options.indexOf(typeof q.answer === "string" ? q.answer : "")
-          : 0,
-      answer: typeof q.answer === "string" ? q.answer : "",
-    })),
-  };
+  let mcqQuestionSet = undefined;
+  if (isMCQType) {
+    mcqQuestionSet = {
+      questions: questionSet.questions.map((q: Question, index: number) => ({
+        id: String(index + 1),
+        question: q.question,
+        options: q.options || [],
+        correctAnswer:
+          typeof q.correctAnswer === "number"
+            ? q.correctAnswer
+            : q.options
+            ? q.options.indexOf(typeof q.answer === "string" ? q.answer : "")
+            : 0,
+        answer:
+          typeof q.answer === "string" || Array.isArray(q.answer)
+            ? q.answer
+            : "",
+      })),
+    };
+  }
 
   const wordBankQuestionSet = {
     wordBank: questionSet.wordBank || [],
-    questions: questionSet.questions.map((q: Question, index: number) => ({
-      id: index + 1,
-      question: q.question,
-      answer: typeof q.answer === "string" ? q.answer : "",
-    })),
-  };
-
-  const completionQuestionSet = {
     questions: questionSet.questions.map((q: Question, index: number) => ({
       id: index + 1,
       question: q.question,
@@ -179,7 +176,7 @@ export default function PracticePage() {
           />
         </div>
         <div className="flex-1">
-          {isMCQType ? (
+          {isMCQType && mcqQuestionSet ? (
             <CardPracticeQuestionsMCQ questionSet={mcqQuestionSet} />
           ) : isWordBankType ? (
             <CardPracticeQuestionsWordBankCompletion
@@ -198,11 +195,7 @@ export default function PracticePage() {
                 answers: questionSet.answers || [],
               }}
             />
-          ) : (
-            <CardPracticeQuestionsCompletion
-              questionSet={completionQuestionSet}
-            />
-          )}
+          ) : null}
         </div>
       </div>
     </div>

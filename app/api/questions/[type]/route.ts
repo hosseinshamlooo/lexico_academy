@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import { NextRequest } from 'next/server';
 
 interface Question {
   id: string;
@@ -22,10 +23,7 @@ interface Passage {
   questionSets: QuestionSet[];
 }
 
-export async function GET(
-  req: Request,
-  { params }: { params: { type: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { type: string } }) {
   const typeStr = params.type;
 
   // Dynamically read the JSON file

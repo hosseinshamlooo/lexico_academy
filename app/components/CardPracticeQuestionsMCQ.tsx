@@ -1,44 +1,133 @@
+// CardPracticeQuestionsMCQ.tsx
+// Renders all MCQ questions in a single card, styled like CardPracticeQuestionsItem, with multi/single answer support.
+
+"use client";
 import React, { useState } from "react";
 
-interface Question {
-  id: number;
+interface MCQQuestion {
+  id: string;
   question: string;
   options: string[];
-  correctAnswer: number;
+  answer: string[] | string;
+  instructions?: string;
 }
 
 interface CardPracticeQuestionsMCQProps {
   questionSet: {
-    questions: Question[];
+    questions: MCQQuestion[];
   };
 }
 
-function CardPracticeQuestionsMCQ({
+export default function CardPracticeQuestionsMCQ({
   questionSet,
 }: CardPracticeQuestionsMCQProps) {
-  const [userAnswers, setUserAnswers] = useState<{ [key: number]: number }>({});
+  const [selectedAnswers, setSelectedAnswers] = useState<{
+    [key: string]: string[];
+  }>(() => {
+    const initial: { [key: string]: string[] } = {};
+    questionSet.questions.forEach((q) => {
+      initial[q.id] = [];
+    });
+    return initial;
+  });
   const [submitted, setSubmitted] = useState(false);
 
-  function handleChange(questionId: number, value: number) {
+  function handleSelect(question: MCQQuestion, option: string) {
+    if (submitted) return;
+    const isMulti =
+      Array.isArray(question.answer) && question.answer.length > 1;
+    setSelectedAnswers((prev) => {
+      const prevSelected = prev[question.id] || [];
+      if (isMulti) {
+        if (prevSelected.includes(option)) {
+          return {
+            ...prev,
+            [question.id]: prevSelected.filter((o) => o !== option),
+          };
+        } else if (prevSelected.length < (question.answer as string[]).length) {
+          return { ...prev, [question.id]: [...prevSelected, option] };
+        } else {
+          return prev;
+        }
+      } else {
+        return { ...prev, [question.id]: [option] };
+      }
+    });
+  }
+
+  function getCorrectOptions(question: MCQQuestion): string[] {
+    // If answer is an array of letters, map to options
+    if (Array.isArray(question.answer)) {
+      if (
+        typeof question.answer[0] === "string" &&
+        question.answer[0].length === 1 &&
+        /[A-Z]/i.test(question.answer[0])
+      ) {
+        // Array of letters
+        return question.answer.map((letter) => {
+          const idx = letter.toUpperCase().charCodeAt(0) - 65;
+          return question.options[idx];
+        });
+      } else {
+        // Array of option strings
+        return question.answer as string[];
+      }
+    } else if (
+      typeof question.answer === "string" &&
+      question.answer.length === 1 &&
+      /[A-Z]/i.test(question.answer)
+    ) {
+      // Single letter
+      const idx = question.answer.toUpperCase().charCodeAt(0) - 65;
+      return [question.options[idx]];
+    } else if (typeof question.answer === "string") {
+      // Single option string
+      return [question.answer];
+    }
+    return [];
+  }
+
+  function getOptionStyle(question: MCQQuestion, option: string) {
     if (!submitted) {
-      setUserAnswers((prev) => ({ ...prev, [questionId]: value }));
+      return selectedAnswers[question.id]?.includes(option)
+        ? "bg-blue-100 border-blue-500"
+        : "bg-white border-gray-300 hover:bg-gray-50";
+    }
+    const correctOptions = getCorrectOptions(question);
+    const correct = correctOptions.includes(option);
+    const selected = selectedAnswers[question.id]?.includes(option);
+    if (correct) {
+      return "bg-green-100 border-green-500 text-green-700";
+    } else if (selected && !correct) {
+      return "bg-red-100 border-red-500 text-red-700";
+    } else {
+      return "bg-white border-gray-300";
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  function allAnswered() {
+    return questionSet.questions.every((q) => {
+      const required = Array.isArray(q.answer) ? q.answer.length : 1;
+      return selectedAnswers[q.id]?.length === required;
+    });
+  }
+
+  function handleSubmit() {
     setSubmitted(true);
   }
 
-  const calculateScore = () => {
+  function calculateScore() {
     let correct = 0;
+    let total = 0;
     questionSet.questions.forEach((q) => {
-      if (userAnswers[q.id] === q.correctAnswer) {
-        correct++;
-      }
+      const correctOptions = getCorrectOptions(q);
+      total += correctOptions.length;
+      const selected = selectedAnswers[q.id] || [];
+      // Count how many correct options were selected (per answer)
+      correct += correctOptions.filter((opt) => selected.includes(opt)).length;
     });
-    return { correct, total: questionSet.questions.length };
-  };
+    return { correct, total };
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
@@ -49,7 +138,8 @@ function CardPracticeQuestionsMCQ({
             className="bg-blue-600 h-2 rounded-full transition-all duration-300"
             style={{
               width: `${
-                (Object.keys(userAnswers).length /
+                (Object.values(selectedAnswers).filter((a) => a.length > 0)
+                  .length /
                   questionSet.questions.length) *
                 100
               }%`,
@@ -57,87 +147,91 @@ function CardPracticeQuestionsMCQ({
           ></div>
         </div>
         <p className="text-sm text-gray-600 mt-2">
-          {Object.keys(userAnswers).length} of {questionSet.questions.length}{" "}
-          questions answered
+          {Object.values(selectedAnswers).filter((a) => a.length > 0).length} of{" "}
+          {questionSet.questions.length} questions answered
         </p>
       </div>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {questionSet.questions.map((q) => (
-          <div key={q.id} className="rounded-lg p-4">
-            <h3 className="font-medium text-gray-900 mb-3">
-              Question {q.id}: {q.question}
-            </h3>
-            <div className="space-y-2">
-              {q.options.map((option, idxOption) => {
-                let optionStyle = "bg-white border-gray-300 hover:bg-gray-50";
-                if (!submitted) {
-                  if (userAnswers[q.id] === idxOption) {
-                    optionStyle = "bg-blue-100 border-blue-500";
-                  }
-                } else {
-                  const isCorrect = idxOption === q.correctAnswer;
-                  const isSelected = userAnswers[q.id] === idxOption;
-                  if (isCorrect) {
-                    optionStyle = "bg-green-100 border-green-500";
-                  } else if (isSelected && !isCorrect) {
-                    optionStyle = "bg-red-100 border-red-500";
-                  }
-                }
-                return (
-                  <button
-                    key={idxOption}
-                    type="button"
-                    onClick={() => handleChange(q.id, idxOption)}
-                    disabled={submitted}
-                    className={`w-full text-left p-3 rounded-lg border-2 transition-all duration-200 ${optionStyle}`}
+      <div className="space-y-6">
+        {questionSet.questions.map((question, idx) => {
+          const isMulti =
+            Array.isArray(question.answer) && question.answer.length > 1;
+          const requiredSelections = isMulti
+            ? (question.answer as string[]).length
+            : 1;
+          return (
+            <div key={question.id} className="rounded-lg p-4 bg-white">
+              <h3 className="font-medium text-gray-900 mb-3">
+                Question {idx + 1}: {question.question}
+              </h3>
+              <div className="space-y-2">
+                {question.options.map((option, index) => (
+                  <label
+                    key={index}
+                    className={
+                      "flex items-center gap-2 cursor-pointer p-2 rounded transition-all duration-200 border-2 " +
+                      getOptionStyle(question, option)
+                    }
                   >
-                    <span className="font-medium mr-2">
-                      {String.fromCharCode(65 + idxOption)}.
-                    </span>
-                    {option}
-                  </button>
-                );
-              })}
-            </div>
-            {submitted && (
-              <div className="mt-3 p-3 rounded-lg bg-gray-50">
-                <p className="text-sm text-gray-700">
-                  <span className="font-medium">Correct answer:</span>{" "}
-                  {q.options[q.correctAnswer]}
-                </p>
+                    {isMulti ? (
+                      <input
+                        type="checkbox"
+                        className="appearance-none w-0 h-0"
+                        checked={
+                          selectedAnswers[question.id]?.includes(option) ||
+                          false
+                        }
+                        onChange={() => handleSelect(question, option)}
+                        disabled={
+                          submitted ||
+                          (!selectedAnswers[question.id]?.includes(option) &&
+                            selectedAnswers[question.id]?.length >=
+                              requiredSelections)
+                        }
+                      />
+                    ) : (
+                      <input
+                        type="radio"
+                        className="appearance-none w-0 h-0"
+                        checked={
+                          selectedAnswers[question.id]?.includes(option) ||
+                          false
+                        }
+                        onChange={() => handleSelect(question, option)}
+                        name={`mcq-${question.id}`}
+                        disabled={submitted}
+                      />
+                    )}
+                    <span>{option}</span>
+                  </label>
+                ))}
               </div>
-            )}
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-6 pt-4 border-t border-gray-200">
+        {!submitted ? (
+          <button
+            onClick={handleSubmit}
+            disabled={!allAnswered()}
+            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+          >
+            Submit Answers
+          </button>
+        ) : (
+          <div className="text-center">
+            <div className="text-2xl font-bold text-gray-900 mb-2">
+              {calculateScore().correct}/{calculateScore().total}
+            </div>
+            <div className="text-sm text-gray-600">
+              {Math.round(
+                (calculateScore().correct / calculateScore().total) * 100
+              )}
+              % correct
+            </div>
           </div>
-        ))}
-        <div className="mt-6 pt-4 border-t border-gray-200">
-          {!submitted ? (
-            <button
-              type="submit"
-              disabled={
-                Object.keys(userAnswers).length < questionSet.questions.length
-              }
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-            >
-              Submit Answers
-            </button>
-          ) : (
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900 mb-2">
-                {calculateScore().correct}/{calculateScore().total}
-              </div>
-              <div className="text-sm text-gray-600">
-                {Math.round(
-                  (calculateScore().correct / calculateScore().total) * 100
-                )}
-                % correct
-              </div>
-            </div>
-          )}
-        </div>
-      </form>
+        )}
+      </div>
     </div>
   );
 }
-
-export default CardPracticeQuestionsMCQ;

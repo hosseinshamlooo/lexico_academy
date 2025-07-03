@@ -205,8 +205,7 @@
                             "A few of his possessions were still in his tomb when archaeologists found it.",
                             "He criticised the design and construction of other pyramids in Egypt."
                         ],
-                        "correctAnswer": 1,
-                        "answer": "B, D"
+                        "answer": ["B", "D"]
                     }
                 ]
             }
@@ -877,70 +876,50 @@
                 "type": "matching-info",
                 "instructions": "Which section contains the following information? Write the correct letter, A–H, in boxes 14–19 on your answer sheet.",
                 "questions": [
-                    {
-                        "id": "q14",
-                        "question": "an explanation for weapons being left behind in the mountains"
-                    },
-                    {
-                        "id": "q15",
-                        "question": "a reference to the physical difficulties involved in an archaeological expedition"
-                    },
-                    {
-                        "id": "q16",
-                        "question": "an explanation of why less food may have been available"
-                    },
-                    {
-                        "id": "q17",
-                        "question": "a reference to the possibility of future archaeological discoveries"
-                    },
-                    {
-                        "id": "q18",
-                        "question": "examples of items that would have been traded"
-                    },
-                    {
-                        "id": "q19",
-                        "question": "a reference to the pressure archaeologists are under to work quickly"
-                    }
+                    { "id": "q14", "question": "an explanation for weapons being left behind in the mountains" },
+                    { "id": "q15", "question": "a reference to the physical difficulties involved in an archaeological expedition" },
+                    { "id": "q16", "question": "an explanation of why less food may have been available" },
+                    { "id": "q17", "question": "a reference to the possibility of future archaeological discoveries" },
+                    { "id": "q18", "question": "examples of items that would have been traded" },
+                    { "id": "q19", "question": "a reference to the pressure archaeologists are under to work quickly" }
                 ]
             },
             {
                 "type": "summary-completion",
                 "instructions": "Complete the summary below. Choose ONE WORD ONLY from the passage for each answer. Write your answers in boxes 20–22 on your answer sheet.",
                 "questions": [
-                    {
-                        "id": "q20",
-                        "question": "Organic materials such as animal skins and textiles are not discovered very often at archaeological sites. They have little protection against 20 __________, which means that they decay relatively quickly.",
-                        "answer": "microorganisms"
-                    },
-                    {
-                        "id": "q21",
-                        "question": "In the past, there were trade routes through these mountains and 21 __________ gathered there in the summer months to avoid being attacked by 22 __________ on lower ground.",
-                        "answer": "reindeer"
-                    },
-                    {
-                        "id": "q22",
-                        "question": "In the past, there were trade routes through these mountains and 21 reindeer gathered there in the summer months to avoid being attacked by 22 __________ on lower ground.",
-                        "answer": "insects"
-                    }
+                    { "id": "q20", "question": "Organic materials such as animal skins and textiles are not discovered very often at archaeological sites. They have little protection against 20 __________, which means that they decay relatively quickly.", "answer": "microorganisms" },
+                    { "id": "q21", "question": "In the past, there were trade routes through these mountains and 21 __________ gathered there in the summer months to avoid being attacked by 22 __________ on lower ground.", "answer": "reindeer" },
+                    { "id": "q22", "question": "In the past, there were trade routes through these mountains and 21 reindeer gathered there in the summer months to avoid being attacked by 22 __________ on lower ground.", "answer": "insects" }
                 ]
             },
             {
-                "type": "multiple-choice-multi",
+                "type": "multiple-choice",
                 "instructions": "Choose TWO letters, A–E. Write the correct letters in boxes 23 and 24 on your answer sheet. Which TWO of the following statements does the writer make about the discoveries of Barrett's team?",
                 "questions": [
                     {
                         "id": "q23",
-                        "question": "A Artefacts found in the higher mountain passes were limited to skiing equipment.\nB Hunters went into the mountains even during periods of extreme cold.\nC The number of artefacts from certain time periods was relatively low.\nD Radiocarbon dating of artefacts produced some unreliable results.\nE More artefacts were found in Oppland than at any other mountain site."
-                    }
-                ]
-            },
-            {
-                "type": "multiple-choice-multi",
-                "instructions": "Choose TWO letters, A–E. Write the correct letters in boxes 25 and 26 on your answer sheet. Which TWO of the following statements does the writer make about the Viking Age?",
-                "questions": [
+                        "question": "Which TWO of the following statements does the writer make about the discoveries of Barrett's team?",
+                        "options": [
+                            "A Artefacts found in the higher mountain passes were limited to skiing equipment.",
+                            "B Hunters went into the mountains even during periods of extreme cold.",
+                            "C The number of artefacts from certain time periods was relatively low.",
+                            "D Radiocarbon dating of artefacts produced some unreliable results.",
+                            "E More artefacts were found in Oppland than at any other mountain site."
+                        ],
+                        "answer": ["C", "E"]
+                    },
                     {
-                        "id": "q25",
-                        "question": "A Hunters at this time benefited from an increased demand for goods.\nB The beginning of the period saw the greatest growth in the wealth of Vikings.\nC Vikings did not rely on ships alone to transport goods.\nD Norwegian towns at this time attracted traders from around the world.\nE Vikings were primarily interested in their trading links with the Middle East."
+                        "id": "q24",
+                        "question": "Which TWO of the following statements does the writer make about the Viking Age?",
+                        "options": [
+                            "A Hunters at this time benefited from an increased demand for goods.",
+                            "B The beginning of the period saw the greatest growth in the wealth of Vikings.",
+                            "C Vikings did not rely on ships alone to transport goods.",
+                            "D Norwegian towns at this time attracted traders from around the world.",
+                            "E Vikings were primarily interested in their trading links with the Middle East."
+                        ],
+                        "answer": ["A", "C"]
                     }
                 ]
             }
@@ -1171,7 +1150,8 @@
 {
   "passageId": "ai_attitudes_1",
   "title": "Attitudes towards Artificial Intelligence",
-  "passage": "A\nArtificial intelligence (AI) can already predict the future. Police forces are using it to map when and where crime is likely to occur. Doctors can use it to predict when a patient is most likely to have a heart attack or stroke. Researchers are even trying to give AI imagination so it can plan for unexpected consequences.\n\nMany decisions in our lives require a good forecast, and AI is almost always better at forecasting than we are. Yet for all these technological advances, we still seem to deeply lack confidence in AI predictions. Recent cases show that people don’t like relying on AI and prefer to trust human experts, even if these experts are wrong.\n\nIf we want AI to really benefit people, we need to find a way to get people to trust it. To do that, we need to understand why people are so reluctant to trust AI in the first place.\n\nB\nTake the case of Watson for Oncology, one of technology giant IBM’s supercomputer programs. Their attempt to promote this program to cancer doctors was a PR disaster. The AI promised to deliver top-quality recommendations on the treatment of 12 cancers that accounted for 80% of the world’s cases. But when doctors first interacted with Watson, they found themselves in a rather difficult situation. On the one hand, if Watson provided guidance about a treatment that coincided with their own opinions, physicians did not see much point in Watson’s recommendations. The supercomputer was simply telling them what they already knew, and these recommendations did not change the actual treatment.\n\nOn the other hand, if Watson generated a recommendation that contradicted the experts’ opinion, doctors would typically conclude that Watson wasn’t competent. And the machine wouldn’t be able to explain why its treatment was plausible because its machine-learning algorithms were simply too complex to be fully understood by humans. Consequently, this has caused even more suspicion and disbelief, leading many doctors to ignore the seemingly outlandish AI recommendations and stick to their own expertise.\n\nC\nThis is just one example of people’s lack of confidence in AI and their reluctance to accept what AI has to offer. Trust in other people is often based on our understanding of how others think and having experience of their reliability. This helps create a psychological feeling of safety. AI, on the other hand, is still fairly new and unfamiliar to most people. Even if it can be technically explained (and that’s not always the case), AI’s decision-making process is usually too difficult for most people to comprehend. And interacting with something we don’t understand can cause anxiety and give us a sense that we’re losing control.\n\nMany people are also simply not familiar with many instances of AI actually working, because it often happens in the background. Instead, they are acutely aware of instances where AI goes wrong. Embarrassing AI failures receive a disproportionate amount of media attention, emphasising the message that we cannot rely on technology. Machine learning is not foolproof, in part because the humans who design it aren’t.\n\nD\nFeelings about AI run deep. In a recent experiment, people from a range of backgrounds were given various sci-fi films about AI to watch and then asked questions about automation in everyday life. It was found that, regardless of whether the film they watched depicted AI in a positive or negative light, simply watching a cinematic vision of our technological future polarised the participants’ attitudes. Optimists became more extreme in their enthusiasm for AI and sceptics became even more guarded.\n\nThis suggests people use relevant evidence about AI in a biased manner to support their existing attitudes, a deep-rooted human tendency known as “confirmation bias”. As AI is represented more and more in media and entertainment, it could lead to a society split between those who benefit from AI and those who reject it. More pertinently, refusing to accept the advantages offered by AI could place a large group of people at a serious disadvantage.\n\nE\nFortunately, we already have some ideas about how to improve trust in AI. Simply having previous experience with AI can significantly improve people’s opinions about the technology, as was found in the study mentioned above. Evidence also suggests the more you use other technologies such as the internet, the more you trust them.\n\nAnother solution may be to reveal more about the algorithms which AI uses and the purposes they serve. Several high-profile social media companies and online marketplaces already release transparency reports about government requests and surveillance disclosures. A similar practice for AI could help people have a better understanding of the way algorithmic decisions are made.\n\nF\nResearch suggests that allowing people some control over AI decision-making could also improve trust and enable AI to learn from human experience. For example, one study showed that when people were allowed the freedom to slightly modify an algorithm, they felt more satisfied with its decisions, more likely to believe it was superior and more likely to use it in the future.\n\nWe don’t need to understand the intricate inner workings of AI systems, but if people are given a degree of responsibility for how they are implemented, they will be more willing to accept AI into their lives.",
+  "passage": "A\nArtificial intelligence (AI) can already predict the future. Police forces are using it to map when and where crime is likely to occur. Doctors can use it to predict when a patient is most likely to have a heart attack or stroke. Researchers are even trying to give AI imagination so it can plan for unexpected consequences.\n\nMany decisions in our lives require a good forecast, and AI is almost always better at forecasting than we are. Yet for all these technological advances, we still seem to deeply lack confidence in AI predictions. Recent cases show that people don't like relying on AI and prefer to trust human experts, even if these experts are wrong.\n\nIf we want AI to really benefit people, we need to find a way to get people to trust it. To do that, we need to understand why people are so reluctant to trust AI in the first place.\n\nB\nTake the case of Watson for Oncology, one of technology giant IBM's supercomputer programs. Their attempt to promote this program to cancer doctors was a PR disaster. The AI promised to deliver top-quality recommendations on the treatment of 12 cancers that accounted for 80% of the world's cases. But when doctors first interacted with Watson, they found themselves in a rather difficult situation. On the one hand, if Watson provided guidance about a treatment that coincided with their own opinions, physicians did not see much point in Watson's recommendations. The supercomputer was simply telling them what they already knew, and these recommendations did not change the actual treatment.\n\nOn the other hand, if Watson generated a recommendation that contradicted the experts' opinion, doctors would typically conclude that Watson wasn't competent. And the machine wouldn't be able to explain why its treatment was plausible because its machine-learning algorithms were simply too complex to be fully understood by humans. Consequently, this has caused even more suspicion and disbelief, leading many doctors to ignore the seemingly outlandish AI recommendations and stick to their own expertise.\n\nC\nThis is just one example of people's lack of confidence in AI and their reluctance to accept what AI has to offer. Trust in other people is often based on our understanding of how others think and having experience of their reliability. This helps create a psychological feeling of safety. AI, on the other hand, is still fairly new and unfamiliar to most people. Even if it can be technically explained (and that's not always the case), AI's decision-making process is usually too difficult for most people to comprehend. And interacting with something we don't understand can cause anxiety and give us a sense that we're losing control.\n\nMany people are also simply not familiar with many instances of AI actually working, because it often happens in the background. Instead, they are acutely aware of instances where AI goes wrong. Embarrassing AI failures receive a disproportionate amount of media attention, emphasising the message that we cannot rely on technology. Machine learning is not foolproof, in part because the humans who design it aren't.\n\nD\nFeelings about AI run deep. In a recent experiment, people from a range of backgrounds were given various sci-fi films about AI to watch and then asked questions about automation in everyday life. It was found that, regardless of whether the film they watched depicted AI in a positive or negative light, simply watching a cinematic vision of our technological future polarised the participants' attitudes. Optimists became more extreme in their enthusiasm for AI and sceptics became even more guarded.\n\nThis suggests people use relevant evidence about AI in a biased manner to support their existing attitudes, a deep-rooted human tendency known as 'confirmation bias'. As AI is represented more and more in media and entertainment, it could lead to a society split between those who benefit from AI and those who reject it. More pertinently, refusing to accept the advantages offered by AI could place a large group of people at a serious disadvantage.\n\nE\nFortunately, we already have some ideas about how to improve trust in AI. Simply having previous experience with AI can significantly improve people's opinions about the technology, as was found in the study mentioned above. Evidence also suggests the more you use other technologies such as the internet, the more you trust them.\n\nAnother solution may be to reveal more about the algorithms which AI uses and the purposes they serve. Several high-profile social media companies and online marketplaces already release transparency reports about government requests and surveillance disclosures. A similar practice for AI could help people have a better understanding of the way algorithmic decisions are made.\n\nF\nResearch suggests that allowing people some control over AI decision-making could also improve trust and enable AI to learn from human experience. For example, one study showed that when people were allowed the freedom to slightly modify an algorithm, they felt more satisfied with its decisions, more likely to believe it was superior and more likely to use it in the future.\n\nWe don't need to understand the intricate inner workings of AI systems, but if people are given a degree of responsibility for how they are implemented, they will be more willing to accept AI into their lives.",
+
   "questionSets": [
     {
     "type": "multiple-choice",
@@ -1185,7 +1165,8 @@
           "justifying an opinion about an issue",
           "highlighting the existence of a problem",
           "explaining the reasons for a phenomenon"
-        ]
+        ],
+        "answer": "D"
       },
       {
         "id": "q34",
@@ -1195,7 +1176,8 @@
           "Its complexity makes them feel that they are at a disadvantage.",
           "They would rather wait for the technology to be tested over a period of time.",
           "Misunderstandings about how it works make it seem more challenging than it is."
-        ]
+        ],
+        "answer": "D"
       },
       {
         "id": "q35",
@@ -1205,7 +1187,8 @@
           "It devotes an excessive amount of attention to AI.",
           "Its reports of incidents involving AI are often inaccurate.",
           "It gives the impression that AI failures are due to designer error."
-        ]
+        ],
+        "answer": "D"
       }
     ]
   },
@@ -1246,9 +1229,9 @@
         "options": ["YES", "NO", "NOT GIVEN"]
       }
     ]
-  }
-    
+}
   ]
 }
-
 ]
+
+

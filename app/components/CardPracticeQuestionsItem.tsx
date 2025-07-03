@@ -144,16 +144,14 @@ function CardPracticeQuestionsItem({
             </div>
 
             {submitted && (
-              <div className="mt-3 p-3 rounded-lg bg-gray-50">
-                <p className="text-sm text-gray-700">
+              <div className="mt-3 p-3 rounded-lg bg-green-100">
+                <p className="text-sm text-green-700">
                   <span className="font-medium">Correct answer:</span>{" "}
                   {type === "NoteCompletion" || type === "TableCompletion"
                     ? question.answer
                     : question.options &&
                       question.options[question.correctAnswer] !== undefined
-                    ? `${String.fromCharCode(65 + question.correctAnswer)}. ${
-                        question.options[question.correctAnswer]
-                      }`
+                    ? question.options[question.correctAnswer]
                     : null}
                 </p>
               </div>
