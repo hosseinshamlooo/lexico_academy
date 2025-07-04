@@ -8,6 +8,7 @@ import CardPracticeQuestionsMCQ from "@/app/components/CardPracticeQuestionsMCQ"
 import CardPracticeQuestionsWordBankCompletion from "@/app/components/CardPracticeQuestionsWordBankCompletion";
 import CardPracticeQuestionsMatchingInfo from "@/app/components/CardPracticeQuestionsMatchingInfo";
 import CardPracticeQuestionsDiagramLabelling from "@/app/components/CardPracticeQuestionsDiagramLabelling";
+import CardPracticeQuestionsCompletion from "@/app/components/CardPracticeQuestionsCompletion";
 
 interface QuestionSet {
   type?: string;
@@ -24,6 +25,7 @@ interface QuestionSet {
   diagramUrl?: string;
   labels?: string[];
   answers?: string[];
+  mode?: string;
 }
 
 interface PracticeData {
@@ -103,6 +105,8 @@ export default function PracticePage() {
     normalizedType
   );
   const isWordBankType = normalizedType === "WordBankCompletion";
+  const isSummaryCompletionType =
+    questionSet.type === "form-note-table-flowchart-summary-completion";
   const isMatchingInfoType = normalizedType === "MatchingInfo";
   const isDiagramLabellingType = normalizedType === "DiagramLabelling";
 
@@ -129,6 +133,7 @@ export default function PracticePage() {
   }
 
   const wordBankQuestionSet = {
+    mode: questionSet.mode || "",
     wordBank: questionSet.wordBank || [],
     questions: questionSet.questions.map((q: Question, index: number) => ({
       id: index + 1,
@@ -182,6 +187,16 @@ export default function PracticePage() {
             <CardPracticeQuestionsWordBankCompletion
               questionSet={wordBankQuestionSet}
             />
+          ) : isSummaryCompletionType ? (
+            questionSet.mode === "word-bank" ? (
+              <CardPracticeQuestionsWordBankCompletion
+                questionSet={wordBankQuestionSet}
+              />
+            ) : questionSet.mode === "input" ? (
+              <CardPracticeQuestionsCompletion
+                questionSet={wordBankQuestionSet}
+              />
+            ) : null
           ) : isMatchingInfoType ? (
             <CardPracticeQuestionsMatchingInfo
               people={matchingInfoPeople}

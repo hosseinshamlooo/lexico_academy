@@ -267,7 +267,8 @@
                 ]
             },
             {
-                "type": "word-bank-completion",
+                "type": "form-note-table-flowchart-summary-completion",
+                "mode": "word-bank",
                 "instructions": "Complete the summary using the list of words, A–G, below. Write the correct letter, A–G, in boxes 31–34 on your answer sheet.",
                 "wordBank": [
                     "pressure",
@@ -445,7 +446,7 @@
                 ]
             },
             {
-                "type": "word-bank-completion",
+                "type": "form-note-table-flowchart-summary-completion",
                 "instructions": "Choose ONE WORD ONLY from the passage for each answer.",
                 "questions": [
                     {
@@ -520,6 +521,7 @@
             },
             {
                 "type": "form-note-table-flowchart-summary-completion",
+                "mode": "word-bank",
                 "instructions": "Complete the summary using the list of words, A–H, below. Write the correct letter, A–H, in boxes 17–20 on your answer sheet.",
                 "wordBank": [
                     "solution",
@@ -534,22 +536,22 @@
                 "questions": [
                     {
                         "id": "q17",
-                        "question": "Many have a beneficial effect, and only a relatively small number lead to 17 [blank].",
+                        "question": "Many have a beneficial effect, and only a relatively small number lead to [blank].",
                         "answer": "illness"
                     },
                     {
                         "id": "q18",
-                        "question": "we should accept that our relationship with microbes is one based on 18 [blank] .",
+                        "question": "we should accept that our relationship with microbes is one based on [blank] .",
                         "answer": "partnership"
                     },
                     {
                         "id": "q19",
-                        "question": "Our poor 19 [blank], our overuse of antibiotics, and our excessive focus on 20 [blank] are upsetting the bacterial balance.",
+                        "question": "Our poor [blank], our overuse of antibiotics,",
                         "answer": "nutrition"
                     },
                     {
                         "id": "q20",
-                        "question": "our excessive focus on 20 [blank] are upsetting the bacterial balance.",
+                        "question": "and our excessive focus on [blank] are upsetting the bacterial balance.",
                         "answer": "cleanliness"
                     }
                 ]
@@ -668,7 +670,8 @@
                 ]
             },
             {
-                "type": "word-bank-completion",
+                "type": "form-note-table-flowchart-summary-completion",
+                "mode": "word-bank",
                 "instructions": "Complete the summary using the list of words, A–J, below. Write the correct letter, A–J, in boxes 31–35 on your answer sheet.",
                 "wordBank": [
                     "opinions",
@@ -685,27 +688,27 @@
                 "questions": [
                     {
                         "id": "q31",
-                        "question": "It is important to have a certain degree of 31 [blank] regarding the extent of our knowledge.",
+                        "question": "It is important to have a certain degree of [blank] regarding the extent of our knowledge.",
                         "answer": "modesty"
                     },
                     {
                         "id": "q32",
-                        "question": "and to take into account 32 [blank] which may not be the same as our own.",
+                        "question": "and to take into account [blank] which may not be the same as our own.",
                         "answer": "opinions"
                     },
                     {
                         "id": "q33",
-                        "question": "We should also be able to take a broad 33 [blank] of any situation.",
+                        "question": "We should also be able to take a broad [blank] of any situation.",
                         "answer": "view"
                     },
                     {
                         "id": "q34",
-                        "question": "Grossmann also believes that it is better to regard scenarios with 34 [blank].",
+                        "question": "Grossmann also believes that it is better to regard scenarios with [blank].",
                         "answer": "objectivity"
                     },
                     {
                         "id": "q35",
-                        "question": "By avoiding the first-person perspective, we focus more on 35 [blank] and on other moral ideals, which in turn leads to wiser decision-making.",
+                        "question": "By avoiding the first-person perspective, we focus more on [blank] and on other moral ideals, which in turn leads to wiser decision-making.",
                         "answer": "fairness"
                     }
                 ]
@@ -821,46 +824,47 @@
             },
             {
                 "type": "form-note-table-flowchart-summary-completion",
+                "mode": "input",
                 "instructions": "Complete the summary below. Choose ONE WORD ONLY from the passage for each answer. Write your answers in boxes 6–13 on your answer sheet.",
                 "questions": [
                     {
                         "id": "q6",
-                        "question": "Warships were designed so that they were 6 [blank] and moved quickly.",
+                        "question": "Warships were designed so that they were [blank] and moved quickly.",
                         "answer": "lightweight"
                     },
                     {
                         "id": "q7",
-                        "question": "A battering ram made of 7 [blank] was included in the design for attacking and damaging the timber and oars of enemy ships.",
+                        "question": "A battering ram made of [blank] was included in the design for attacking and damaging the timber and oars of enemy ships.",
                         "answer": "bronze"
                     },
                     {
                         "id": "q8",
-                        "question": "Warships, such as the 'trireme', had rowers on three different 8 [blank] .",
+                        "question": "Warships, such as the 'trireme', had rowers on three different [blank] .",
                         "answer": "levels"
                     },
                     {
                         "id": "q9",
-                        "question": "Unlike warships, merchant ships had a broad 9 [blank] that lay far below the surface of the sea.",
+                        "question": "Unlike warships, merchant ships had a broad [blank] that lay far below the surface of the sea.",
                         "answer": "hull"
                     },
                     {
                         "id": "q10",
-                        "question": "They had both square and 10 [blank] sails.",
+                        "question": "They had both square and [blank] sails.",
                         "answer": "triangular"
                     },
                     {
                         "id": "q11",
-                        "question": "On merchant ships and warships, 11 [blank] was used to ensure rowers moved their oars in and out of the water at the same time.",
+                        "question": "On merchant ships and warships, [blank] was used to ensure rowers moved their oars in and out of the water at the same time.",
                         "answer": "music"
                     },
                     {
                         "id": "q12",
-                        "question": "Quantities of agricultural goods such as 12 [blank] were transported by merchant ships to two main ports in Italy.",
+                        "question": "Quantities of agricultural goods such as [blank] were transported by merchant ships to two main ports in Italy.",
                         "answer": "grain"
                     },
                     {
                         "id": "q13",
-                        "question": "The ships were pulled to the shore by 13 [blank] .",
+                        "question": "The ships were pulled to the shore by [blank] .",
                         "answer": "towboats"
                     }
                 ]
@@ -885,12 +889,19 @@
                 ]
             },
             {
-                "type": "summary-completion",
+                "type": "form-note-table-flowchart-summary-completion",
+                "mode": "input",
                 "instructions": "Complete the summary below. Choose ONE WORD ONLY from the passage for each answer. Write your answers in boxes 20–22 on your answer sheet.",
                 "questions": [
-                    { "id": "q20", "question": "Organic materials such as animal skins and textiles are not discovered very often at archaeological sites. They have little protection against 20 __________, which means that they decay relatively quickly.", "answer": "microorganisms" },
-                    { "id": "q21", "question": "In the past, there were trade routes through these mountains and 21 __________ gathered there in the summer months to avoid being attacked by 22 __________ on lower ground.", "answer": "reindeer" },
-                    { "id": "q22", "question": "In the past, there were trade routes through these mountains and 21 reindeer gathered there in the summer months to avoid being attacked by 22 __________ on lower ground.", "answer": "insects" }
+                    { 
+                        "id": "q20", 
+                        "question": "Organic materials such as animal skins and textiles are not discovered very often at archaeological sites. They have little protection against  [blank], which means that they decay relatively quickly.", 
+                        "answer": "microorganisms" },
+                    { 
+                        "id": "q21", 
+                        "question": "In the past, there were trade routes through these mountains and [blank] gathered there in the summer months to avoid being attacked by [blank] on lower ground.", 
+                        "answer": ["reindeer", "insects"] }
+                    
                 ]
             },
             {
@@ -1115,7 +1126,8 @@
       ]
     },
     {
-      "type": "summary-completion",
+      "type": "form-note-table-flowchart-summary-completion",
+      "mode":"word-bank",
       "instructions": "Complete the summary using the list of words, A–H, below. Write the correct letter, A–H, in boxes 18–22 on your answer sheet.",
       "wordBank": [
         "fast",
@@ -1128,15 +1140,15 @@
         "thorough"
       ],
       "questions": [
-        { "id": "q18", "question": "There have been many studies on digital screen use, showing some 18 [blank] trends." },
-        { "id": "q19", "question": "Her team then used a question-and-answer technique to find out how 19 [blank] each group's understanding of the plot was." },
-        { "id": "q20", "question": "with those who read screens finding the order of information 20 [blank] to recall." },
-        { "id": "q21", "question": "Studies by Ziming Liu show that students are tending to read 21 [blank] words and phrases in a text to save time." },
-        { "id": "q22", "question": "this approach, she says, gives the reader a superficial understanding of the 22 [blank] content of material, leaving no time for thought." }
+        { "id": "q18", "question": "There have been many studies on digital screen use, showing some [blank] trends." },
+        { "id": "q19", "question": "Her team then used a question-and-answer technique to find out how [blank] each group's understanding of the plot was." },
+        { "id": "q20", "question": "with those who read screens finding the order of information [blank] to recall." },
+        { "id": "q21", "question": "Studies by Ziming Liu show that students are tending to read [blank] words and phrases in a text to save time." },
+        { "id": "q22", "question": "this approach, she says, gives the reader a superficial understanding of the [blank] content of material, leaving no time for thought." }
       ]
     },
     {
-      "type": "yes-no-not-given",
+      "type": "t-f-ng-or-y-n-ng",
       "instructions": "Do the following statements agree with the views of the writer in Reading Passage 2? In boxes 23–26 on your answer sheet, write YES if the statement agrees with the views of the writer, NO if the statement contradicts the views of the writer, NOT GIVEN if it is impossible to say what the writer thinks about this.",
       "questions": [
         { "id": "q23", "question": "The medium we use to read can affect our choice of reading content.", "options": ["YES", "NO", "NOT GIVEN"] },
@@ -1193,14 +1205,14 @@
     ]
   },
   {
-    "type": "yes-no-not-given",
+    "type": "t-f-ng-or-y-n-ng",
     "instructions": "Do the following statements agree with the views of the writer in the passage? Write YES if the statement agrees with the views of the writer, NO if it contradicts, NOT GIVEN if it is impossible to say what the writer thinks.",
     "questions": [
       { "id": "q36", "question": "[Add your YES/NO/NOT GIVEN question here]", "options": ["YES", "NO", "NOT GIVEN"] }
     ]
   },
   {
-    "type": "yes-no-not-given",
+    "type": "t-f-ng-or-y-n-ng",
     "instructions": "Do the following statements agree with the claims of the writer in Reading Passage 3? In boxes 36–40 on your answer sheet, write YES if the statement agrees with the claims of the writer, NO if the statement contradicts the claims of the writer, NOT GIVEN if it is impossible to say what the writer thinks about this.",
     "questions": [
       {

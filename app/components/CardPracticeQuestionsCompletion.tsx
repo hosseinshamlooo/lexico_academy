@@ -11,12 +11,15 @@ interface Question {
 interface CardPracticeQuestionsCompletionProps {
   questionSet: {
     questions: Question[];
+    mode: string;
   };
 }
 
-function CardPracticeQuestionsCompletion({
+export default function CardPracticeQuestionsCompletion({
   questionSet,
 }: CardPracticeQuestionsCompletionProps) {
+  if (questionSet.mode !== "input") return null;
+
   const [userAnswers, setUserAnswers] = useState<string[]>(
     Array(questionSet.questions.length).fill("")
   );
@@ -129,5 +132,3 @@ function CardPracticeQuestionsCompletion({
     </div>
   );
 }
-
-export default CardPracticeQuestionsCompletion;

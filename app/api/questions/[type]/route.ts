@@ -23,8 +23,8 @@ interface Passage {
   questionSets: QuestionSet[];
 }
 
-export async function GET(request: NextRequest, { params }: { params: { type: string } }) {
-  const typeStr = params.type;
+export async function GET(request: NextRequest, { params }: { params: Promise<{ type: string }> }) {
+  const { type: typeStr } = await params;
 
   // Dynamically read the JSON file
   const filePath = path.join(process.cwd(), 'app', 'data', 'reading.json');
