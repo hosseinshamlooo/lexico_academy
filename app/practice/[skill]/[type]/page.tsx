@@ -9,6 +9,7 @@ import CardPracticeQuestionsWordBankCompletion from "@/app/components/CardPracti
 import CardPracticeQuestionsMatchingInfo from "@/app/components/CardPracticeQuestionsMatchingInfo";
 import CardPracticeQuestionsDiagramLabelling from "@/app/components/CardPracticeQuestionsDiagramLabelling";
 import CardPracticeQuestionsCompletion from "@/app/components/CardPracticeQuestionsCompletion";
+import CardPracticeQuestionsMatchingHeadings from "@/app/components/CardPracticeQuestionsMatchingHeadings";
 
 interface QuestionSet {
   type?: string;
@@ -26,6 +27,8 @@ interface QuestionSet {
   labels?: string[];
   answers?: string[];
   mode?: string;
+  headings?: { id: string; text: string }[];
+  instructions?: string;
 }
 
 interface PracticeData {
@@ -110,6 +113,9 @@ export default function PracticePage() {
   const isMatchingInfoType = normalizedType === "MatchingInfo";
   const isDiagramLabellingType = normalizedType === "DiagramLabelling";
   const isSentenceCompletionType = questionSet.type === "sentence-completion";
+  const isMatchingHeadingsType =
+    normalizedType === "MatchingHeadings" ||
+    normalizedType === "matching-headings";
 
   // Prepare question sets for each type
   let mcqQuestionSet = undefined;
@@ -213,6 +219,27 @@ export default function PracticePage() {
                 diagramUrl: questionSet.diagramUrl,
                 questions: questionSet.questions,
                 answers: questionSet.answers || [],
+              }}
+            />
+          ) : isMatchingHeadingsType ? (
+            <CardPracticeQuestionsMatchingHeadings
+              questionSet={{
+                headings: questionSet.headings || [
+                  { id: "i", text: "Heading i" },
+                  { id: "ii", text: "Heading ii" },
+                  { id: "iii", text: "Heading iii" },
+                  { id: "iv", text: "Heading iv" },
+                  { id: "v", text: "Heading v" },
+                  { id: "vi", text: "Heading vi" },
+                  { id: "vii", text: "Heading vii" },
+                  { id: "viii", text: "Heading viii" },
+                ],
+                questions: (questionSet.questions || []).map((q, idx) => ({
+                  id: q.id ?? idx + 1,
+                  question: q.question,
+                  answer: typeof q.answer === "string" ? q.answer : "",
+                })),
+                instructions: questionSet.instructions,
               }}
             />
           ) : null}
