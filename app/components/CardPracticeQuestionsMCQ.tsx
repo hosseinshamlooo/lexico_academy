@@ -3,6 +3,7 @@
 
 "use client";
 import React, { useState } from "react";
+import InstructionBox from "@/app/components/InstructionBox";
 
 interface MCQQuestion {
   id: string;
@@ -132,7 +133,9 @@ export default function CardPracticeQuestionsMCQ({
   return (
     <div className="bg-white rounded-lg shadow-md p-6 max-w-xl mx-auto">
       <div className="mb-4">
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">Questions</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          Multiple Choice
+        </h2>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="bg-blue-600 h-2 rounded-full transition-all duration-300"
@@ -160,9 +163,9 @@ export default function CardPracticeQuestionsMCQ({
             : 1;
           return (
             <div key={question.id} className="rounded-lg p-4 bg-white">
-              <h3 className="font-medium text-gray-900 mb-3 text-base">
+              <InstructionBox className="mb-3">
                 {question.question}
-              </h3>
+              </InstructionBox>
               <div className="space-y-2">
                 {question.options.map((option, index) => (
                   <label

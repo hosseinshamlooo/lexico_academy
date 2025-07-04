@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import InstructionBox from "@/app/components/InstructionBox";
 
 interface DiagramLabellingQuestion {
   diagramUrl?: string;
   questions: Array<{ id: string | number; question: string }>;
   answers: string[];
+  instructions?: string;
 }
 
 interface CardPracticeQuestionsDiagramLabellingProps {
@@ -59,6 +61,11 @@ function CardPracticeQuestionsDiagramLabelling({
         </p>
       </div>
       <form onSubmit={handleSubmit} className="space-y-6">
+        {questionSet.instructions && (
+          <InstructionBox className="mb-3">
+            {questionSet.instructions}
+          </InstructionBox>
+        )}
         {diagramUrl && (
           <Image
             src={diagramUrl}

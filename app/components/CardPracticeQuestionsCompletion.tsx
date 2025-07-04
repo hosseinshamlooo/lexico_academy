@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import InstructionBox from "@/app/components/InstructionBox";
 
 interface Question {
   id: number;
@@ -12,6 +13,7 @@ interface CardPracticeQuestionsCompletionProps {
   questionSet: {
     questions: Question[];
     mode: string;
+    instructions?: string;
   };
 }
 
@@ -23,6 +25,7 @@ function safeTrim(val: string | undefined | null) {
 export default function CardPracticeQuestionsCompletion({
   questionSet,
 }: CardPracticeQuestionsCompletionProps) {
+  const { instructions } = questionSet;
   if (questionSet.mode !== "input") return null;
 
   // Build a flat array of all answers in order, matching the number of [blank]s in each question
@@ -72,13 +75,13 @@ export default function CardPracticeQuestionsCompletion({
   const total = totalBlanks;
 
   // Render
-  let globalBlankIdx = 0;
   return (
     <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">
           Summary Completion
         </h2>
+
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="bg-blue-600 h-2 rounded-full transition-all duration-300"
@@ -89,27 +92,31 @@ export default function CardPracticeQuestionsCompletion({
           {answeredCount} of {total} blanks filled
         </p>
       </div>
+      {questionSet.instructions && (
+        <InstructionBox className="mb-4 mt-4">
+          {questionSet.instructions}
+        </InstructionBox>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-6">
         {questionSet.questions.map((q, qIdx) => {
           const parts = q.question.split(/(\[blank\])/g);
-          // Find all global blank indices for this question
           const numBlanks = (q.question.match(/\[blank\]/g) || []).length;
-          const globalBlankIndices = Array.from(
+          // Compute the global blank indices for this question
+          let startIdx = 0;
+          for (let i = 0; i < qIdx; i++) startIdx += blankCounts[i];
+          const blankIndices = Array.from(
             { length: numBlanks },
-            (_, i) => {
-              let idx = 0;
-              for (let j = 0; j < qIdx; j++) idx += blankCounts[j];
-              return idx + i;
-            }
+            (_, i) => startIdx + i
           );
           return (
-            <div key={q.id} className="py-2 px-0 w-full">
+            <div key={q.id} className="mb-6">
               <div className="text-gray-900 mb-3 text-base">
                 {parts.map((part, i) =>
                   part === "[blank]" ? (
                     (() => {
-                      const thisGlobalIdx = globalBlankIdx;
-                      globalBlankIdx++;
+                      const thisGlobalIdx = startIdx;
+                      startIdx++;
                       return (
                         <input
                           key={`blank-${q.id}-${i}`}
@@ -141,20 +148,20 @@ export default function CardPracticeQuestionsCompletion({
               </div>
               {/* Correction box: only show if at least one blank in this question is wrong */}
               {submitted &&
-                globalBlankIndices.some(
-                  (idx) =>
-                    safeTrim(userAnswers[idx]) !== safeTrim(flatAnswers[idx])
+                blankIndices.some(
+                  (bIdx) =>
+                    safeTrim(userAnswers[bIdx]) !== safeTrim(flatAnswers[bIdx])
                 ) && (
                   <div className="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 mt-2 text-sm text-gray-700">
                     <span className="font-semibold text-gray-600">
-                      Correct answer{globalBlankIndices.length > 1 ? "s" : ""}:{" "}
+                      Correct answer{blankIndices.length > 1 ? "s" : ""}:
                     </span>
-                    {globalBlankIndices.map((idx, i) => (
-                      <span key={idx} className="inline-block mr-2">
+                    {blankIndices.map((bIdx, i) => (
+                      <span key={bIdx} className="inline-block mr-2">
                         <span className="text-green-700 font-semibold">
-                          {flatAnswers[idx] || "—"}
+                          {flatAnswers[bIdx] || "—"}
                         </span>
-                        {i < globalBlankIndices.length - 1 && <span>, </span>}
+                        {i < blankIndices.length - 1 && <span>, </span>}
                       </span>
                     ))}
                   </div>

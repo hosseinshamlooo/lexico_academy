@@ -147,6 +147,7 @@ export default function PracticePage() {
       question: q.question,
       answer: q.answer ?? "",
     })),
+    instructions: questionSet.instructions,
   };
 
   // For matching-info type

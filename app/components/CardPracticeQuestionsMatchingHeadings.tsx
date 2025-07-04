@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import InstructionBox from "@/app/components/InstructionBox";
 
 interface MatchingHeadingsQuestion {
   id: string | number;
@@ -45,7 +46,9 @@ export default function CardPracticeQuestionsMatchingHeadings({
         <h2 className="text-xl font-semibold text-gray-900 mb-2">
           Matching Headings
         </h2>
-        {instructions && <p className="mb-2 text-gray-700">{instructions}</p>}
+        {instructions && (
+          <InstructionBox className="mb-4">{instructions}</InstructionBox>
+        )}
         <div className="rounded-xl bg-gray-100 p-4 flex flex-col items-center gap-2 mb-4 border border-gray-200 shadow-sm">
           <h3 className="text-base font-semibold text-gray-700 mb-2">
             List of Headings
@@ -70,7 +73,9 @@ export default function CardPracticeQuestionsMatchingHeadings({
                 <span className="font-semibold w-8 text-gray-500 text-right flex-shrink-0 pt-0.1">
                   {idx + 1}.
                 </span>
-                <span className="flex-1 text-left">{q.question}</span>
+                <InstructionBox className="flex-1 text-left mb-2">
+                  {q.question}
+                </InstructionBox>
                 <select
                   className={`w-28 h-9 text-center border-2 rounded-lg text-base font-bold focus:outline-none transition-all
                     ${

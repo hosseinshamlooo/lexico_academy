@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ProgressBarOnboarding from "@/app/components/ProgressBarOnboarding";
+import InstructionBox from "@/app/components/InstructionBox";
 
 interface MatchingInfoPerson {
   id: string; // 'A', 'B', 'C'
@@ -65,9 +66,9 @@ function CardPracticeQuestionsMatchingInfo({
         </div>
       </div>
       {instructions && (
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 px-3 py-2 mb-3 text-yellow-900 text-base font-medium rounded-lg w-full max-w-xl mx-auto">
+        <InstructionBox className="w-full max-w-xl mx-auto mb-3">
           {instructions}
-        </div>
+        </InstructionBox>
       )}
       {/* Names Box: only render if mode is 'people' */}
       {mode === "people" && people.length > 0 && (
@@ -98,11 +99,13 @@ function CardPracticeQuestionsMatchingInfo({
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="mb-6 text-base leading-8 text-gray-900 space-y-4">
           {questions.map((q, idx) => (
-            <div key={q.id} className="flex items-start gap-3">
-              <span className="font-semibold w-8 text-gray-500 text-right flex-shrink-0 pt-0.1">
+            <div key={q.id} className="flex items-start gap-2">
+              <span className="font-semibold w-7 text-gray-500 text-right flex-shrink-0 pt-0.1 text-sm">
                 {idx + 1}.
               </span>
-              <span className="flex-1 text-left">{q.question}</span>
+              <InstructionBox className="flex-1 text-left text-sm mb-2">
+                {q.question}
+              </InstructionBox>
               <input
                 type="text"
                 maxLength={1}

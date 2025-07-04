@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import InstructionBox from "@/app/components/InstructionBox";
 
 interface Question {
   id: string | number;
@@ -11,6 +12,7 @@ interface CardPracticeQuestionsWordBankCompletionProps {
     wordBank: string[];
     questions: Question[];
     mode: string;
+    instructions?: string;
   };
 }
 
@@ -137,9 +139,29 @@ export default function CardPracticeQuestionsWordBankCompletion({
   // Render
   return (
     <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
+      <h2 className="text-xl font-semibold text-gray-900 mb-2">
+        Summary Completion
+      </h2>
+      <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+        <div
+          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+          style={{ width: `${(answeredCount / total) * 100}%` }}
+        ></div>
+        <p className="text-sm text-gray-600 mt-2 mb-4">
+          {answeredCount} of {total} blanks filled
+        </p>
+      </div>
+
+      {/* Render instructions under progress bar */}
+      {questionSet.instructions && (
+        <InstructionBox className="mb-4 mt-10">
+          {questionSet.instructions}
+        </InstructionBox>
+      )}
+
       {/* Word Bank Box */}
       {questionSet.mode === "word-bank" && (
-        <div className="mb-6">
+        <div className="mb-6 mt-6">
           <div className="rounded-xl bg-gray-100 p-4 flex flex-wrap gap-2 justify-center mb-4 border border-gray-200">
             {bank.length === 0 ? (
               <span className="text-gray-400 italic">All words used</span>
@@ -163,18 +185,7 @@ export default function CardPracticeQuestionsWordBankCompletion({
           </div>
         </div>
       )}
-      <h2 className="text-xl font-semibold text-gray-900 mb-2">
-        Summary Completion
-      </h2>
-      <div className="w-full bg-gray-200 rounded-full h-2">
-        <div
-          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-          style={{ width: `${(answeredCount / total) * 100}%` }}
-        ></div>
-      </div>
-      <p className="text-sm text-gray-600 mt-2">
-        {answeredCount} of {total} blanks filled
-      </p>
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="mb-6 text-base leading-8 text-gray-900 space-y-4">
           {uniqueQuestions.map(({ sentence }, qIdx) => {
