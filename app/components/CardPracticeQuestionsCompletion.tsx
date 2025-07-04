@@ -60,8 +60,8 @@ export default function CardPracticeQuestionsCompletion({
   const score = flatAnswers.reduce(
     (acc, answer, idx) =>
       acc +
-      (userAnswers[idx]?.trim().toLowerCase() ===
-      (answer ? answer.trim().toLowerCase() : "")
+      ((userAnswers[idx] ?? "").trim().toLowerCase() ===
+      (answer ?? "").trim().toLowerCase()
         ? 1
         : 0),
     0
@@ -117,14 +117,12 @@ export default function CardPracticeQuestionsCompletion({
                             type="text"
                             className={`inline-block w-20 align-middle px-1 py-0.5 rounded border border-gray-300 bg-gray-50 focus:border-blue-500 hover:border-blue-500 text-sm transition-all duration-200 ${
                               submitted
-                                ? userAnswers[thisGlobalIdx]
-                                    ?.trim()
+                                ? (userAnswers[thisGlobalIdx] ?? "")
+                                    .trim()
                                     .toLowerCase() ===
-                                  (flatAnswers[thisGlobalIdx]
-                                    ? flatAnswers[thisGlobalIdx]
-                                        .trim()
-                                        .toLowerCase()
-                                    : "")
+                                  (flatAnswers[thisGlobalIdx] ?? "")
+                                    .trim()
+                                    .toLowerCase()
                                   ? "border-green-500 bg-green-50"
                                   : "border-red-500 bg-red-50"
                                 : ""
@@ -151,10 +149,8 @@ export default function CardPracticeQuestionsCompletion({
               {submitted &&
                 globalBlankIndices.some(
                   (idx) =>
-                    userAnswers[idx]?.trim().toLowerCase() !==
-                    (flatAnswers[idx]
-                      ? flatAnswers[idx].trim().toLowerCase()
-                      : "")
+                    (userAnswers[idx] ?? "").trim().toLowerCase() !==
+                    (flatAnswers[idx] ?? "").trim().toLowerCase()
                 ) && (
                   <div className="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 mt-2 text-sm text-gray-700">
                     <span className="font-semibold text-gray-600">
