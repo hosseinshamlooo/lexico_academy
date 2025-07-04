@@ -25,7 +25,6 @@ function safeTrim(val: string | undefined | null) {
 export default function CardPracticeQuestionsCompletion({
   questionSet,
 }: CardPracticeQuestionsCompletionProps) {
-  const { instructions } = questionSet;
   if (questionSet.mode !== "input") return null;
 
   // Build a flat array of all answers in order, matching the number of [blank]s in each question
@@ -84,8 +83,11 @@ export default function CardPracticeQuestionsCompletion({
 
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
-            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${(answeredCount / total) * 100}%` }}
+            className="h-2 rounded-full transition-all duration-500"
+            style={{
+              width: `${(answeredCount / total) * 100}%`,
+              backgroundColor: "#1D5554",
+            }}
           ></div>
         </div>
         <p className="text-sm text-gray-600 mt-2">
@@ -121,14 +123,18 @@ export default function CardPracticeQuestionsCompletion({
                         <input
                           key={`blank-${q.id}-${i}`}
                           type="text"
-                          className={`inline-block w-20 align-middle px-1 py-0.5 rounded border border-gray-300 bg-gray-50 focus:border-blue-500 hover:border-blue-500 text-sm transition-all duration-200 ${
-                            submitted
-                              ? safeTrim(userAnswers[thisGlobalIdx]) ===
-                                safeTrim(flatAnswers[thisGlobalIdx])
-                                ? "border-green-500 bg-green-50"
-                                : "border-red-500 bg-red-50"
-                              : ""
-                          }`}
+                          className={`inline-block w-20 align-middle px-1 py-0.5 rounded border transition-all duration-200 text-sm
+                            ${
+                              submitted
+                                ? safeTrim(userAnswers[thisGlobalIdx]) ===
+                                  safeTrim(flatAnswers[thisGlobalIdx])
+                                  ? "border-green-500 bg-green-50"
+                                  : "border-red-500 bg-red-50"
+                                : !userAnswers[thisGlobalIdx]
+                                ? "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] placeholder-[#1D5554]"
+                                : "border-[#1D5554] text-[#1D5554] bg-white"
+                            }
+                          `}
                           value={userAnswers[thisGlobalIdx] ?? ""}
                           onChange={(e) =>
                             handleChange(thisGlobalIdx, e.target.value)
@@ -136,6 +142,11 @@ export default function CardPracticeQuestionsCompletion({
                           disabled={submitted}
                           aria-label={`Blank for question ${q.id}`}
                           style={{ minWidth: "3rem", maxWidth: "6rem" }}
+                          placeholder={
+                            userAnswers[thisGlobalIdx]
+                              ? ""
+                              : `${thisGlobalIdx + 1}`
+                          }
                         />
                       );
                     })()
@@ -174,7 +185,7 @@ export default function CardPracticeQuestionsCompletion({
             <button
               type="submit"
               disabled={answeredCount < total}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              className="w-full bg-[#1D5554] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#174342] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
               Submit Answers
             </button>

@@ -138,7 +138,7 @@ export default function CardPracticeQuestionsMCQ({
         </h2>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
-            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+            className="h-2 rounded-full transition-all duration-500"
             style={{
               width: `${
                 (Object.values(selectedAnswers).filter((a) => a.length > 0)
@@ -146,6 +146,7 @@ export default function CardPracticeQuestionsMCQ({
                   questionSet.questions.length) *
                 100
               }%`,
+              backgroundColor: "#1D5554",
             }}
           ></div>
         </div>
@@ -167,9 +168,9 @@ export default function CardPracticeQuestionsMCQ({
                 {question.question}
               </InstructionBox>
               <div className="space-y-2">
-                {question.options.map((option, index) => (
+                {question.options.map((option, optIdx) => (
                   <label
-                    key={index}
+                    key={optIdx}
                     className={
                       "flex items-center gap-2 cursor-pointer p-2 rounded transition-all duration-200 border-2 text-base " +
                       getOptionStyle(question, option)
@@ -203,6 +204,9 @@ export default function CardPracticeQuestionsMCQ({
                         name={`mcq-${question.id}`}
                       />
                     )}
+                    <span className="font-bold text-base mr-2 text-[#1D5554]">
+                      {String.fromCharCode(65 + optIdx)}
+                    </span>
                     <span>{option}</span>
                   </label>
                 ))}
@@ -217,7 +221,7 @@ export default function CardPracticeQuestionsMCQ({
             type="button"
             disabled={!allAnswered()}
             onClick={handleSubmit}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium text-base hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className="w-full bg-[#1D5554] text-white py-3 px-4 rounded-lg font-medium text-base hover:bg-[#174342] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
             Submit Answers
           </button>

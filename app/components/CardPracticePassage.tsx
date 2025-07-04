@@ -22,7 +22,10 @@ function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
                 <div key={idx} className="flex items-start gap-3">
                   {match ? (
                     <>
-                      <span className="flex-shrink-0 text-xl font-extrabold text-green-700 leading-none pt-1 min-w-[2.5rem] text-center">
+                      <span
+                        className="flex-shrink-0 text-xl font-extrabold leading-none pt-1 min-w-[2.5rem] text-center"
+                        style={{ color: "#1D5554" }}
+                      >
                         {match[1]}
                       </span>
                       <span className="block text-base leading-relaxed">

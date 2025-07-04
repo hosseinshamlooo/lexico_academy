@@ -99,13 +99,11 @@ function CardPracticeQuestionsMatchingInfo({
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="mb-6 text-base leading-8 text-gray-900 space-y-4">
           {questions.map((q, idx) => (
-            <div key={q.id} className="flex items-start gap-2">
-              <span className="font-semibold w-7 text-gray-500 text-right flex-shrink-0 pt-0.1 text-sm">
-                {idx + 1}.
+            <div key={q.id} className="flex items-baseline gap-2">
+              <span className="font-semibold w-7 text-gray-500 text-right flex-shrink-0 text-base mt-0.5">
+                {idx + 1}
               </span>
-              <InstructionBox className="flex-1 text-left text-sm mb-2">
-                {q.question}
-              </InstructionBox>
+              <span className="flex-1 ml-1">{q.question}</span>
               <input
                 type="text"
                 maxLength={1}
@@ -116,7 +114,7 @@ function CardPracticeQuestionsMatchingInfo({
                         q.answer.toUpperCase()
                         ? "border-green-500 bg-green-50 text-green-800"
                         : "border-red-500 bg-red-50 text-red-800"
-                      : "border-blue-300 bg-white text-blue-800 focus:border-blue-500"
+                      : "border-[#1D5554] text-[#1D5554] focus:border-[#1D5554] bg-white"
                   }
                 `}
                 value={userAnswers[idx]}
@@ -135,7 +133,7 @@ function CardPracticeQuestionsMatchingInfo({
               disabled={userAnswers.some(
                 (a) => !["A", "B", "C"].includes(a.toUpperCase())
               )}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              className="w-full bg-[#1D5554] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#174342] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
               Submit Answers
             </button>

@@ -73,9 +73,9 @@ export default function CardPracticeQuestionsMatchingHeadings({
                 <span className="font-semibold w-8 text-gray-500 text-right flex-shrink-0 pt-0.1">
                   {idx + 1}.
                 </span>
-                <InstructionBox className="flex-1 text-left mb-2">
-                  {q.question}
-                </InstructionBox>
+
+                {q.question}
+
                 <select
                   className={`w-28 h-9 text-center border-2 rounded-lg text-base font-bold focus:outline-none transition-all
                     ${

@@ -927,11 +927,11 @@
                         "id": "q23",
                         "question": "Which TWO of the following statements does the writer make about the discoveries of Barrett's team?",
                         "options": [
-                            "A Artefacts found in the higher mountain passes were limited to skiing equipment.",
-                            "B Hunters went into the mountains even during periods of extreme cold.",
-                            "C The number of artefacts from certain time periods was relatively low.",
-                            "D Radiocarbon dating of artefacts produced some unreliable results.",
-                            "E More artefacts were found in Oppland than at any other mountain site."
+                            "Artefacts found in the higher mountain passes were limited to skiing equipment.",
+                            "Hunters went into the mountains even during periods of extreme cold.",
+                            "The number of artefacts from certain time periods was relatively low.",
+                            "Radiocarbon dating of artefacts produced some unreliable results.",
+                            "More artefacts were found in Oppland than at any other mountain site."
                         ],
                         "answer": ["C", "E"]
                     },
@@ -939,11 +939,11 @@
                         "id": "q24",
                         "question": "Which TWO of the following statements does the writer make about the Viking Age?",
                         "options": [
-                            "A Hunters at this time benefited from an increased demand for goods.",
-                            "B The beginning of the period saw the greatest growth in the wealth of Vikings.",
-                            "C Vikings did not rely on ships alone to transport goods.",
-                            "D Norwegian towns at this time attracted traders from around the world.",
-                            "E Vikings were primarily interested in their trading links with the Middle East."
+                            "Hunters at this time benefited from an increased demand for goods.",
+                            "The beginning of the period saw the greatest growth in the wealth of Vikings.",
+                            "Vikings did not rely on ships alone to transport goods.",
+                            "Norwegian towns at this time attracted traders from around the world.",
+                            "Vikings were primarily interested in their trading links with the Middle East."
                         ],
                         "answer": ["A", "C"]
                     }
