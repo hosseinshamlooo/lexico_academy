@@ -109,6 +109,7 @@ export default function PracticePage() {
     questionSet.type === "form-note-table-flowchart-summary-completion";
   const isMatchingInfoType = normalizedType === "MatchingInfo";
   const isDiagramLabellingType = normalizedType === "DiagramLabelling";
+  const isSentenceCompletionType = questionSet.type === "sentence-completion";
 
   // Prepare question sets for each type
   let mcqQuestionSet = undefined;
@@ -138,7 +139,7 @@ export default function PracticePage() {
     questions: questionSet.questions.map((q: Question, index: number) => ({
       id: index + 1,
       question: q.question,
-      answer: q.answer,
+      answer: q.answer ?? "",
     })),
   };
 
@@ -197,6 +198,10 @@ export default function PracticePage() {
                 questionSet={wordBankQuestionSet}
               />
             ) : null
+          ) : isSentenceCompletionType ? (
+            <CardPracticeQuestionsCompletion
+              questionSet={wordBankQuestionSet}
+            />
           ) : isMatchingInfoType ? (
             <CardPracticeQuestionsMatchingInfo
               people={matchingInfoPeople}

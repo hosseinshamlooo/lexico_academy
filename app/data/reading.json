@@ -1032,19 +1032,20 @@
             },
             {
                 "type": "sentence-completion",
+                "mode":"input",
                 "instructions": "Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer. Write your answers in boxes 38–40 on your answer sheet.",
                 "questions": [
                     {
                         "id": "q38",
-                        "question": "Daffodils are likely to flower early in response to __________ weather."
+                        "question": "Daffodils are likely to flower early in response to [blank] weather."
                     },
                     {
                         "id": "q39",
-                        "question": "If ash trees come into leaf before oak trees, the weather in __________ will probably be wet."
+                        "question": "If ash trees come into leaf before oak trees, the weather in [blank] will probably be wet."
                     },
                     {
                         "id": "q40",
-                        "question": "The research was carried out using a particular species of __________ ."
+                        "question": "The research was carried out using a particular species of [blank] ."
                     }
                 ]
             }
