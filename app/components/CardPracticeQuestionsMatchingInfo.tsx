@@ -55,7 +55,7 @@ function CardPracticeQuestionsMatchingInfo({
   const answered = userAnswers.filter((a) => a && a.trim() !== "").length;
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 h-full flex flex-col">
+    <div className="bg-white rounded-lg shadow-[0_0_16px_0_rgba(0,0,0,0.10)] p-6 h-full flex flex-col">
       <div className="flex-shrink-0">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Questions</h2>
         <div className="mb-4 w-full max-w-xl mx-auto">
