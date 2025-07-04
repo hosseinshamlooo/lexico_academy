@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import InstructionBox from "@/app/components/InstructionBox";
+import ProgressBarOnboarding from "./ProgressBarOnboarding";
 
 interface DiagramLabellingQuestion {
   diagramUrl?: string;
@@ -47,28 +48,28 @@ function CardPracticeQuestionsDiagramLabelling({
   const score = feedback.filter(Boolean).length;
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
-      <div className="mb-6">
+    <div className="bg-white rounded-lg shadow-[0_0_16px_0_rgba(0,0,0,0.10)] p-6 h-full flex flex-col">
+      <div className="mb-6 flex-shrink-0">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Questions</h2>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div
-            className="h-2 rounded-full transition-all duration-500"
-            style={{
-              width: `${(answeredCount / total) * 100}%`,
-              backgroundColor: "#1D5554",
-            }}
-          ></div>
+        <div className="mb-4 w-full max-w-xl mx-auto">
+          <ProgressBarOnboarding
+            step={answeredCount}
+            total={questions.length}
+          />
+          <div className="text-sm text-gray-700 mt-1 text-left">
+            {answeredCount} of {questions.length} questions answered
+          </div>
         </div>
-        <p className="text-sm text-gray-600 mt-2">
-          {answeredCount} of {total} questions answered
-        </p>
-      </div>
-      <form onSubmit={handleSubmit} className="space-y-6">
         {questionSet.instructions && (
-          <InstructionBox className="mb-3">
+          <InstructionBox className="w-full max-w-xl mx-auto mb-3">
             {questionSet.instructions}
           </InstructionBox>
         )}
+      </div>
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 flex-1 overflow-y-auto scrollbar-hide"
+      >
         {diagramUrl && (
           <Image
             src={diagramUrl}

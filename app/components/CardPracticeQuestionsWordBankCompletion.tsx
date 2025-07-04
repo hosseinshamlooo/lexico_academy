@@ -138,94 +138,99 @@ export default function CardPracticeQuestionsWordBankCompletion({
 
   // Render
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold text-gray-900 mb-2">
-        Summary Completion
-      </h2>
-      <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-        <div
-          className="h-2 rounded-full transition-all duration-500"
-          style={{
-            width: `${(answeredCount / total) * 100}%`,
-            backgroundColor: "#1D5554",
-          }}
-        ></div>
-        <p className="text-sm text-gray-600 mt-2 mb-4">
-          {answeredCount} of {total} blanks filled
-        </p>
-      </div>
-
-      {/* Render instructions under progress bar */}
-      {questionSet.instructions && (
-        <InstructionBox className="mb-4 mt-10">
-          {questionSet.instructions}
-        </InstructionBox>
-      )}
-
-      {/* Word Bank Box */}
-      {questionSet.mode === "word-bank" && (
-        <div className="mb-6 mt-6">
-          <div className="rounded-xl bg-gray-100 p-4 flex flex-wrap gap-2 justify-center mb-4 border border-gray-200">
-            {bank.length === 0 ? (
-              <span className="text-[#1D5554] italic">All words used</span>
-            ) : (
-              bank.map((word, i) => (
-                <button
-                  key={`${word}-${i}`}
-                  type="button"
-                  className={`px-3 py-1 rounded-lg border font-medium shadow-sm transition-all focus:outline-none focus:ring-2 bg-[#e6f4f3] text-[#1D5554] border-[#1D5554] hover:bg-[#d0eae8]`}
-                  draggable={!submitted}
-                  onDragStart={() => setDraggedWord(word)}
-                  onDragEnd={() => setDraggedWord(null)}
-                  disabled={submitted}
-                  tabIndex={0}
-                  aria-label={`Drag ${word}`}
-                >
-                  {word}
-                </button>
-              ))
-            )}
-          </div>
+    <div className="bg-white rounded-lg shadow-[0_0_16px_0_rgba(0,0,0,0.10)] p-6 h-full flex flex-col">
+      <div className="flex-shrink-0">
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">Questions</h2>
+        <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+          <div
+            className="h-2 rounded-full transition-all duration-500"
+            style={{
+              width: `${(answeredCount / total) * 100}%`,
+              backgroundColor: "#1D5554",
+            }}
+          ></div>
+          <p className="text-sm text-gray-600 mt-2 mb-4">
+            {answeredCount} of {total} blanks filled
+          </p>
         </div>
-      )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="mb-6 text-base leading-8 text-gray-900 space-y-4">
-          {uniqueQuestions.map(({ sentence }, qIdx) => {
-            // Compute the blank indices for this question
-            const parts = sentence.split(/(\[blank\])/g);
-            let localBlank = 0;
-            // Find all global blank indices for this question
-            const numBlanks = (sentence.match(/\[blank\]/g) || []).length;
-            const globalBlankIndices = Array.from(
-              { length: numBlanks },
-              (_, i) => getBlankIndex(qIdx, i)
-            );
-            return (
-              <div
-                key={qIdx}
-                className="flex flex-col items-start gap-2 w-full"
-              >
-                <span>
-                  {parts.map((part, i) =>
-                    part === "[blank]" ? (
-                      (() => {
-                        const globalBlankIdx = getBlankIndex(qIdx, localBlank);
-                        const blankLabel = qIdx + 1;
-                        localBlank++;
-                        return (
-                          <span
-                            key={`blank-${qIdx}-${i}`}
-                            className="inline-block align-middle mx-1"
-                            onDragOver={(e) => {
-                              if (!submitted) e.preventDefault();
-                            }}
-                            onDrop={() => handleDrop(globalBlankIdx)}
-                          >
-                            {questionSet.mode === "word-bank" ? (
-                              <button
-                                type="button"
-                                className={`inline-block w-24 h-8 rounded border-2 align-middle text-center transition-all
+        {/* Render instructions under progress bar */}
+        {questionSet.instructions && (
+          <InstructionBox className="mb-4 mt-10">
+            {questionSet.instructions}
+          </InstructionBox>
+        )}
+
+        {/* Word Bank Box */}
+        {questionSet.mode === "word-bank" && (
+          <div className="mb-6 mt-6">
+            <div className="rounded-xl bg-gray-100 p-4 flex flex-wrap gap-2 justify-center mb-4 border border-gray-200">
+              {bank.length === 0 ? (
+                <span className="text-[#1D5554] italic">All words used</span>
+              ) : (
+                bank.map((word, i) => (
+                  <button
+                    key={`${word}-${i}`}
+                    type="button"
+                    className={`px-3 py-1 rounded-lg border font-medium shadow-sm transition-all focus:outline-none focus:ring-2 bg-[#e6f4f3] text-[#1D5554] border-[#1D5554] hover:bg-[#d0eae8]`}
+                    draggable={!submitted}
+                    onDragStart={() => setDraggedWord(word)}
+                    onDragEnd={() => setDraggedWord(null)}
+                    disabled={submitted}
+                    tabIndex={0}
+                    aria-label={`Drag ${word}`}
+                  >
+                    {word}
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-6 flex-1 overflow-y-auto scrollbar-hide"
+        >
+          <div className="mb-6 text-base leading-8 text-gray-900 space-y-4">
+            {uniqueQuestions.map(({ sentence }, qIdx) => {
+              // Compute the blank indices for this question
+              const parts = sentence.split(/(\[blank\])/g);
+              let localBlank = 0;
+              // Find all global blank indices for this question
+              const numBlanks = (sentence.match(/\[blank\]/g) || []).length;
+              const globalBlankIndices = Array.from(
+                { length: numBlanks },
+                (_, i) => getBlankIndex(qIdx, i)
+              );
+              return (
+                <div
+                  key={qIdx}
+                  className="flex flex-col items-start gap-2 w-full"
+                >
+                  <span>
+                    {parts.map((part, i) =>
+                      part === "[blank]" ? (
+                        (() => {
+                          const globalBlankIdx = getBlankIndex(
+                            qIdx,
+                            localBlank
+                          );
+                          const blankLabel = qIdx + 1;
+                          localBlank++;
+                          return (
+                            <span
+                              key={`blank-${qIdx}-${i}`}
+                              className="inline-block align-middle mx-1"
+                              onDragOver={(e) => {
+                                if (!submitted) e.preventDefault();
+                              }}
+                              onDrop={() => handleDrop(globalBlankIdx)}
+                            >
+                              {questionSet.mode === "word-bank" ? (
+                                <button
+                                  type="button"
+                                  className={`inline-block w-24 h-8 rounded border-2 align-middle text-center transition-all
                                     ${
                                       userAnswers[globalBlankIdx]
                                         ? submitted
@@ -243,105 +248,108 @@ export default function CardPracticeQuestionsWordBankCompletion({
                                         : "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554]"
                                     }
                                   `}
-                                onClick={() => handleRemove(globalBlankIdx)}
-                                disabled={
-                                  submitted || !userAnswers[globalBlankIdx]
-                                }
-                              >
-                                {userAnswers[globalBlankIdx] ? (
-                                  <span>
-                                    {userAnswers[globalBlankIdx]}
-                                    {!submitted && (
-                                      <span className="ml-2 text-lg">×</span>
-                                    )}
-                                  </span>
-                                ) : (
-                                  <span className="font-semibold text-[#1D5554]">
-                                    {blankLabel}
-                                  </span>
-                                )}
-                              </button>
-                            ) : (
-                              <input
-                                type="text"
-                                className={`inline-block w-20 align-middle px-1 py-0.5 rounded border border-gray-300 bg-gray-50 focus:border-blue-500 hover:border-blue-500 text-sm transition-all duration-200 ${
-                                  submitted
-                                    ? userAnswers[globalBlankIdx]
-                                        ?.trim()
-                                        .toLowerCase() ===
-                                      blankMap[globalBlankIdx].answer
-                                        .trim()
-                                        .toLowerCase()
-                                      ? "border-green-500 bg-green-50"
-                                      : "border-red-500 bg-red-50"
-                                    : ""
-                                }`}
-                                value={userAnswers[globalBlankIdx] || ""}
-                                onChange={(e) =>
-                                  handleInput(globalBlankIdx, e.target.value)
-                                }
-                                disabled={submitted}
-                                aria-label={`Blank for question ${qIdx + 1}`}
-                                style={{ minWidth: "3rem", maxWidth: "6rem" }}
-                              />
+                                  onClick={() => handleRemove(globalBlankIdx)}
+                                  disabled={
+                                    submitted || !userAnswers[globalBlankIdx]
+                                  }
+                                >
+                                  {userAnswers[globalBlankIdx] ? (
+                                    <span>
+                                      {userAnswers[globalBlankIdx]}
+                                      {!submitted && (
+                                        <span className="ml-2 text-lg">×</span>
+                                      )}
+                                    </span>
+                                  ) : (
+                                    <span className="font-semibold text-[#1D5554]">
+                                      {blankLabel}
+                                    </span>
+                                  )}
+                                </button>
+                              ) : (
+                                <input
+                                  type="text"
+                                  className={`inline-block w-20 align-middle px-1 py-0.5 rounded border border-gray-300 bg-gray-50 focus:border-blue-500 hover:border-blue-500 text-sm transition-all duration-200 ${
+                                    submitted
+                                      ? userAnswers[globalBlankIdx]
+                                          ?.trim()
+                                          .toLowerCase() ===
+                                        blankMap[globalBlankIdx].answer
+                                          .trim()
+                                          .toLowerCase()
+                                        ? "border-green-500 bg-green-50"
+                                        : "border-red-500 bg-red-50"
+                                      : ""
+                                  }`}
+                                  value={userAnswers[globalBlankIdx] || ""}
+                                  onChange={(e) =>
+                                    handleInput(globalBlankIdx, e.target.value)
+                                  }
+                                  disabled={submitted}
+                                  aria-label={`Blank for question ${qIdx + 1}`}
+                                  style={{ minWidth: "3rem", maxWidth: "6rem" }}
+                                />
+                              )}
+                            </span>
+                          );
+                        })()
+                      ) : (
+                        <React.Fragment key={`text-${qIdx}-${i}`}>
+                          {part}
+                        </React.Fragment>
+                      )
+                    )}
+                  </span>
+                  {/* Show correct answers in a full-width box under each question after submit, but only if at least one answer is wrong */}
+                  {submitted &&
+                    globalBlankIndices.some(
+                      (idx) =>
+                        userAnswers[idx]?.trim().toLowerCase() !==
+                        blankMap[idx].answer.trim().toLowerCase()
+                    ) && (
+                      <div className="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 mt-2 text-sm text-gray-700">
+                        <span className="font-semibold text-gray-600">
+                          Correct answer
+                          {globalBlankIndices.length > 1 ? "s" : ""}:{" "}
+                        </span>
+                        {globalBlankIndices.map((idx, i) => (
+                          <span key={idx} className="inline-block mr-2">
+                            <span className="text-green-700 font-semibold">
+                              {blankMap[idx].answer}
+                            </span>
+                            {i < globalBlankIndices.length - 1 && (
+                              <span>, </span>
                             )}
                           </span>
-                        );
-                      })()
-                    ) : (
-                      <React.Fragment key={`text-${qIdx}-${i}`}>
-                        {part}
-                      </React.Fragment>
-                    )
-                  )}
-                </span>
-                {/* Show correct answers in a full-width box under each question after submit, but only if at least one answer is wrong */}
-                {submitted &&
-                  globalBlankIndices.some(
-                    (idx) =>
-                      userAnswers[idx]?.trim().toLowerCase() !==
-                      blankMap[idx].answer.trim().toLowerCase()
-                  ) && (
-                    <div className="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 mt-2 text-sm text-gray-700">
-                      <span className="font-semibold text-gray-600">
-                        Correct answer{globalBlankIndices.length > 1 ? "s" : ""}
-                        :{" "}
-                      </span>
-                      {globalBlankIndices.map((idx, i) => (
-                        <span key={idx} className="inline-block mr-2">
-                          <span className="text-green-700 font-semibold">
-                            {blankMap[idx].answer}
-                          </span>
-                          {i < globalBlankIndices.length - 1 && <span>, </span>}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                        ))}
+                      </div>
+                    )}
+                </div>
+              );
+            })}
+          </div>
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            {!submitted ? (
+              <button
+                type="submit"
+                disabled={answeredCount < total}
+                className="w-full bg-[#1D5554] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#174342] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              >
+                Submit Answers
+              </button>
+            ) : (
+              <div className="text-center">
+                <div className="text-2xl font-bold text-gray-900 mb-2">
+                  {score}/{total}
+                </div>
+                <div className="text-sm text-gray-600">
+                  {Math.round((score / total) * 100)}% correct
+                </div>
               </div>
-            );
-          })}
-        </div>
-        <div className="mt-6 pt-4 border-t border-gray-200">
-          {!submitted ? (
-            <button
-              type="submit"
-              disabled={answeredCount < total}
-              className="w-full bg-[#1D5554] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#174342] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-            >
-              Submit Answers
-            </button>
-          ) : (
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900 mb-2">
-                {score}/{total}
-              </div>
-              <div className="text-sm text-gray-600">
-                {Math.round((score / total) * 100)}% correct
-              </div>
-            </div>
-          )}
-        </div>
-      </form>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

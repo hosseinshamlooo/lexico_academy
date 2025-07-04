@@ -91,16 +91,16 @@ export default function CardPracticeQuestionsMCQ({
   function getOptionStyle(question: MCQQuestion, option: string) {
     if (!submitted) {
       return selectedAnswers[question.id]?.includes(option)
-        ? "bg-blue-100 border-blue-500"
-        : "bg-white border-gray-300 hover:bg-gray-50";
+        ? "bg-[var(--color-primary-selected)] border-[var(--color-primary-selected)] text-white hover:bg-[var(--color-primary-selected)] focus:bg-[var(--color-primary-selected)]"
+        : "bg-white border-gray-300 hover:bg-[var(--color-primary-bg,#e6f4f3)] focus:bg-[var(--color-primary-bg,#e6f4f3)] text-gray-900";
     }
     const correctOptions = getCorrectOptions(question);
     const correct = correctOptions.includes(option);
     const selected = selectedAnswers[question.id]?.includes(option);
     if (correct) {
-      return "bg-green-100 border-green-500 text-green-700";
+      return "bg-emerald-50 border-emerald-600 text-emerald-800";
     } else if (selected && !correct) {
-      return "bg-red-100 border-red-500 text-red-700";
+      return "bg-rose-50 border-rose-600 text-rose-800";
     } else {
       return "bg-white border-gray-300";
     }
@@ -131,11 +131,9 @@ export default function CardPracticeQuestionsMCQ({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 max-w-xl mx-auto">
-      <div className="mb-4">
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">
-          Multiple Choice
-        </h2>
+    <div className="bg-white rounded-lg shadow-[0_0_16px_0_rgba(0,0,0,0.10)] p-6 h-full flex flex-col">
+      <div className="mb-4 flex-shrink-0">
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">Questions</h2>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="h-2 rounded-full transition-all duration-500"
@@ -155,7 +153,7 @@ export default function CardPracticeQuestionsMCQ({
           {questionSet.questions.length} questions answered
         </p>
       </div>
-      <div className="space-y-6">
+      <div className="space-y-6 flex-1 overflow-y-auto scrollbar-hide">
         {questionSet.questions.map((question) => {
           const isMulti =
             Array.isArray(question.answer) && question.answer.length > 1;
@@ -204,7 +202,29 @@ export default function CardPracticeQuestionsMCQ({
                         name={`mcq-${question.id}`}
                       />
                     )}
-                    <span className="font-bold text-base mr-2 text-[#1D5554]">
+                    <span
+                      className={
+                        `font-bold text-base mr-2 ` +
+                        (submitted
+                          ? (() => {
+                              const correctOptions =
+                                getCorrectOptions(question);
+                              const correct = correctOptions.includes(option);
+                              const selected =
+                                selectedAnswers[question.id]?.includes(option);
+                              if (correct) {
+                                return "text-emerald-600";
+                              } else if (selected && !correct) {
+                                return "text-rose-600";
+                              } else {
+                                return "text-gray-400";
+                              }
+                            })()
+                          : selectedAnswers[question.id]?.includes(option)
+                          ? "text-[var(--color-primary-bg,#e6f4f3)]"
+                          : "text-[var(--color-primary)]")
+                      }
+                    >
                       {String.fromCharCode(65 + optIdx)}
                     </span>
                     <span>{option}</span>
@@ -215,7 +235,7 @@ export default function CardPracticeQuestionsMCQ({
           );
         })}
       </div>
-      <div className="mt-6 pt-4 border-t border-gray-200">
+      <div className="mt-6 pt-4 border-t border-gray-200 flex-shrink-0">
         {!submitted ? (
           <button
             type="button"

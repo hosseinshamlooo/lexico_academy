@@ -75,11 +75,9 @@ export default function CardPracticeQuestionsCompletion({
 
   // Render
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">
-          Summary Completion
-        </h2>
+    <div className="bg-white rounded-lg shadow-[0_0_16px_0_rgba(0,0,0,0.10)] p-6 h-full flex flex-col">
+      <div className="mb-6 flex-shrink-0">
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">Questions</h2>
 
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div

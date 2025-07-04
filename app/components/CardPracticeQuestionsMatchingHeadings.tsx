@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import InstructionBox from "@/app/components/InstructionBox";
+import ProgressBarOnboarding from "./ProgressBarOnboarding";
 
 interface MatchingHeadingsQuestion {
   id: string | number;
@@ -40,12 +41,18 @@ export default function CardPracticeQuestionsMatchingHeadings({
     0
   );
 
+  const answered = userAnswers.filter((a) => a && a.trim() !== "").length;
+
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">
-          Matching Headings
-        </h2>
+    <div className="bg-white rounded-lg shadow-md p-6 h-full flex flex-col">
+      <div className="mb-6 flex-shrink-0">
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">Questions</h2>
+        <div className="mb-4 w-full max-w-xl mx-auto">
+          <ProgressBarOnboarding step={answered} total={questions.length} />
+          <div className="text-sm text-gray-700 mt-1 text-left">
+            {answered} of {questions.length} questions answered
+          </div>
+        </div>
         {instructions && (
           <InstructionBox className="mb-4">{instructions}</InstructionBox>
         )}
@@ -56,7 +63,7 @@ export default function CardPracticeQuestionsMatchingHeadings({
           <div className="flex flex-col gap-1 w-full">
             {headings.map((h) => (
               <div key={h.id} className="flex items-baseline gap-2 w-full">
-                <span className="font-bold text-blue-700 min-w-[2rem] text-right">
+                <span className="font-bold text-[var(--color-primary)] min-w-[2rem] text-right">
                   {h.id}.
                 </span>
                 <span className="text-gray-700 flex-1">{h.text}</span>
@@ -65,7 +72,10 @@ export default function CardPracticeQuestionsMatchingHeadings({
           </div>
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 flex-1 overflow-y-auto scrollbar-hide"
+      >
         <div className="mb-6 text-base leading-8 text-gray-900 space-y-4">
           {questions.map((q, idx) => (
             <div key={q.id} className="flex flex-col gap-1">
@@ -83,7 +93,7 @@ export default function CardPracticeQuestionsMatchingHeadings({
                         ? userAnswers[idx] === q.answer
                           ? "border-green-500 bg-green-50 text-green-800"
                           : "border-red-500 bg-red-50 text-red-800"
-                        : "border-blue-300 bg-white text-blue-800 focus:border-blue-500"
+                        : "border-[#1D5554] bg-white text-[#1D5554] focus:border-[#1D5554]"
                     }
                   `}
                   value={userAnswers[idx]}
@@ -114,7 +124,7 @@ export default function CardPracticeQuestionsMatchingHeadings({
             <button
               type="submit"
               disabled={userAnswers.some((a) => !a)}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              className="w-full bg-[#1D5554] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#174342] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
               Submit Answers
             </button>

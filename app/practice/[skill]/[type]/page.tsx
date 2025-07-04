@@ -71,7 +71,7 @@ export default function PracticePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cyan-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading practice questions...</p>
@@ -82,7 +82,7 @@ export default function PracticePage() {
 
   if (!data || !data.questionSet) {
     return (
-      <div className="min-h-screen bg-cyan-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600">Failed to load practice data</p>
         </div>
@@ -179,16 +179,16 @@ export default function PracticePage() {
   );
 
   return (
-    <div className="min-h-screen bg-cyan-50 pb-10">
+    <div className="min-h-screen pb-10 bg-white">
       <PracticeHeader title={passage.title} />
-      <div className="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto mt-10 px-4">
-        <div className="flex-1">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto mt-10 px-4">
+        <div className="h-[650px]">
           <CardPracticePassage
             title={passage.title}
             passage={passage.passage}
           />
         </div>
-        <div className="flex-1">
+        <div className="h-[650px]">
           {isMCQType && mcqQuestionSet ? (
             <CardPracticeQuestionsMCQ questionSet={mcqQuestionSet} />
           ) : isWordBankType ? (
@@ -222,6 +222,7 @@ export default function PracticePage() {
                 diagramUrl: questionSet.diagramUrl,
                 questions: questionSet.questions,
                 answers: questionSet.answers || [],
+                instructions: questionSet.instructions,
               }}
             />
           ) : isMatchingHeadingsType ? (

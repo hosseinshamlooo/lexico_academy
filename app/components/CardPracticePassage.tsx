@@ -12,9 +12,11 @@ function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
   const hasLetters = paragraphs.some((para) => /^([A-Z])\.\s+/.test(para));
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">{title}</h2>
-      <div className="text-gray-800 space-y-6">
+    <div className="bg-white rounded-lg shadow-[0_0_16px_0_rgba(0,0,0,0.10)] p-6 h-full flex flex-col">
+      <h2 className="text-xl font-bold mb-4 text-center flex-shrink-0">
+        {title}
+      </h2>
+      <div className="text-gray-800 space-y-6 flex-1 overflow-y-auto scrollbar-hide">
         {hasLetters
           ? paragraphs.map((para, idx) => {
               const match = para.match(/^([A-Z])\.\s+(.*)$/);
