@@ -50,45 +50,57 @@ export default function CardPracticeQuestionsMatchingHeadings({
           <h3 className="text-base font-semibold text-gray-700 mb-2">
             List of Headings
           </h3>
-          <ul className="list-disc list-inside text-gray-700">
+          <div className="flex flex-col gap-1 w-full">
             {headings.map((h) => (
-              <li key={h.id}>
-                <span className="font-bold mr-2">{h.id}.</span> {h.text}
-              </li>
+              <div key={h.id} className="flex items-baseline gap-2 w-full">
+                <span className="font-bold text-blue-700 min-w-[2rem] text-right">
+                  {h.id}.
+                </span>
+                <span className="text-gray-700 flex-1">{h.text}</span>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="mb-6 text-base leading-8 text-gray-900 space-y-4">
           {questions.map((q, idx) => (
-            <div key={q.id} className="flex items-center gap-3">
-              <span className="font-semibold w-8 text-gray-500 text-right flex-shrink-0 pt-0.1">
-                {idx + 1}.
-              </span>
-              <span className="flex-1 text-left">{q.question}</span>
-              <select
-                className={`w-28 h-9 text-center border-2 rounded-lg text-base font-bold focus:outline-none transition-all
-                  ${
-                    submitted
-                      ? userAnswers[idx] === q.answer
-                        ? "border-green-500 bg-green-50 text-green-800"
-                        : "border-red-500 bg-red-50 text-red-800"
-                      : "border-blue-300 bg-white text-blue-800 focus:border-blue-500"
-                  }
-                `}
-                value={userAnswers[idx]}
-                onChange={(e) => handleSelect(idx, e.target.value)}
-                disabled={submitted}
-                aria-label={`Heading for question ${idx + 1}`}
-              >
-                <option value="">Select</option>
-                {headings.map((h) => (
-                  <option key={h.id} value={h.id}>
-                    {h.id}
-                  </option>
-                ))}
-              </select>
+            <div key={q.id} className="flex flex-col gap-1">
+              <div className="flex items-center gap-3">
+                <span className="font-semibold w-8 text-gray-500 text-right flex-shrink-0 pt-0.1">
+                  {idx + 1}.
+                </span>
+                <span className="flex-1 text-left">{q.question}</span>
+                <select
+                  className={`w-28 h-9 text-center border-2 rounded-lg text-base font-bold focus:outline-none transition-all
+                    ${
+                      submitted
+                        ? userAnswers[idx] === q.answer
+                          ? "border-green-500 bg-green-50 text-green-800"
+                          : "border-red-500 bg-red-50 text-red-800"
+                        : "border-blue-300 bg-white text-blue-800 focus:border-blue-500"
+                    }
+                  `}
+                  value={userAnswers[idx]}
+                  onChange={(e) => handleSelect(idx, e.target.value)}
+                  disabled={submitted}
+                  aria-label={`Heading for question ${idx + 1}`}
+                >
+                  <option value="">Select</option>
+                  {headings.map((h) => (
+                    <option key={h.id} value={h.id}>
+                      {h.id}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {/* Correction box if wrong */}
+              {submitted && userAnswers[idx] !== q.answer && (
+                <div className="w-full bg-red-50 border border-red-300 text-red-800 rounded-lg px-4 py-2 mt-2 text-sm">
+                  <span className="font-semibold">Correct:</span> {q.answer} -{" "}
+                  {headings.find((h) => h.id === q.answer)?.text || ""}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -112,22 +124,6 @@ export default function CardPracticeQuestionsMatchingHeadings({
             </div>
           )}
         </div>
-        {/* Show correct answers below after submit */}
-        {submitted && (
-          <div className="mt-8">
-            <h3 className="font-semibold text-gray-800 mb-2">
-              Correct Answers:
-            </h3>
-            <ul className="list-decimal list-inside text-gray-700">
-              {questions.map((q, idx) => (
-                <li key={q.id}>
-                  <span className="font-medium">{idx + 1}:</span> {q.answer} -{" "}
-                  {headings.find((h) => h.id === q.answer)?.text || ""}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </form>
     </div>
   );
