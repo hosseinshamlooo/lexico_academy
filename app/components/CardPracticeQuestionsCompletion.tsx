@@ -15,6 +15,11 @@ interface CardPracticeQuestionsCompletionProps {
   };
 }
 
+// Utility function to safely trim and lowercase
+function safeTrim(val: string | undefined | null) {
+  return (val ?? "").trim().toLowerCase();
+}
+
 export default function CardPracticeQuestionsCompletion({
   questionSet,
 }: CardPracticeQuestionsCompletionProps) {
@@ -59,11 +64,7 @@ export default function CardPracticeQuestionsCompletion({
 
   const score = flatAnswers.reduce(
     (acc, answer, idx) =>
-      acc +
-      ((userAnswers[idx] ?? "").trim().toLowerCase() ===
-      (answer ?? "").trim().toLowerCase()
-        ? 1
-        : 0),
+      acc + (safeTrim(userAnswers[idx]) === safeTrim(answer) ? 1 : 0),
     0
   );
 
@@ -104,53 +105,45 @@ export default function CardPracticeQuestionsCompletion({
           return (
             <div key={q.id} className="py-2 px-0 w-full">
               <div className="text-gray-900 mb-3 text-base">
-                <span className="font-medium mr-2">Question {q.id}:</span>
-                <span className="inline">
-                  {parts.map((part, i) =>
-                    part === "[blank]" ? (
-                      (() => {
-                        const thisGlobalIdx = globalBlankIdx;
-                        globalBlankIdx++;
-                        return (
-                          <input
-                            key={`blank-${q.id}-${i}`}
-                            type="text"
-                            className={`inline-block w-20 align-middle px-1 py-0.5 rounded border border-gray-300 bg-gray-50 focus:border-blue-500 hover:border-blue-500 text-sm transition-all duration-200 ${
-                              submitted
-                                ? (userAnswers[thisGlobalIdx] ?? "")
-                                    .trim()
-                                    .toLowerCase() ===
-                                  (flatAnswers[thisGlobalIdx] ?? "")
-                                    .trim()
-                                    .toLowerCase()
-                                  ? "border-green-500 bg-green-50"
-                                  : "border-red-500 bg-red-50"
-                                : ""
-                            }`}
-                            value={userAnswers[thisGlobalIdx] ?? ""}
-                            onChange={(e) =>
-                              handleChange(thisGlobalIdx, e.target.value)
-                            }
-                            disabled={submitted}
-                            aria-label={`Blank for question ${q.id}`}
-                            style={{ minWidth: "3rem", maxWidth: "6rem" }}
-                          />
-                        );
-                      })()
-                    ) : (
-                      <React.Fragment key={`text-${q.id}-${i}`}>
-                        {part}
-                      </React.Fragment>
-                    )
-                  )}
-                </span>
+                {parts.map((part, i) =>
+                  part === "[blank]" ? (
+                    (() => {
+                      const thisGlobalIdx = globalBlankIdx;
+                      globalBlankIdx++;
+                      return (
+                        <input
+                          key={`blank-${q.id}-${i}`}
+                          type="text"
+                          className={`inline-block w-20 align-middle px-1 py-0.5 rounded border border-gray-300 bg-gray-50 focus:border-blue-500 hover:border-blue-500 text-sm transition-all duration-200 ${
+                            submitted
+                              ? safeTrim(userAnswers[thisGlobalIdx]) ===
+                                safeTrim(flatAnswers[thisGlobalIdx])
+                                ? "border-green-500 bg-green-50"
+                                : "border-red-500 bg-red-50"
+                              : ""
+                          }`}
+                          value={userAnswers[thisGlobalIdx] ?? ""}
+                          onChange={(e) =>
+                            handleChange(thisGlobalIdx, e.target.value)
+                          }
+                          disabled={submitted}
+                          aria-label={`Blank for question ${q.id}`}
+                          style={{ minWidth: "3rem", maxWidth: "6rem" }}
+                        />
+                      );
+                    })()
+                  ) : (
+                    <React.Fragment key={`text-${q.id}-${i}`}>
+                      {part}
+                    </React.Fragment>
+                  )
+                )}
               </div>
               {/* Correction box: only show if at least one blank in this question is wrong */}
               {submitted &&
                 globalBlankIndices.some(
                   (idx) =>
-                    (userAnswers[idx] ?? "").trim().toLowerCase() !==
-                    (flatAnswers[idx] ?? "").trim().toLowerCase()
+                    safeTrim(userAnswers[idx]) !== safeTrim(flatAnswers[idx])
                 ) && (
                   <div className="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 mt-2 text-sm text-gray-700">
                     <span className="font-semibold text-gray-600">

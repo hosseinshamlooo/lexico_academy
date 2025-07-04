@@ -152,7 +152,7 @@ export default function CardPracticeQuestionsMCQ({
         </p>
       </div>
       <div className="space-y-6">
-        {questionSet.questions.map((question, idx) => {
+        {questionSet.questions.map((question) => {
           const isMulti =
             Array.isArray(question.answer) && question.answer.length > 1;
           const requiredSelections = isMulti
@@ -161,7 +161,7 @@ export default function CardPracticeQuestionsMCQ({
           return (
             <div key={question.id} className="rounded-lg p-4 bg-white">
               <h3 className="font-medium text-gray-900 mb-3">
-                Question {idx + 1}: {question.question}
+                {question.question}
               </h3>
               <div className="space-y-2">
                 {question.options.map((option, index) => (
