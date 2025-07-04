@@ -138,7 +138,7 @@ export default function PracticePage() {
     questions: questionSet.questions.map((q: Question, index: number) => ({
       id: index + 1,
       question: q.question,
-      answer: typeof q.answer === "string" ? q.answer : "",
+      answer: q.answer,
     })),
   };
 
