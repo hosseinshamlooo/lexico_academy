@@ -212,6 +212,8 @@ export default function PracticePage() {
             <CardPracticeQuestionsMatchingInfo
               people={matchingInfoPeople}
               questions={matchingInfoQuestions}
+              instructions={questionSet.instructions}
+              mode={questionSet.mode}
             />
           ) : isDiagramLabellingType ? (
             <CardPracticeQuestionsDiagramLabelling

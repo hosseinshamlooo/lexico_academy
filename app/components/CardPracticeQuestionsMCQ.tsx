@@ -130,8 +130,8 @@ export default function CardPracticeQuestionsMCQ({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="mb-6">
+    <div className="bg-white rounded-lg shadow-md p-6 max-w-xl mx-auto">
+      <div className="mb-4">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Questions</h2>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
@@ -160,7 +160,7 @@ export default function CardPracticeQuestionsMCQ({
             : 1;
           return (
             <div key={question.id} className="rounded-lg p-4 bg-white">
-              <h3 className="font-medium text-gray-900 mb-3">
+              <h3 className="font-medium text-gray-900 mb-3 text-base">
                 {question.question}
               </h3>
               <div className="space-y-2">
@@ -168,7 +168,7 @@ export default function CardPracticeQuestionsMCQ({
                   <label
                     key={index}
                     className={
-                      "flex items-center gap-2 cursor-pointer p-2 rounded transition-all duration-200 border-2 " +
+                      "flex items-center gap-2 cursor-pointer p-2 rounded transition-all duration-200 border-2 text-base " +
                       getOptionStyle(question, option)
                     }
                   >
@@ -198,7 +198,6 @@ export default function CardPracticeQuestionsMCQ({
                         }
                         onChange={() => handleSelect(question, option)}
                         name={`mcq-${question.id}`}
-                        disabled={submitted}
                       />
                     )}
                     <span>{option}</span>
@@ -212,9 +211,10 @@ export default function CardPracticeQuestionsMCQ({
       <div className="mt-6 pt-4 border-t border-gray-200">
         {!submitted ? (
           <button
-            onClick={handleSubmit}
+            type="button"
             disabled={!allAnswered()}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            onClick={handleSubmit}
+            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium text-base hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
             Submit Answers
           </button>

@@ -136,7 +136,7 @@ export default function CardPracticeQuestionsWordBankCompletion({
 
   // Render
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
       {/* Word Bank Box */}
       {questionSet.mode === "word-bank" && (
         <div className="mb-6">

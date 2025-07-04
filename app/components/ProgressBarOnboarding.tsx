@@ -37,9 +37,9 @@ export default function ProgressBarOnboarding(props: {
 
   return (
     <div className="w-full">
-      <div className="w-[600px] mx-auto h-3 bg-gray-200 rounded-full mt-12">
+      <div className="w-full h-2 bg-gray-200 rounded-full mt-2">
         <div
-          className="h-3 bg-[#1D5554] transition-all duration-[900ms] rounded-full"
+          className="h-2 bg-[#1D5554] transition-all duration-300 rounded-full"
           style={{ width: `${fill}%` }}
         />
       </div>

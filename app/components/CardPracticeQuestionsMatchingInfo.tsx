@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ProgressBarOnboarding from "@/app/components/ProgressBarOnboarding";
 
 interface MatchingInfoPerson {
   id: string; // 'A', 'B', 'C'
@@ -14,11 +15,15 @@ interface MatchingInfoQuestion {
 interface CardPracticeQuestionsMatchingInfoProps {
   people: MatchingInfoPerson[];
   questions: MatchingInfoQuestion[];
+  instructions?: string;
+  mode?: string;
 }
 
 function CardPracticeQuestionsMatchingInfo({
   people,
   questions,
+  instructions,
+  mode = "people",
 }: CardPracticeQuestionsMatchingInfoProps) {
   const [userAnswers, setUserAnswers] = useState<string[]>(
     Array(questions.length).fill("")
@@ -26,9 +31,9 @@ function CardPracticeQuestionsMatchingInfo({
   const [submitted, setSubmitted] = useState(false);
 
   function handleInputChange(idx: number, value: string) {
-    // Only allow A, B, or C (case-insensitive)
+    // Only allow a single uppercase letter (A-Z)
     const letter = value.toUpperCase();
-    if (letter === "" || ["A", "B", "C"].includes(letter)) {
+    if (letter === "" || /^[A-Z]$/.test(letter)) {
       const updated = [...userAnswers];
       updated[idx] = letter;
       setUserAnswers(updated);
@@ -46,34 +51,50 @@ function CardPracticeQuestionsMatchingInfo({
     0
   );
 
+  const answered = userAnswers.filter((a) => a && a.trim() !== "").length;
+
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      {/* Names Box */}
-      <div className="mb-6">
-        <div className="rounded-xl bg-gray-100 p-4 flex flex-col items-center gap-2 mb-4 border border-gray-200 shadow-sm">
-          <h2 className="text-base font-semibold text-gray-700 mb-2">
-            List of People
-          </h2>
-          <table className="min-w-max border border-gray-300 rounded-lg bg-white">
-            <thead>
-              <tr className="bg-gray-50">
-                <th className="px-4 py-2 border-b text-left">Letter</th>
-                <th className="px-4 py-2 border-b text-left">Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {people.map((person) => (
-                <tr key={person.id}>
-                  <td className="px-4 py-2 font-bold text-blue-700">
-                    {person.id}
-                  </td>
-                  <td className="px-4 py-2">{person.name}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <div className="bg-white rounded-lg shadow-md p-6 max-w-xl mx-auto">
+      <h2 className="text-xl font-semibold text-gray-900 mb-2">
+        Matching Info
+      </h2>
+      <div className="mb-4 w-full max-w-xl mx-auto">
+        <ProgressBarOnboarding step={answered} total={questions.length} />
+        <div className="text-sm text-gray-700 mt-1 text-left">
+          {answered} of {questions.length} questions answered
         </div>
       </div>
+      {instructions && (
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 px-3 py-2 mb-3 text-yellow-900 text-base font-medium rounded-lg w-full max-w-xl mx-auto">
+          {instructions}
+        </div>
+      )}
+      {/* Names Box: only render if mode is 'people' */}
+      {mode === "people" && people.length > 0 && (
+        <div className="mb-6">
+          <div className="rounded-xl bg-gray-100 p-6 flex flex-col items-center gap-2 mb-4 border border-gray-200 shadow-sm">
+            <h3 className="text-base font-semibold text-gray-700 mb-2">List</h3>
+            <table className="min-w-max border border-gray-300 rounded-lg bg-white">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="px-4 py-2 border-b text-left">Letter</th>
+                  <th className="px-4 py-2 border-b text-left">Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                {people.map((person) => (
+                  <tr key={person.id}>
+                    <td className="px-4 py-2 font-bold text-blue-700">
+                      {person.id}
+                    </td>
+                    <td className="px-4 py-2">{person.name}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="mb-6 text-base leading-8 text-gray-900 space-y-4">
           {questions.map((q, idx) => (
@@ -104,7 +125,7 @@ function CardPracticeQuestionsMatchingInfo({
             </div>
           ))}
         </div>
-        <div className="mt-6 pt-4 border-t border-gray-200">
+        <div className="mt-6 pt-4 border-t border-gray-200 w-full max-w-xl mx-auto">
           {!submitted ? (
             <button
               type="submit"
