@@ -1,4 +1,5 @@
 import React from "react";
+import TimerPractice from "@/app/components/TimerPractice";
 
 interface PracticeHeaderProps {
   title: string;
@@ -13,19 +14,15 @@ function PracticeHeader({ title }: PracticeHeaderProps) {
       <div className="max-w-6xl mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+            <h1 className="text-2xl font-extrabold text-[#1D5554] tracking-tighter">
+              {title}
+            </h1>
             <p className="text-gray-700 mt-1">
               Practice your skills with this passage
             </p>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="text-right">
-              <div className="text-sm text-gray-700">Time remaining</div>
-              <div className="text-lg font-semibold text-gray-900">15:00</div>
-            </div>
-            <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-              <span className="text-gray-700 font-semibold">P</span>
-            </div>
+            <TimerPractice duration={300} />
           </div>
         </div>
       </div>

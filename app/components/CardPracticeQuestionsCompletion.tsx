@@ -25,8 +25,6 @@ function safeTrim(val: string | undefined | null) {
 export default function CardPracticeQuestionsCompletion({
   questionSet,
 }: CardPracticeQuestionsCompletionProps) {
-  if (questionSet.mode !== "input") return null;
-
   // Build a flat array of all answers in order, matching the number of [blank]s in each question
   const flatAnswers: string[] = [];
   const blankCounts: number[] = [];
@@ -52,6 +50,8 @@ export default function CardPracticeQuestionsCompletion({
     Array(totalBlanks).fill("")
   );
   const [submitted, setSubmitted] = useState(false);
+
+  if (questionSet.mode !== "input") return null;
 
   function handleChange(idx: number, value: string) {
     const updated = [...userAnswers];
@@ -98,30 +98,31 @@ export default function CardPracticeQuestionsCompletion({
         </InstructionBox>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {questionSet.questions.map((q, qIdx) => {
-          const parts = q.question.split(/(\[blank\])/g);
-          const numBlanks = (q.question.match(/\[blank\]/g) || []).length;
-          // Compute the global blank indices for this question
-          let startIdx = 0;
-          for (let i = 0; i < qIdx; i++) startIdx += blankCounts[i];
-          const blankIndices = Array.from(
-            { length: numBlanks },
-            (_, i) => startIdx + i
-          );
-          return (
-            <div key={q.id} className="mb-6">
-              <div className="text-gray-900 mb-3 text-base">
-                {parts.map((part, i) =>
-                  part === "[blank]" ? (
-                    (() => {
-                      const thisGlobalIdx = startIdx;
-                      startIdx++;
-                      return (
-                        <input
-                          key={`blank-${q.id}-${i}`}
-                          type="text"
-                          className={`inline-block w-20 align-middle px-1 py-0.5 rounded border transition-all duration-200 text-sm
+      <div className="flex-1 overflow-y-auto scrollbar-hide">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {questionSet.questions.map((q, qIdx) => {
+            const parts = q.question.split(/(\[blank\])/g);
+            const numBlanks = (q.question.match(/\[blank\]/g) || []).length;
+            // Compute the global blank indices for this question
+            let startIdx = 0;
+            for (let i = 0; i < qIdx; i++) startIdx += blankCounts[i];
+            const blankIndices = Array.from(
+              { length: numBlanks },
+              (_, i) => startIdx + i
+            );
+            return (
+              <div key={q.id} className="mb-6">
+                <div className="text-gray-900 mb-3 text-base">
+                  {parts.map((part, i) =>
+                    part === "[blank]" ? (
+                      (() => {
+                        const thisGlobalIdx = startIdx;
+                        startIdx++;
+                        return (
+                          <input
+                            key={`blank-${q.id}-${i}`}
+                            type="text"
+                            className={`inline-block w-20 align-middle px-1 py-0.5 rounded border transition-all duration-200 text-sm
                             ${
                               submitted
                                 ? safeTrim(userAnswers[thisGlobalIdx]) ===
@@ -133,72 +134,74 @@ export default function CardPracticeQuestionsCompletion({
                                 : "border-[#1D5554] text-[#1D5554] bg-white"
                             }
                           `}
-                          value={userAnswers[thisGlobalIdx] ?? ""}
-                          onChange={(e) =>
-                            handleChange(thisGlobalIdx, e.target.value)
-                          }
-                          disabled={submitted}
-                          aria-label={`Blank for question ${q.id}`}
-                          style={{ minWidth: "3rem", maxWidth: "6rem" }}
-                          placeholder={
-                            userAnswers[thisGlobalIdx]
-                              ? ""
-                              : `${thisGlobalIdx + 1}`
-                          }
-                        />
-                      );
-                    })()
-                  ) : (
-                    <React.Fragment key={`text-${q.id}-${i}`}>
-                      {part}
-                    </React.Fragment>
-                  )
-                )}
-              </div>
-              {/* Correction box: only show if at least one blank in this question is wrong */}
-              {submitted &&
-                blankIndices.some(
-                  (bIdx) =>
-                    safeTrim(userAnswers[bIdx]) !== safeTrim(flatAnswers[bIdx])
-                ) && (
-                  <div className="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 mt-2 text-sm text-gray-700">
-                    <span className="font-semibold text-gray-600">
-                      Correct answer{blankIndices.length > 1 ? "s" : ""}:
-                    </span>
-                    {blankIndices.map((bIdx, i) => (
-                      <span key={bIdx} className="inline-block mr-2">
-                        <span className="text-green-700 font-semibold">
-                          {flatAnswers[bIdx] || "—"}
-                        </span>
-                        {i < blankIndices.length - 1 && <span>, </span>}
+                            value={userAnswers[thisGlobalIdx] ?? ""}
+                            onChange={(e) =>
+                              handleChange(thisGlobalIdx, e.target.value)
+                            }
+                            disabled={submitted}
+                            aria-label={`Blank for question ${q.id}`}
+                            style={{ minWidth: "3rem", maxWidth: "6rem" }}
+                            placeholder={
+                              userAnswers[thisGlobalIdx]
+                                ? ""
+                                : `${thisGlobalIdx + 1}`
+                            }
+                          />
+                        );
+                      })()
+                    ) : (
+                      <React.Fragment key={`text-${q.id}-${i}`}>
+                        {part}
+                      </React.Fragment>
+                    )
+                  )}
+                </div>
+                {/* Correction box: only show if at least one blank in this question is wrong */}
+                {submitted &&
+                  blankIndices.some(
+                    (bIdx) =>
+                      safeTrim(userAnswers[bIdx]) !==
+                      safeTrim(flatAnswers[bIdx])
+                  ) && (
+                    <div className="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 mt-2 text-sm text-gray-700">
+                      <span className="font-semibold text-gray-600">
+                        Correct answer{blankIndices.length > 1 ? "s" : ""}:
                       </span>
-                    ))}
-                  </div>
-                )}
-            </div>
-          );
-        })}
-        <div className="mt-6 pt-4 border-t border-gray-200">
-          {!submitted ? (
-            <button
-              type="submit"
-              disabled={answeredCount < total}
-              className="w-full bg-[#1D5554] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#174342] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-            >
-              Submit Answers
-            </button>
-          ) : (
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900 mb-2">
-                {score}/{total}
+                      {blankIndices.map((bIdx, i) => (
+                        <span key={bIdx} className="inline-block mr-2">
+                          <span className="text-green-700 font-semibold">
+                            {flatAnswers[bIdx] || "—"}
+                          </span>
+                          {i < blankIndices.length - 1 && <span>, </span>}
+                        </span>
+                      ))}
+                    </div>
+                  )}
               </div>
-              <div className="text-sm text-gray-600">
-                {Math.round((score / total) * 100)}% correct
+            );
+          })}
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            {!submitted ? (
+              <button
+                type="submit"
+                disabled={answeredCount < total}
+                className="w-full bg-[#1D5554] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#174342] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              >
+                Submit Answers
+              </button>
+            ) : (
+              <div className="text-center">
+                <div className="text-2xl font-bold text-gray-900 mb-2">
+                  {score}/{total}
+                </div>
+                <div className="text-sm text-gray-600">
+                  {Math.round((score / total) * 100)}% correct
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      </form>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

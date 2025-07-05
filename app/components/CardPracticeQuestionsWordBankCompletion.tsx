@@ -33,8 +33,7 @@ function extractBlankSentence(str: string) {
 export default function CardPracticeQuestionsWordBankCompletion({
   questionSet,
 }: CardPracticeQuestionsWordBankCompletionProps) {
-  if (questionSet.mode !== "word-bank") return null;
-
+  // Move hooks before early return
   // Debug log (must be before any hooks)
   console.log(
     "WordBankCompletion mode:",
@@ -76,6 +75,8 @@ export default function CardPracticeQuestionsWordBankCompletion({
   const [bank, setBank] = useState<string[]>([...questionSet.wordBank]);
   const [submitted, setSubmitted] = useState(false);
   const [draggedWord, setDraggedWord] = useState<string | null>(null);
+
+  if (questionSet.mode !== "word-bank") return null;
 
   function handleDrop(globalIdx: number) {
     if (submitted || !draggedWord) return;
@@ -187,11 +188,10 @@ export default function CardPracticeQuestionsWordBankCompletion({
             </div>
           </div>
         )}
-
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-6 flex-1 overflow-y-auto scrollbar-hide"
-        >
+      </div>
+      {/* Scrollable questions area */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="mb-6 text-base leading-8 text-gray-900 space-y-4">
             {uniqueQuestions.map(({ sentence }, qIdx) => {
               // Compute the blank indices for this question
@@ -328,27 +328,29 @@ export default function CardPracticeQuestionsWordBankCompletion({
               );
             })}
           </div>
-          <div className="mt-6 pt-4 border-t border-gray-200">
-            {!submitted ? (
-              <button
-                type="submit"
-                disabled={answeredCount < total}
-                className="w-full bg-[#1D5554] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#174342] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-              >
-                Submit Answers
-              </button>
-            ) : (
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900 mb-2">
-                  {score}/{total}
-                </div>
-                <div className="text-sm text-gray-600">
-                  {Math.round((score / total) * 100)}% correct
-                </div>
-              </div>
-            )}
-          </div>
         </form>
+      </div>
+      {/* Fixed submit/result area */}
+      <div className="mt-6 pt-4 border-t border-gray-200">
+        {!submitted ? (
+          <button
+            type="submit"
+            disabled={answeredCount < total}
+            className="w-full bg-[#1D5554] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#174342] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            form="wordbank-form"
+          >
+            Submit Answers
+          </button>
+        ) : (
+          <div className="text-center">
+            <div className="text-2xl font-bold text-gray-900 mb-2">
+              {score}/{total}
+            </div>
+            <div className="text-sm text-gray-600">
+              {Math.round((score / total) * 100)}% correct
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
