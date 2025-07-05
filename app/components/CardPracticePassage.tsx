@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { FaMarker } from "react-icons/fa6";
 
 interface Highlight {
   id: string;
+  paragraphIndex: number;
   start: number;
   end: number;
   text: string;
@@ -17,30 +18,24 @@ interface CardPracticePassageProps {
   passage: string;
 }
 
-const HIGHLIGHT_COLORS = [
-  "bg-yellow-200",
-  "bg-green-200",
-  "bg-blue-200",
-  "bg-pink-200",
-  "bg-purple-200",
-];
+const HIGHLIGHT_COLOR = "bg-yellow-200";
 
 function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
   const [isMarkerActive, setIsMarkerActive] = useState(false);
   const [highlights, setHighlights] = useState<Highlight[]>([]);
-  const [selectedText, setSelectedText] = useState("");
-  const [showNoteModal, setShowNoteModal] = useState(false);
+  const [showNoteBox, setShowNoteBox] = useState(false);
   const [currentNote, setCurrentNote] = useState("");
   const [currentHighlight, setCurrentHighlight] =
     useState<Partial<Highlight> | null>(null);
-  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
+  const [noteBoxPosition, setNoteBoxPosition] = useState({ x: 0, y: 0 });
+  const paragraphRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Split by double newlines for paragraphs
   const paragraphs = passage.split(/\n\s*\n/);
   // Detect if any paragraph starts with a letter
   const hasLetters = paragraphs.some((para) => /^([A-Z])\.\s+/.test(para));
 
-  const handleTextSelection = () => {
+  const handleTextSelection = (paragraphIndex: number) => {
     if (!isMarkerActive) return;
 
     const selection = window.getSelection();
@@ -51,21 +46,39 @@ function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
 
     if (selectedText.length === 0) return;
 
-    // Get the full passage text and find the start/end positions
-    const fullText = passage.replace(/\n\s*\n/g, "\n\n");
-    const start = fullText.indexOf(selectedText);
+    // Check if the selection is within the current paragraph
+    const paragraphElement = paragraphRefs.current[paragraphIndex];
+    if (
+      !paragraphElement ||
+      !paragraphElement.contains(range.commonAncestorContainer)
+    ) {
+      return;
+    }
+
+    // Get the text content of this specific paragraph
+    const paragraphText = paragraphElement.textContent || "";
+    const start = paragraphText.indexOf(selectedText);
     const end = start + selectedText.length;
 
     if (start === -1) return;
 
-    setSelectedText(selectedText);
+    // Get the position of the selection for the note box (using page coordinates)
+    const rect = range.getBoundingClientRect();
+
+    setNoteBoxPosition({
+      x: rect.left + window.scrollX,
+      y: rect.bottom + window.scrollY + 5,
+    });
+
     setCurrentHighlight({
+      paragraphIndex,
       start,
       end,
       text: selectedText,
-      color: HIGHLIGHT_COLORS[selectedColorIndex],
+      color: HIGHLIGHT_COLOR,
     });
-    setShowNoteModal(true);
+    setShowNoteBox(true);
+    setCurrentNote("");
   };
 
   const addHighlight = () => {
@@ -73,6 +86,7 @@ function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
 
     const newHighlight: Highlight = {
       id: Date.now().toString(),
+      paragraphIndex: currentHighlight.paragraphIndex!,
       start: currentHighlight.start!,
       end: currentHighlight.end!,
       text: currentHighlight.text!,
@@ -81,12 +95,18 @@ function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
     };
 
     setHighlights((prev) => [...prev, newHighlight]);
-    setShowNoteModal(false);
+    setShowNoteBox(false);
     setCurrentNote("");
     setCurrentHighlight(null);
-    setSelectedColorIndex((prev) => (prev + 1) % HIGHLIGHT_COLORS.length);
 
     // Clear selection
+    window.getSelection()?.removeAllRanges();
+  };
+
+  const cancelHighlight = () => {
+    setShowNoteBox(false);
+    setCurrentNote("");
+    setCurrentHighlight(null);
     window.getSelection()?.removeAllRanges();
   };
 
@@ -94,11 +114,35 @@ function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
     setHighlights((prev) => prev.filter((h) => h.id !== highlightId));
   };
 
-  const renderTextWithHighlights = (text: string) => {
-    if (highlights.length === 0) return text;
+  const renderTextWithHighlights = (text: string, paragraphIndex: number) => {
+    // Get highlights for this specific paragraph
+    const paragraphHighlights = highlights.filter(
+      (h) => h.paragraphIndex === paragraphIndex
+    );
+
+    // Add current temporary highlight if it's for this paragraph
+    const allHighlights = [...paragraphHighlights];
+    if (
+      currentHighlight &&
+      currentHighlight.paragraphIndex === paragraphIndex
+    ) {
+      allHighlights.push({
+        id: "temp",
+        paragraphIndex: currentHighlight.paragraphIndex,
+        start: currentHighlight.start!,
+        end: currentHighlight.end!,
+        text: currentHighlight.text!,
+        note: "",
+        color: currentHighlight.color!,
+      });
+    }
+
+    if (allHighlights.length === 0) return text;
 
     // Sort highlights by start position
-    const sortedHighlights = [...highlights].sort((a, b) => a.start - b.start);
+    const sortedHighlights = [...allHighlights].sort(
+      (a, b) => a.start - b.start
+    );
 
     const parts: React.ReactNode[] = [];
     let lastIndex = 0;
@@ -118,22 +162,26 @@ function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
         <span
           key={`highlight-${highlight.id}`}
           className={`${highlight.color} cursor-pointer relative group`}
-          onClick={() => {
-            if (highlight.note) {
-              alert(`Note: ${highlight.note}`);
-            }
-          }}
         >
           {text.slice(highlight.start, highlight.end)}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              removeHighlight(highlight.id);
-            }}
-            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-4 h-4 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            ×
-          </button>
+          {highlight.id !== "temp" && (
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeHighlight(highlight.id);
+                }}
+                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-4 h-4 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                ×
+              </button>
+              {highlight.note && (
+                <div className="absolute bottom-full left-0 mb-2 bg-white border border-gray-300 rounded-lg shadow-lg p-2 text-sm max-w-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-30">
+                  {highlight.note}
+                </div>
+              )}
+            </>
+          )}
         </span>
       );
 
@@ -153,7 +201,14 @@ function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
 
     if (match) {
       return (
-        <div key={idx} className="flex items-start gap-3">
+        <div
+          key={idx}
+          className="flex items-start gap-3 relative"
+          ref={(el) => {
+            paragraphRefs.current[idx] = el;
+          }}
+          onMouseUp={() => handleTextSelection(idx)}
+        >
           <span
             className="flex-shrink-0 text-xl font-extrabold leading-none pt-1 min-w-[2.5rem] text-center"
             style={{ color: "#1D5554" }}
@@ -161,16 +216,23 @@ function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
             {match[1]}
           </span>
           <span className="block text-base leading-relaxed">
-            {renderTextWithHighlights(match[2])}
+            {renderTextWithHighlights(match[2], idx)}
           </span>
         </div>
       );
     } else {
       return (
-        <div key={idx} className="flex items-start gap-3">
+        <div
+          key={idx}
+          className="flex items-start gap-3 relative"
+          ref={(el) => {
+            paragraphRefs.current[idx] = el;
+          }}
+          onMouseUp={() => handleTextSelection(idx)}
+        >
           <span className="flex-shrink-0 min-w-[2.5rem]"></span>
           <span className="block text-base leading-relaxed">
-            {renderTextWithHighlights(para)}
+            {renderTextWithHighlights(para, idx)}
           </span>
         </div>
       );
@@ -178,8 +240,15 @@ function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
   };
 
   const renderSimpleParagraph = (para: string, idx: number) => (
-    <p key={idx} className="text-base leading-relaxed">
-      {renderTextWithHighlights(para)}
+    <p
+      key={idx}
+      className="text-base leading-relaxed relative"
+      ref={(el) => {
+        paragraphRefs.current[idx] = el;
+      }}
+      onMouseUp={() => handleTextSelection(idx)}
+    >
+      {renderTextWithHighlights(para, idx)}
     </p>
   );
 
@@ -190,10 +259,13 @@ function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
         <button
           onClick={() => setIsMarkerActive(!isMarkerActive)}
           className={`p-2 rounded-full shadow-lg transition-all ${
-            isMarkerActive
-              ? "bg-green-500 text-white"
-              : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+            isMarkerActive ? "text-white" : "text-gray-600 hover:bg-gray-300"
           }`}
+          style={{
+            backgroundColor: isMarkerActive
+              ? "var(--color-primary, #1D5554)"
+              : "#f3f4f6",
+          }}
           title={isMarkerActive ? "Disable marker" : "Enable marker"}
         >
           <FaMarker size={16} />
@@ -207,73 +279,47 @@ function CardPracticePassage({ title, passage }: CardPracticePassageProps) {
         className={`text-gray-800 space-y-6 flex-1 overflow-y-auto scrollbar-hide ${
           isMarkerActive ? "cursor-text" : ""
         }`}
-        onMouseUp={handleTextSelection}
       >
         {hasLetters
           ? paragraphs.map((para, idx) => renderParagraph(para, idx))
           : paragraphs.map((para, idx) => renderSimpleParagraph(para, idx))}
       </div>
 
-      {/* Note Modal */}
-      {showNoteModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">Add Note</h3>
-
-            <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-2">Selected text:</p>
-              <p className="bg-gray-100 p-2 rounded text-sm">{selectedText}</p>
-            </div>
-
-            <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-2">Highlight color:</p>
-              <div className="flex gap-2">
-                {HIGHLIGHT_COLORS.map((color, index) => (
-                  <button
-                    key={color}
-                    onClick={() => setSelectedColorIndex(index)}
-                    className={`w-6 h-6 rounded-full ${color} border-2 ${
-                      selectedColorIndex === index
-                        ? "border-gray-800"
-                        : "border-gray-300"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm text-gray-600 mb-2">
-                Note (optional):
-              </label>
-              <textarea
-                value={currentNote}
-                onChange={(e) => setCurrentNote(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded resize-none"
-                rows={3}
-                placeholder="Add a note about this highlight..."
-              />
-            </div>
-
-            <div className="flex gap-2 justify-end">
-              <button
-                onClick={() => {
-                  setShowNoteModal(false);
-                  setCurrentNote("");
-                  setCurrentHighlight(null);
-                  window.getSelection()?.removeAllRanges();
-                }}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={addHighlight}
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-              >
-                Add Highlight
-              </button>
-            </div>
+      {/* Note Box - Fixed positioning to extend beyond card boundaries */}
+      {showNoteBox && (
+        <div
+          className="fixed z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-3 min-w-[200px]"
+          style={{
+            left: noteBoxPosition.x,
+            top: noteBoxPosition.y,
+          }}
+        >
+          <div className="mb-3">
+            <label className="block text-xs text-gray-600 mb-1">
+              Note (optional):
+            </label>
+            <textarea
+              value={currentNote}
+              onChange={(e) => setCurrentNote(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded text-sm resize-none"
+              rows={2}
+              placeholder="Add a note..."
+              autoFocus
+            />
+          </div>
+          <div className="flex gap-2 justify-end">
+            <button
+              onClick={cancelHighlight}
+              className="px-3 py-1 text-xs text-gray-600 hover:bg-gray-100 rounded"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={addHighlight}
+              className="px-3 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600"
+            >
+              Save
+            </button>
           </div>
         </div>
       )}

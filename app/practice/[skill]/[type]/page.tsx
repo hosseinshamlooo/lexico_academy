@@ -10,6 +10,7 @@ import CardPracticeQuestionsMatchingInfo from "@/app/components/CardPracticeQues
 import CardPracticeQuestionsDiagramLabelling from "@/app/components/CardPracticeQuestionsDiagramLabelling";
 import CardPracticeQuestionsCompletion from "@/app/components/CardPracticeQuestionsCompletion";
 import CardPracticeQuestionsMatchingHeadings from "@/app/components/CardPracticeQuestionsMatchingHeadings";
+import CardPracticeQuestionsTable from "@/app/components/CardPracticeQuestionsTable";
 
 interface QuestionSet {
   type?: string;
@@ -40,6 +41,29 @@ interface PracticeData {
 }
 
 type Question = PracticeData["questionSet"]["questions"][0];
+
+// Add this type above the component
+interface TableContentText {
+  type: "text";
+  text: string;
+}
+interface TableContentBlank {
+  type: "blank";
+  id: string;
+  answer: string;
+}
+interface TableContentBullet {
+  type: "bullet";
+  content: TableContent[];
+}
+type TableContent = TableContentText | TableContentBlank | TableContentBullet;
+interface TableQuestionSet extends Partial<QuestionSet> {
+  title?: string;
+  instructions: string;
+  mode: "table";
+  content: TableContent[];
+  questions?: QuestionSet["questions"];
+}
 
 export default function PracticePage() {
   const params = useParams();
@@ -125,7 +149,8 @@ export default function PracticePage() {
 
   const isWordBankType =
     normalizedType === "WordBankCompletion" ||
-    questionSet.type === "summary-table-completion";
+    (questionSet.type === "summary-table-completion" &&
+      questionSet.mode === "word-bank");
   const isMatchingInfoType =
     normalizedType === "MatchingInfo" || questionSet.type === "matching-info";
   const isDiagramLabellingType =
@@ -137,7 +162,7 @@ export default function PracticePage() {
 
   // Prepare question sets for each type
   let mcqQuestionSet = undefined;
-  if (isMCQType) {
+  if (isMCQType && Array.isArray(questionSet.questions)) {
     mcqQuestionSet = {
       questions: questionSet.questions.map((q: Question, index: number) => ({
         id: String(index + 1),
@@ -161,11 +186,13 @@ export default function PracticePage() {
   const wordBankQuestionSet = {
     mode: questionSet.mode || "",
     wordBank: questionSet.wordBank || [],
-    questions: questionSet.questions.map((q: Question, index: number) => ({
-      id: index + 1,
-      question: q.question,
-      answer: q.answer ?? "",
-    })),
+    questions: Array.isArray(questionSet.questions)
+      ? questionSet.questions.map((q: Question, index: number) => ({
+          id: index + 1,
+          question: q.question,
+          answer: q.answer ?? "",
+        }))
+      : [],
     instructions: questionSet.instructions,
   };
 
@@ -186,16 +213,18 @@ export default function PracticePage() {
       ? questionSet.people
       : questionSet.people.map((p: string) => ({ id: p, name: p }))
     : [];
-  const matchingInfoQuestions = questionSet.questions.map(
-    (
-      q: { id: string | number; question: string; answer?: string },
-      index: number
-    ) => ({
-      id: index + 1,
-      question: q.question,
-      answer: typeof q.answer === "string" ? q.answer : "",
-    })
-  );
+  const matchingInfoQuestions = Array.isArray(questionSet.questions)
+    ? questionSet.questions.map(
+        (
+          q: { id: string | number; question: string; answer?: string },
+          index: number
+        ) => ({
+          id: index + 1,
+          question: q.question,
+          answer: typeof q.answer === "string" ? q.answer : "",
+        })
+      )
+    : [];
 
   return (
     <div className="min-h-screen pb-10 bg-white">
@@ -208,7 +237,12 @@ export default function PracticePage() {
           />
         </div>
         <div className="h-[650px]">
-          {isMCQType && mcqQuestionSet ? (
+          {questionSet.mode === "table" &&
+          Array.isArray((questionSet as { content?: unknown }).content) ? (
+            <CardPracticeQuestionsTable
+              questionSet={questionSet as TableQuestionSet}
+            />
+          ) : isMCQType && mcqQuestionSet ? (
             <CardPracticeQuestionsMCQ questionSet={mcqQuestionSet} />
           ) : isWordBankType ? (
             <CardPracticeQuestionsWordBankCompletion
@@ -239,7 +273,9 @@ export default function PracticePage() {
             <CardPracticeQuestionsDiagramLabelling
               questionSet={{
                 diagramUrl: questionSet.diagramUrl,
-                questions: questionSet.questions,
+                questions: Array.isArray(questionSet.questions)
+                  ? questionSet.questions
+                  : [],
                 answers: questionSet.answers || [],
                 instructions: questionSet.instructions,
               }}
@@ -257,11 +293,13 @@ export default function PracticePage() {
                   { id: "vii", text: "Heading vii" },
                   { id: "viii", text: "Heading viii" },
                 ],
-                questions: (questionSet.questions || []).map((q, idx) => ({
-                  id: q.id ?? idx + 1,
-                  question: q.question,
-                  answer: typeof q.answer === "string" ? q.answer : "",
-                })),
+                questions: Array.isArray(questionSet.questions)
+                  ? (questionSet.questions || []).map((q, idx) => ({
+                      id: q.id ?? idx + 1,
+                      question: q.question,
+                      answer: typeof q.answer === "string" ? q.answer : "",
+                    }))
+                  : [],
                 instructions: questionSet.instructions,
               }}
             />
