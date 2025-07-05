@@ -109,61 +109,66 @@ const listeningPracticeTypesData = [
 
 const readingPracticeTypesData = [
   {
-    title: "Matching Headings",
+    title: "Fact/Opinion Judgement",
     progress: "0/100",
-    questionTypes: ["Main ideas", "gist", "structure", "skimming", "hierarchy"],
+    questionTypes: ["True/False/Not Given", "Yes/No/Not Given"],
   },
   {
     title: "Multiple Choice",
     progress: "0/100",
-    questionTypes: ["Details", "inference", "paraphrasing", "distractors"],
+    questionTypes: ["Single Option", "Multiple Options"],
   },
   {
-    title: "T/F/NG or Y/N/NG",
+    title: "Matching Headings",
     progress: "0/135",
-    questionTypes: [
-      "Fact-checking",
-      "contradiction",
-      "implied info",
-      "writer's view",
-    ],
+    questionTypes: ["Matching Headings"],
   },
   {
     title: "Matching Information",
     progress: "0/65",
-    questionTypes: ["Locate details", "scan examples", "synonyms"],
-  },
-  {
-    title: "Matching Features",
-    progress: "0/45",
-    questionTypes: ["Compare sources", "viewpoints", "details"],
+    questionTypes: ["Matching Information", "Matching Features"],
   },
   {
     title: "Matching Sentence Endings",
+    progress: "0/45",
+    questionTypes: ["Matching Sentence Endings"],
+  },
+  {
+    title: "Short Completion",
     progress: "0/35",
-    questionTypes: ["Grammar logic", "flow", "cause/effect"],
+    questionTypes: ["Sentence Completion", "Short Answer", "Note Completion"],
   },
   {
-    title: "Sentence Completion",
+    title: "Summary & Table Completion",
     progress: "0/55",
-    questionTypes: ["Find phrases", "word limit", "synonyms"],
+    questionTypes: ["Table Completion", "Summary Completion"],
   },
   {
-    title: "Form, Note, Table, Flowchart, Summary Completion",
+    title: "Visual Completion",
     progress: "0/65",
-    questionTypes: ["Summarize", "sequence", "paraphrase", "notes"],
-  },
-  {
-    title: "Diagram Label",
-    progress: "0/25",
-    questionTypes: ["Visual link", "spatial understanding"],
-  },
-  {
-    title: "Short Answer",
-    progress: "0/40",
-    questionTypes: ["Locate fact", "word limit", "precise detail"],
+    questionTypes: ["Flowchart Completion", "Diagram Label Completion"],
   },
 ];
+
+// Mapping from card titles to API route types
+const titleToRouteTypeMap = {
+  // Reading mappings
+  "Fact/Opinion Judgement": "fact-opinion-judgement",
+  "Multiple Choice": "multiple-choice",
+  "Matching Headings": "matching-headings",
+  "Matching Information": "matching-info",
+  "Matching Sentence Endings": "matching-sentence-endings",
+  "Short Completion": "short-completion",
+  "Summary & Table Completion": "summary-table-completion",
+  "Visual Completion": "visual-completion",
+
+  // Listening mappings (placeholder - these would need corresponding API routes)
+  "Plan, Map, Diagram Labelling": "diagram-labelling",
+  "Form, Note, Table, Flowchart, Summary Completion":
+    "summary-table-completion",
+  "Sentence Completion": "sentence-completion",
+  "Short-Answer Questions": "short-answer",
+};
 
 function toKebabCase(str: string): string {
   return (
@@ -207,6 +212,21 @@ function CardPracticeQuestions() {
     }
   };
 
+  const handleCardClick = (item: PracticeTypeData) => {
+    const skill = activeTab === 0 ? "listening" : "reading";
+
+    // Get the route type from the mapping
+    const routeType =
+      titleToRouteTypeMap[item.title as keyof typeof titleToRouteTypeMap];
+
+    if (routeType) {
+      router.push(`/practice/${skill}/${routeType}`);
+    } else {
+      // Fallback to kebab case if no mapping exists
+      router.push(`/practice/${skill}/${toKebabCase(item.title)}`);
+    }
+  };
+
   return (
     <div className="w-full rounded-none px-4 md:px-10 py-6 mr-30">
       {/* Tab Navigation */}
@@ -241,39 +261,13 @@ function CardPracticeQuestions() {
       {/* Practice Type Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {visibleCards.map((item: PracticeTypeData) => {
-          const isReadingTab = activeTab === 1;
-          const isMultipleChoice = item.title === "Multiple Choice";
-          const isTFNG = item.title === "T/F/NG or Y/N/NG";
-          const isSummaryTableFlowchartNote =
-            item.title === "Form, Note, Table, Flowchart, Summary Completion";
-          const summaryTypes = [
-            "SummaryCompletion",
-            "TableCompletion",
-            "FlowchartCompletion",
-            "NoteCompletion",
-          ];
-          const handleClick =
-            isReadingTab &&
-            (isMultipleChoice || isTFNG || isSummaryTableFlowchartNote)
-              ? () => {
-                  if (isSummaryTableFlowchartNote) {
-                    const randomType =
-                      summaryTypes[
-                        Math.floor(Math.random() * summaryTypes.length)
-                      ];
-                    router.push(`/practice/reading/${randomType}`);
-                  } else {
-                    router.push(`/practice/reading/${toKebabCase(item.title)}`);
-                  }
-                }
-              : undefined;
           return (
             <CardPracticeType
               key={item.title}
               title={item.title}
               progress={item.progress}
               questionTypes={item.questionTypes}
-              onClick={handleClick}
+              onClick={() => handleCardClick(item)}
             />
           );
         })}

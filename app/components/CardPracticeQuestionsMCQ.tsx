@@ -16,17 +16,19 @@ interface MCQQuestion {
 interface CardPracticeQuestionsMCQProps {
   questionSet: {
     questions: MCQQuestion[];
+    instructions?: string;
   };
 }
 
 export default function CardPracticeQuestionsMCQ({
   questionSet,
 }: CardPracticeQuestionsMCQProps) {
+  const { questions, instructions } = questionSet;
   const [selectedAnswers, setSelectedAnswers] = useState<{
     [key: string]: string[];
   }>(() => {
     const initial: { [key: string]: string[] } = {};
-    questionSet.questions.forEach((q) => {
+    questions.forEach((q) => {
       initial[q.id] = [];
     });
     return initial;
@@ -107,7 +109,7 @@ export default function CardPracticeQuestionsMCQ({
   }
 
   function allAnswered() {
-    return questionSet.questions.every((q) => {
+    return questions.every((q) => {
       const required = Array.isArray(q.answer) ? q.answer.length : 1;
       return selectedAnswers[q.id]?.length === required;
     });
@@ -120,7 +122,7 @@ export default function CardPracticeQuestionsMCQ({
   function calculateScore() {
     let correct = 0;
     let total = 0;
-    questionSet.questions.forEach((q) => {
+    questions.forEach((q) => {
       const correctOptions = getCorrectOptions(q);
       total += correctOptions.length;
       const selected = selectedAnswers[q.id] || [];
@@ -134,6 +136,9 @@ export default function CardPracticeQuestionsMCQ({
     <div className="bg-white rounded-lg shadow-[0_0_16px_0_rgba(0,0,0,0.10)] p-6 h-full flex flex-col">
       <div className="mb-4 flex-shrink-0">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Questions</h2>
+        {instructions && (
+          <InstructionBox className="mb-3">{instructions}</InstructionBox>
+        )}
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="h-2 rounded-full transition-all duration-500"
@@ -150,11 +155,11 @@ export default function CardPracticeQuestionsMCQ({
         </div>
         <p className="text-sm text-gray-600 mt-2">
           {Object.values(selectedAnswers).filter((a) => a.length > 0).length} of{" "}
-          {questionSet.questions.length} questions answered
+          {questions.length} questions answered
         </p>
       </div>
       <div className="space-y-6 flex-1 overflow-y-auto scrollbar-hide">
-        {questionSet.questions.map((question) => {
+        {questions.map((question) => {
           const isMulti =
             Array.isArray(question.answer) && question.answer.length > 1;
           const requiredSelections = isMulti

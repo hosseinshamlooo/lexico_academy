@@ -96,26 +96,44 @@ export default function PracticePage() {
   function normalizeType(type: string) {
     if (!type) return "mcq";
     if (type === "multiple-choice") return "MultipleChoice";
-    if (type === "t-f-ng-or-y-n-ng") return "TrueFalseNotGiven";
-    if (type === "word-bank-completion") return "WordBankCompletion";
+    if (type === "fact-opinion-judgement") return "FactOpinionJudgement";
+    if (type === "summary-table-completion") return "SummaryTableCompletion";
+    if (type === "short-completion") return "ShortCompletion";
+    if (type === "visual-completion") return "VisualCompletion";
+    if (type === "matching-headings") return "MatchingHeadings";
     if (type === "matching-info") return "MatchingInfo";
     if (type === "diagram-labelling") return "DiagramLabelling";
+    if (type === "word-bank-completion") return "WordBankCompletion";
     return type;
   }
 
   const normalizedType = normalizeType(type);
-  const isMCQType = ["MultipleChoice", "TrueFalseNotGiven", "mcq"].includes(
-    normalizedType
-  );
-  const isWordBankType = normalizedType === "WordBankCompletion";
-  const isSummaryCompletionType =
-    questionSet.type === "form-note-table-flowchart-summary-completion";
-  const isMatchingInfoType = normalizedType === "MatchingInfo";
-  const isDiagramLabellingType = normalizedType === "DiagramLabelling";
-  const isSentenceCompletionType = questionSet.type === "sentence-completion";
+
+  // Check if it's an MCQ type (including fact-opinion-judgement which has options)
+  const isMCQType =
+    ["MultipleChoice", "FactOpinionJudgement", "mcq"].includes(
+      normalizedType
+    ) ||
+    questionSet.type === "fact-opinion-judgement" ||
+    questionSet.type === "multiple-choice";
+
+  // Check if it's a completion type (excluding visual-completion which is handled separately)
+  const isCompletionType =
+    ["SummaryTableCompletion", "ShortCompletion"].includes(normalizedType) ||
+    questionSet.type === "summary-table-completion" ||
+    questionSet.type === "short-completion";
+
+  const isWordBankType =
+    normalizedType === "WordBankCompletion" ||
+    questionSet.type === "summary-table-completion";
+  const isMatchingInfoType =
+    normalizedType === "MatchingInfo" || questionSet.type === "matching-info";
+  const isDiagramLabellingType =
+    normalizedType === "DiagramLabelling" ||
+    questionSet.type === "visual-completion";
   const isMatchingHeadingsType =
     normalizedType === "MatchingHeadings" ||
-    normalizedType === "matching-headings";
+    questionSet.type === "matching-headings";
 
   // Prepare question sets for each type
   let mcqQuestionSet = undefined;
@@ -136,6 +154,7 @@ export default function PracticePage() {
             ? q.answer
             : "",
       })),
+      instructions: questionSet.instructions,
     };
   }
 
@@ -195,7 +214,7 @@ export default function PracticePage() {
             <CardPracticeQuestionsWordBankCompletion
               questionSet={wordBankQuestionSet}
             />
-          ) : isSummaryCompletionType ? (
+          ) : isCompletionType ? (
             questionSet.mode === "word-bank" ? (
               <CardPracticeQuestionsWordBankCompletion
                 questionSet={wordBankQuestionSet}
@@ -204,11 +223,11 @@ export default function PracticePage() {
               <CardPracticeQuestionsCompletion
                 questionSet={wordBankQuestionSet}
               />
-            ) : null
-          ) : isSentenceCompletionType ? (
-            <CardPracticeQuestionsCompletion
-              questionSet={wordBankQuestionSet}
-            />
+            ) : (
+              <CardPracticeQuestionsCompletion
+                questionSet={wordBankQuestionSet}
+              />
+            )
           ) : isMatchingInfoType ? (
             <CardPracticeQuestionsMatchingInfo
               people={matchingInfoPeople}
