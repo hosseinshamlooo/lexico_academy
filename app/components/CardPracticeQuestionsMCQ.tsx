@@ -171,7 +171,7 @@ export default function CardPracticeQuestionsMCQ({
           return (
             <div key={question.id} className="rounded-lg p-4 bg-white">
               <InstructionBox className="mb-3">
-                {question.question}
+                <div className="leading-8">{question.question}</div>
               </InstructionBox>
               <div className="space-y-2">
                 {question.options.map((option, optIdx) => {

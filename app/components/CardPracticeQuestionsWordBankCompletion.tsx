@@ -213,7 +213,7 @@ export default function CardPracticeQuestionsWordBankCompletion({
                   key={qIdx}
                   className="flex flex-col items-start gap-2 w-full"
                 >
-                  <span>
+                  <span className="leading-8">
                     {parts.map((part, i) =>
                       part === "[blank]" ? (
                         (() => {
@@ -234,7 +234,7 @@ export default function CardPracticeQuestionsWordBankCompletion({
                                 <span className="inline-flex items-center gap-1 relative">
                                   <button
                                     type="button"
-                                    className={`inline-block w-24 h-8 rounded border-2 align-middle text-center transition-all
+                                    className={`inline-block w-24 h-8 rounded border-2 align-middle text-center transition-all font-medium
                                       ${
                                         userVal
                                           ? submitted
@@ -242,10 +242,10 @@ export default function CardPracticeQuestionsWordBankCompletion({
                                               correctAnswer.trim().toLowerCase()
                                               ? "border-green-500 bg-green-50 text-green-800"
                                               : "border-red-500 bg-red-50 text-red-800"
-                                            : "border-[#1D5554] text-[#1D5554] bg-white"
+                                            : "border-[#1D5554] text-[#1D5554] bg-white hover:bg-[#e6f4f3]"
                                           : draggedWord
                                           ? "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] animate-pulse"
-                                          : "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554]"
+                                          : "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] hover:bg-[#d0eae8]"
                                       }
                                     `}
                                     onClick={() => handleRemove(blankIdx)}
@@ -281,14 +281,16 @@ export default function CardPracticeQuestionsWordBankCompletion({
                                 <span className="inline-flex items-center gap-1 relative">
                                   <input
                                     type="text"
-                                    className={`inline-block w-20 align-middle px-1 py-0.5 rounded border border-gray-300 bg-gray-50 focus:border-blue-500 hover:border-blue-500 text-sm transition-all duration-200 ${
-                                      submitted
-                                        ? userVal?.trim().toLowerCase() ===
-                                          correctAnswer.trim().toLowerCase()
-                                          ? "border-green-500 bg-green-50"
-                                          : "border-red-500 bg-red-50"
-                                        : ""
-                                    }`}
+                                    className={`inline-block w-24 h-8 align-middle px-2 py-1 rounded border-2 transition-all duration-200 text-sm font-medium
+                                      ${
+                                        submitted
+                                          ? userVal?.trim().toLowerCase() ===
+                                            correctAnswer.trim().toLowerCase()
+                                            ? "border-green-500 bg-green-50 text-green-800"
+                                            : "border-red-500 bg-red-50 text-red-800"
+                                          : "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] hover:bg-[#d0eae8] focus:border-[#1D5554] focus:bg-white"
+                                      }
+                                    `}
                                     value={userVal || ""}
                                     onChange={(e) =>
                                       handleInput(blankIdx, e.target.value)
@@ -297,10 +299,7 @@ export default function CardPracticeQuestionsWordBankCompletion({
                                     aria-label={`Blank for question ${
                                       qIdx + 1
                                     }`}
-                                    style={{
-                                      minWidth: "3rem",
-                                      maxWidth: "6rem",
-                                    }}
+                                    placeholder={`${blankIdx + 1}`}
                                   />
                                   {submitted && userVal && (
                                     <div className="flex-shrink-0">

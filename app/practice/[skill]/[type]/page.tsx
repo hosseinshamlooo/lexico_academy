@@ -60,7 +60,7 @@ type TableContent = TableContentText | TableContentBlank | TableContentBullet;
 interface TableQuestionSet extends Partial<QuestionSet> {
   title?: string;
   instructions: string;
-  mode: "table";
+  mode: "table" | "input";
   content: TableContent[];
   questions?: QuestionSet["questions"];
 }
@@ -237,8 +237,9 @@ export default function PracticePage() {
           />
         </div>
         <div className="h-[650px]">
-          {questionSet.mode === "table" &&
-          Array.isArray((questionSet as { content?: unknown }).content) ? (
+          {questionSet.mode === "table" ||
+          (questionSet.type === "summary-table-completion" &&
+            Array.isArray((questionSet as { content?: unknown }).content)) ? (
             <CardPracticeQuestionsTable
               questionSet={questionSet as TableQuestionSet}
             />

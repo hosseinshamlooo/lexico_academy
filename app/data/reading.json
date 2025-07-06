@@ -6,7 +6,7 @@
         "questionSets": [
             {
                 "type": "fact-opinion-judgement",
-                "instructions": "Do the following statements agree with the information given in Reading Passage 1?",
+                "instructions": "Do the following statements agree with the information given in the passage?\n\nSelect 'True' if the statement agrees with the information, 'False' if the statement contradicts the information, 'Not Given' if there is no information on this.",
                 "questions": [
                     {
                         "id": "q1",
@@ -182,31 +182,14 @@
                 ]
             },
             {
-                "type": "short-completion",
+                "type": "summary-table-completion",
                 "mode": "input",
                 "instructions": "Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.",
-                "questions": [
-                    {
-                        "id": "q1",
-                        "question": "The complex that includes the Step Pyramid and its surroundings is considered to be as big as an Egyptian [blank] of the past.",
-                        "answer": "city",
-                        "options": []
-                    },
-                    {
-                        "id": "q2",
-                        "question": "The area outside the pyramid included accommodation that was occupied by [blank], along with many other buildings and features.",
-                        "answer": "priests"
-                    },
-                    {
-                        "id": "q3",
-                        "question": "A wall ran around the outside of the complex and a number of false entrances were built into this. In addition, a long [blank] encircled the wall.",
-                        "answer": "trench"
-                    },
-                    {
-                        "id": "q4",
-                        "question": "As a result, any visitors who had not been invited were cleverly prevented from entering the pyramid grounds unless they knew the [blank] of the real entrance.",
-                        "answer": "location"
-                    }
+                "content": [
+                    "The complex that includes the Step Pyramid and its surroundings is considered to be as big as an Egyptian [blank:q1:city] of the past.",
+                    "The area outside the pyramid included accommodation that was occupied by [blank:q2:priests], along with many other buildings and features.",
+                    "A wall ran around the outside of the complex and a number of false entrances were built into this. In addition, a long [blank:q3:trench] encircled the wall.",
+                    "As a result, any visitors who had not been invited were cleverly prevented from entering the pyramid grounds unless they knew the [blank:q4:location] of the real entrance."
                 ]
             },
             {
@@ -380,7 +363,7 @@
         "questionSets": [
             {
                 "type": "fact-opinion-judgement",
-                "instructions": "Do the following statements agree with the information given in Reading Passage 1? In boxes 1–8 on your answer sheet, write TRUE if the statement agrees with the information, FALSE if the statement contradicts the information, NOT GIVEN if there is no information on this.",
+                "instructions": "Do the following statements agree with the information given in the passage?\n\nSelect 'True' if the statement agrees with the information, 'False' if the statement contradicts the information, 'Not Given' if there is no information on this.",
                 "questions": [
                     {
                         "id": "q1",
@@ -465,35 +448,75 @@
                 ]
             },
             {
-                "type": "summary-table-completion", 
-                "mode": "input",
-                "instructions": "Choose ONE WORD ONLY from the passage for each answer.",
-                "questions": [
+                "type": "summary-table-completion",
+                "mode": "table",
+                "title": "The Uffington White Horse",
+                "instructions": "Complete the notes below.\n\nChoose ONE WORD ONLY from the passage for each answer.",
+                "content": [
+                    "The location of the Uffington White Horse",
                     {
-                        "id": "q9",
-                        "question": "An ancient road known as the [blank]",
-                        "answer": "Ridgeway"
+                        "type": "bullet",
+                        "content": [
+                            "a distance of 2.5 km from Uffington village"
+                        ]
                     },
                     {
-                        "id": "q10",
-                        "question": "First reference to White Horse Hill appears in [blank] from the 1070s",
-                        "answer": "documents"
+                        "type": "bullet",
+                        "content": [
+                            "near an ancient road known as the [blank:1:Ridgeway]" 
+                        ]
                     },
                     {
-                        "id": "q11",
-                        "question": "According to analysis of the surrounding [blank], the Horse is Late Bronze Age / Early Iron Age",
-                        "answer": "soil"
+                        "type": "bullet",
+                        "content": [
+                            "close to an ancient cemetery that has a number of burial mounds" 
+                        ]
+                    },
+                    "Dating the Uffington White Horse:",
+                    {
+                        "type": "bullet",
+                        "content": [
+                            "first reference to White Horse Hill appears in [blank:2:documents] from the 1070s"
+                        ]
                     },
                     {
-                        "id": "q12",
-                        "question": "Epona was associated with protection of horses and [blank]",
-                        "answer": "fertility"
+                        "type": "bullet",
+                        "content": [
+                            "horses shown on coins from the period 100 BCE - 1 BCE are similar in appearance"
+                        ]
                     },
                     {
-                        "id": "q13",
-                        "question": "A Welsh goddess called [blank]",
-                        "answer": "Rhiannon"
+                        "type": "bullet",
+                        "content": [
+                            "according to analysis of the surrounding [blank:3:soil], the Horse is Late Bronze Age / Early Iron Age"
+                        ]
+                    },
+                    "Possible reasons for creation of the Uffington White Horse:",
+                    {
+                        "type": "bullet",
+                        "content": [
+                            "an emblem to indicate land ownership"
+                        ]
+                    },
+                    {
+                        "type": "bullet",
+                        "content": [
+                            "formed part of an ancient ritual"
+                        ]
+                    },
+                    {
+                        "type": "bullet",
+                        "content": [
+                            "was a representation of goddess Epona - associated with protection of horses and [blank:4:fertility] "
+                        ]
+                    },
+                    {
+                        "type": "bullet",
+                        "content": [
+                            "was a representation of a Welsh goddess called [blank:5:Rhiannon] "
+                        ]
                     }
+                    
                 ]
             }
         ]
@@ -578,7 +601,7 @@
             },
             {
                 "type": "fact-opinion-judgement",
-                "instructions": "Do the following statements agree with the claims of the writer in Reading Passage 2? In boxes 21–26 on your answer sheet, write YES if the statement agrees with the claims of the writer, NO if the statement contradicts the claims of the writer, NOT GIVEN if it is impossible to say what the writer thinks about this.",
+                "instructions": "Do the following statements agree with the information given in the passage?\n\nSelect 'True' if the statement agrees with the information, 'False' if the statement contradicts the information, 'Not Given' if there is no information on this.",
                 "questions": [
                     {
                         "id": "q21",
@@ -735,7 +758,7 @@
             },
             {
                 "type": "fact-opinion-judgement",
-                "instructions": "Do the following statements agree with the information given in Reading Passage 3? In boxes 36–40 on your answer sheet, write TRUE if the statement agrees with the information, FALSE if the statement contradicts the information, NOT GIVEN if there is no information on this.",
+                "instructions": "Do the following statements agree with the information given in the passage?\n\nSelect 'True' if the statement agrees with the information, 'False' if the statement contradicts the information, 'Not Given' if there is no information on this.",
                 "questions": [
                     {
                         "id": "q36",
@@ -793,7 +816,7 @@
         "questionSets": [
             {
                 "type": "fact-opinion-judgement",
-                "instructions": "Do the following statements agree with the information given in Reading Passage 1? In boxes 1–5 on your answer sheet, write TRUE if the statement agrees with the information, FALSE if the statement contradicts the information, NOT GIVEN if there is no information on this.",
+                "instructions": "Do the following statements agree with the information given in the passage?\n\nSelect 'True' if the statement agrees with the information, 'False' if the statement contradicts the information, 'Not Given' if there is no information on this.",
                 "questions": [
                     {
                         "id": "q1",
@@ -964,7 +987,7 @@
         "questionSets": [
             {
                 "type": "fact-opinion-judgement",
-                "instructions": "Do the following statements agree with the information given in Reading Passage 3? In boxes 27–32 on your answer sheet, write TRUE if the statement agrees with the information, FALSE if the statement contradicts the information, NOT GIVEN if there is no information on this.",
+                "instructions": "Do the following statements agree with the information given in the passage?\n\nSelect 'True' if the statement agrees with the information, 'False' if the statement contradicts the information, 'Not Given' if there is no information on this.",
                 "questions": [
                     {
                         "id": "q27",
@@ -1050,22 +1073,13 @@
                 ]
             },
             {
-                "type": "short-completion",
+                "type": "summary-table-completion",
                 "mode":"input",
                 "instructions": "Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer. Write your answers in boxes 38–40 on your answer sheet.",
-                "questions": [
-                    {
-                        "id": "q38",
-                        "question": "Daffodils are likely to flower early in response to [blank] weather."
-                    },
-                    {
-                        "id": "q39",
-                        "question": "If ash trees come into leaf before oak trees, the weather in [blank] will probably be wet."
-                    },
-                    {
-                        "id": "q40",
-                        "question": "The research was carried out using a particular species of [blank] ."
-                    }
+                "content": [
+                    "Daffodils are likely to flower early in response to [blank:q38:warm] weather.",
+                    "If ash trees come into leaf before oak trees, the weather in [blank:q39:summer] will probably be wet.",
+                    "The research was carried out using a particular species of [blank:q40:Arabidopsis] ."
                 ]
             }
         ]
@@ -1173,7 +1187,7 @@
     },
     {
       "type": "fact-opinion-judgement",
-      "instructions": "Do the following statements agree with the views of the writer in Reading Passage 2? In boxes 23–26 on your answer sheet, write YES if the statement agrees with the views of the writer, NO if the statement contradicts the views of the writer, NOT GIVEN if it is impossible to say what the writer thinks about this.",
+      "instructions": "Do the following statements agree with the information given in the passage?\n\nSelect 'True' if the statement agrees with the information, 'False' if the statement contradicts the information, 'Not Given' if there is no information on this.",
       "questions": [
         { "id": "q23", "question": "The medium we use to read can affect our choice of reading content.", "options": ["YES", "NO", "NOT GIVEN"] },
         { "id": "q24", "question": "Some age groups are more likely to lose their complex reading skills than others.", "options": ["YES", "NO", "NOT GIVEN"] },
@@ -1252,7 +1266,7 @@
             },
   {
     "type": "fact-opinion-judgement",
-    "instructions": "Do the following statements agree with the claims of the writer in Reading Passage 3? In boxes 36–40 on your answer sheet, write YES if the statement agrees with the claims of the writer, NO if the statement contradicts the claims of the writer, NOT GIVEN if it is impossible to say what the writer thinks about this.",
+    "instructions": "Do the following statements agree with the information given in the passage?\n\nSelect 'True' if the statement agrees with the information, 'False' if the statement contradicts the information, 'Not Given' if there is no information on this.",
     "questions": [
       {
         "id": "q36",

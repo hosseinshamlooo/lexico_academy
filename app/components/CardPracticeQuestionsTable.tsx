@@ -38,18 +38,19 @@ function getBlankInputProps(
 ) {
   return {
     className:
-      "inline-block w-24 px-1 py-0 border rounded text-center mx-1 focus:outline-none focus:ring-2 transition-all text-sm " +
+      "inline-block w-24 h-8 px-2 py-1 border-2 rounded text-center mx-1 focus:outline-none focus:ring-2 transition-all text-sm font-medium " +
       (submitted
         ? correct
-          ? "bg-green-100 border-green-500"
-          : "bg-red-100 border-red-500"
-        : "bg-[var(--color-primary-bg,#e6f4f3)] border-[var(--color-primary,#1D5554)] text-[var(--color-primary,#1D5554)]"),
+          ? "bg-green-50 border-green-500 text-green-800"
+          : "bg-red-50 border-red-500 text-red-800"
+        : "bg-[#e6f4f3] border-[#1D5554] text-[#1D5554] hover:bg-[#d0eae8] focus:bg-white"),
     value,
     onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
       onChange(e.target.value),
     disabled: submitted,
     id: `blank-${idx}`,
     autoComplete: "off",
+    placeholder: idx,
   };
 }
 
@@ -256,7 +257,7 @@ export default function CardPracticeQuestionsTable(
       )}
       {/* Content (scrollable, ordered) */}
       <div className="bg-base-100 rounded-lg p-4 md:p-6 shadow-none space-y-4 flex-1 overflow-y-auto scrollbar-hide">
-        <div className="text-base leading-relaxed flex flex-col gap-2">
+        <div className="text-base leading-8 flex flex-col gap-2">
           {renderContent(content)}
         </div>
       </div>

@@ -115,7 +115,7 @@ export default function CardPracticeQuestionsCompletion({
             );
             return (
               <div key={q.id} className="mb-6">
-                <div className="text-gray-900 mb-3 text-base">
+                <div className="text-gray-900 mb-3 text-base leading-8">
                   {parts.map((part, i) =>
                     part === "[blank]" ? (
                       (() => {
@@ -134,15 +134,15 @@ export default function CardPracticeQuestionsCompletion({
                           >
                             <input
                               type="text"
-                              className={`inline-block w-20 align-middle px-1 py-0.5 rounded border transition-all duration-200 text-sm
+                              className={`inline-block w-24 h-8 align-middle px-2 py-1 rounded border-2 transition-all duration-200 text-sm font-medium
                               ${
                                 submitted
                                   ? isCorrect
-                                    ? "border-green-500 bg-green-50"
-                                    : "border-red-500 bg-red-50"
+                                    ? "border-green-500 bg-green-50 text-green-800"
+                                    : "border-red-500 bg-red-50 text-red-800"
                                   : !userAnswers[thisGlobalIdx]
-                                  ? "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] placeholder-[#1D5554]"
-                                  : "border-[#1D5554] text-[#1D5554] bg-white"
+                                  ? "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] placeholder-[#1D5554] hover:bg-[#d0eae8]"
+                                  : "border-[#1D5554] text-[#1D5554] bg-white hover:bg-[#e6f4f3]"
                               }
                             `}
                               value={userAnswers[thisGlobalIdx] ?? ""}
@@ -151,12 +151,7 @@ export default function CardPracticeQuestionsCompletion({
                               }
                               disabled={submitted}
                               aria-label={`Blank for question ${q.id}`}
-                              style={{ minWidth: "3rem", maxWidth: "6rem" }}
-                              placeholder={
-                                userAnswers[thisGlobalIdx]
-                                  ? ""
-                                  : `${thisGlobalIdx + 1}`
-                              }
+                              placeholder={`${thisGlobalIdx + 1}`}
                             />
                             {submitted && hasAnswer && (
                               <div className="flex-shrink-0">

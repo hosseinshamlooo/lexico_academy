@@ -106,45 +106,63 @@ function CardPracticeQuestionsMatchingInfo({
         className="space-y-6 flex-1 overflow-y-auto scrollbar-hide"
       >
         <div className="mb-6 text-base leading-8 text-gray-900 space-y-4">
-          {questions.map((q, idx) => (
-            <div key={q.id} className="flex items-baseline gap-2">
-              <span className="font-semibold w-7 text-gray-500 text-right flex-shrink-0 text-base mt-0.5">
-                {idx + 1}
-              </span>
-              <span className="flex-1 ml-1">{q.question}</span>
-              <div className="flex items-center gap-1">
-                <input
-                  type="text"
-                  maxLength={1}
-                  className={`w-12 h-9 text-center border-2 rounded-lg text-lg font-bold uppercase focus:outline-none transition-all
-                      ${
-                        submitted
-                          ? userAnswers[idx].toUpperCase() ===
-                            q.answer.toUpperCase()
-                            ? "border-green-500 bg-green-50 text-green-800"
-                            : "border-red-500 bg-red-50 text-red-800"
-                          : "border-[#1D5554] text-[#1D5554] focus:border-[#1D5554] bg-white"
-                      }
-                    `}
-                  value={userAnswers[idx]}
-                  onChange={(e) => handleInputChange(idx, e.target.value)}
-                  disabled={submitted}
-                  aria-label={`Answer for question ${idx + 1}`}
-                  autoComplete="off"
-                />
-                {submitted && userAnswers[idx] && (
-                  <div className="flex-shrink-0">
-                    {userAnswers[idx].toUpperCase() ===
-                    q.answer.toUpperCase() ? (
-                      <FaCircleCheck className="text-green-500 text-sm" />
-                    ) : (
-                      <FaCircleXmark className="text-red-500 text-sm" />
+          {questions.map((q, idx) => {
+            const isCorrect =
+              userAnswers[idx].toUpperCase() === q.answer.toUpperCase();
+            const hasAnswer =
+              userAnswers[idx] && userAnswers[idx].trim() !== "";
+            return (
+              <div key={q.id} className="flex flex-col gap-1">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-semibold w-7 text-gray-500 text-right flex-shrink-0 text-base mt-0.5">
+                    {idx + 1}
+                  </span>
+                  <span className="flex-1 ml-1">{q.question}</span>
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="text"
+                      maxLength={1}
+                      className={`w-12 h-9 text-center border-2 rounded-lg text-lg font-bold uppercase focus:outline-none transition-all
+                        ${
+                          submitted
+                            ? isCorrect
+                              ? "border-green-500 bg-green-50 text-green-800"
+                              : "border-red-500 bg-red-50 text-red-800"
+                            : "border-[#1D5554] text-[#1D5554] focus:border-[#1D5554] bg-white"
+                        }
+                      `}
+                      value={userAnswers[idx]}
+                      onChange={(e) => handleInputChange(idx, e.target.value)}
+                      disabled={submitted}
+                      aria-label={`Answer for question ${idx + 1}`}
+                      autoComplete="off"
+                    />
+                    {submitted && userAnswers[idx] && (
+                      <div className="flex-shrink-0">
+                        {isCorrect ? (
+                          <FaCircleCheck className="text-green-500 text-sm" />
+                        ) : (
+                          <FaCircleXmark className="text-red-500 text-sm" />
+                        )}
+                      </div>
                     )}
+                  </div>
+                </div>
+                {/* Correction box under wrong answers only */}
+                {submitted && !isCorrect && hasAnswer && (
+                  <div className="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 mt-2 text-sm text-gray-700">
+                    <span className="font-semibold text-gray-600">
+                      Correct answer:
+                    </span>{" "}
+                    <span className="text-green-700 font-semibold">
+                      {q.answer} (
+                      {people.find((p) => p.id === q.answer)?.name || ""})
+                    </span>
                   </div>
                 )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         <div className="mt-6 pt-4 border-t border-gray-200 w-full max-w-xl mx-auto">
           {!submitted ? (
@@ -161,22 +179,6 @@ function CardPracticeQuestionsMatchingInfo({
             <CorrectionDisplay correct={score} total={questions.length} />
           )}
         </div>
-        {/* Show correct answers below after submit */}
-        {submitted && (
-          <div className="mt-8">
-            <h3 className="font-semibold text-gray-800 mb-2">
-              Correct Answers:
-            </h3>
-            <ul className="list-decimal list-inside text-gray-700">
-              {questions.map((q, idx) => (
-                <li key={q.id}>
-                  <span className="font-medium">{idx + 1}:</span> {q.answer} (
-                  {people.find((p) => p.id === q.answer)?.name || ""})
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </form>
     </div>
   );

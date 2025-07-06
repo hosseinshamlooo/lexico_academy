@@ -87,7 +87,7 @@ function CardPracticeQuestionsDiagramLabelling({
             const parts = q.question.split(/(\[blank\])/g);
             return (
               <div key={q.id} className="flex flex-col gap-1 py-2 px-0">
-                <div className="text-gray-900 mb-1 text-base flex items-center flex-wrap gap-2">
+                <div className="text-gray-900 mb-1 text-base leading-8 flex items-center flex-wrap gap-2">
                   <span className="inline">
                     {parts.map((part, i) =>
                       part === "[blank]" ? (
@@ -97,19 +97,21 @@ function CardPracticeQuestionsDiagramLabelling({
                         >
                           <input
                             type="text"
-                            className={`inline-block w-20 align-middle px-1 py-0.5 rounded border border-gray-300 bg-gray-50 focus:border-blue-500 hover:border-blue-500 text-sm transition-all duration-200 ${
-                              submitted
-                                ? inputs[idx]?.trim().toLowerCase() ===
-                                  (answers[idx] || "").trim().toLowerCase()
-                                  ? "border-green-500 bg-green-50"
-                                  : "border-red-500 bg-red-50"
-                                : ""
-                            }`}
+                            className={`inline-block w-24 h-8 align-middle px-2 py-1 rounded border-2 transition-all duration-200 text-sm font-medium
+                              ${
+                                submitted
+                                  ? inputs[idx]?.trim().toLowerCase() ===
+                                    (answers[idx] || "").trim().toLowerCase()
+                                    ? "border-green-500 bg-green-50 text-green-800"
+                                    : "border-red-500 bg-red-50 text-red-800"
+                                  : "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] hover:bg-[#d0eae8] focus:border-[#1D5554] focus:bg-white"
+                              }
+                            `}
                             value={inputs[idx]}
                             onChange={(e) => handleChange(idx, e.target.value)}
                             disabled={submitted}
                             aria-label={`Blank for question ${idx + 1}`}
-                            style={{ minWidth: "3rem", maxWidth: "6rem" }}
+                            placeholder={`${idx + 1}`}
                           />
                           {submitted && inputs[idx] && (
                             <div className="flex-shrink-0">
