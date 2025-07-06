@@ -4,6 +4,9 @@
 "use client";
 import React, { useState } from "react";
 import InstructionBox from "@/app/components/InstructionBox";
+import CorrectionDisplay from "@/app/components/CorrectionDisplay";
+import { FaCircleCheck } from "react-icons/fa6";
+import { FaCircleXmark } from "react-icons/fa6";
 
 interface MCQQuestion {
   id: string;
@@ -171,70 +174,88 @@ export default function CardPracticeQuestionsMCQ({
                 {question.question}
               </InstructionBox>
               <div className="space-y-2">
-                {question.options.map((option, optIdx) => (
-                  <label
-                    key={optIdx}
-                    className={
-                      "flex items-center gap-2 cursor-pointer p-2 rounded transition-all duration-200 border-2 text-base " +
-                      getOptionStyle(question, option)
-                    }
-                  >
-                    {isMulti ? (
-                      <input
-                        type="checkbox"
-                        className="appearance-none w-0 h-0"
-                        checked={
-                          selectedAnswers[question.id]?.includes(option) ||
-                          false
+                {question.options.map((option, optIdx) => {
+                  const correctOptions = getCorrectOptions(question);
+                  const correct = correctOptions.includes(option);
+                  const selected =
+                    selectedAnswers[question.id]?.includes(option);
+
+                  return (
+                    <div key={optIdx}>
+                      <label
+                        className={
+                          "flex items-center gap-2 cursor-pointer p-2 rounded transition-all duration-200 border-2 text-base " +
+                          getOptionStyle(question, option)
                         }
-                        onChange={() => handleSelect(question, option)}
-                        disabled={
-                          submitted ||
-                          (!selectedAnswers[question.id]?.includes(option) &&
-                            selectedAnswers[question.id]?.length >=
-                              requiredSelections)
-                        }
-                      />
-                    ) : (
-                      <input
-                        type="radio"
-                        className="appearance-none w-0 h-0"
-                        checked={
-                          selectedAnswers[question.id]?.includes(option) ||
-                          false
-                        }
-                        onChange={() => handleSelect(question, option)}
-                        name={`mcq-${question.id}`}
-                      />
-                    )}
-                    <span
-                      className={
-                        `font-bold text-base mr-2 ` +
-                        (submitted
-                          ? (() => {
-                              const correctOptions =
-                                getCorrectOptions(question);
-                              const correct = correctOptions.includes(option);
-                              const selected =
-                                selectedAnswers[question.id]?.includes(option);
-                              if (correct) {
-                                return "text-emerald-600";
-                              } else if (selected && !correct) {
-                                return "text-rose-600";
-                              } else {
-                                return "text-gray-400";
-                              }
-                            })()
-                          : selectedAnswers[question.id]?.includes(option)
-                          ? "text-[var(--color-primary-bg,#e6f4f3)]"
-                          : "text-[var(--color-primary)]")
-                      }
-                    >
-                      {String.fromCharCode(65 + optIdx)}
-                    </span>
-                    <span>{option}</span>
-                  </label>
-                ))}
+                      >
+                        {isMulti ? (
+                          <input
+                            type="checkbox"
+                            className="appearance-none w-0 h-0"
+                            checked={
+                              selectedAnswers[question.id]?.includes(option) ||
+                              false
+                            }
+                            onChange={() => handleSelect(question, option)}
+                            disabled={
+                              submitted ||
+                              (!selectedAnswers[question.id]?.includes(
+                                option
+                              ) &&
+                                selectedAnswers[question.id]?.length >=
+                                  requiredSelections)
+                            }
+                          />
+                        ) : (
+                          <input
+                            type="radio"
+                            className="appearance-none w-0 h-0"
+                            checked={
+                              selectedAnswers[question.id]?.includes(option) ||
+                              false
+                            }
+                            onChange={() => handleSelect(question, option)}
+                            name={`mcq-${question.id}`}
+                          />
+                        )}
+                        <span
+                          className={
+                            `font-bold text-base mr-2 ` +
+                            (submitted
+                              ? (() => {
+                                  if (correct) {
+                                    return "text-emerald-600";
+                                  } else if (selected && !correct) {
+                                    return "text-rose-600";
+                                  } else {
+                                    return "text-gray-400";
+                                  }
+                                })()
+                              : selectedAnswers[question.id]?.includes(option)
+                              ? "text-[var(--color-primary-bg,#e6f4f3)]"
+                              : "text-[var(--color-primary)]")
+                          }
+                        >
+                          {String.fromCharCode(65 + optIdx)}
+                        </span>
+                        <span className="flex-1">{option}</span>
+                        {submitted && (
+                          <div className="flex-shrink-0">
+                            {correct && selected ? (
+                              <FaCircleCheck className="text-green-500 text-lg" />
+                            ) : selected && !correct ? (
+                              <FaCircleXmark className="text-red-500 text-lg" />
+                            ) : correct ? (
+                              <FaCircleCheck className="text-green-500 text-lg" />
+                            ) : (
+                              <div className="w-5 h-5" />
+                            )}
+                          </div>
+                        )}
+                      </label>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
@@ -251,17 +272,10 @@ export default function CardPracticeQuestionsMCQ({
             Submit Answers
           </button>
         ) : (
-          <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900 mb-2">
-              {calculateScore().correct}/{calculateScore().total}
-            </div>
-            <div className="text-sm text-gray-600">
-              {Math.round(
-                (calculateScore().correct / calculateScore().total) * 100
-              )}
-              % correct
-            </div>
-          </div>
+          <CorrectionDisplay
+            correct={calculateScore().correct}
+            total={calculateScore().total}
+          />
         )}
       </div>
     </div>

@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import CorrectionDisplay from "@/app/components/CorrectionDisplay";
+import { FaCircleCheck } from "react-icons/fa6";
+import { FaCircleXmark } from "react-icons/fa6";
 
 interface Question {
   id: number;
@@ -115,22 +118,41 @@ function CardPracticeQuestionsItem({
             <div className="space-y-2">
               {(type === "TrueFalseNotGiven" || type === "MatchingHeadings") &&
                 question.options &&
-                question.options.map((option, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleAnswerSelect(question.id, index)}
-                    disabled={submitted}
-                    className={`w-full text-left p-3 rounded-lg border-2 transition-all duration-200 ${getOptionStyle(
-                      question.id,
-                      index
-                    )}`}
-                  >
-                    <span className="font-medium mr-2">
-                      {String.fromCharCode(65 + index)}.
-                    </span>
-                    {option}
-                  </button>
-                ))}
+                question.options.map((option, index) => {
+                  const isCorrect = index === question.correctAnswer;
+                  const isSelected = selectedAnswers[question.id] === index;
+
+                  return (
+                    <div key={index}>
+                      <button
+                        onClick={() => handleAnswerSelect(question.id, index)}
+                        disabled={submitted}
+                        className={`w-full text-left p-3 rounded-lg border-2 transition-all duration-200 flex items-center gap-2 ${getOptionStyle(
+                          question.id,
+                          index
+                        )}`}
+                      >
+                        <span className="font-medium mr-2">
+                          {String.fromCharCode(65 + index)}.
+                        </span>
+                        <span className="flex-1">{option}</span>
+                        {submitted && (
+                          <div className="flex-shrink-0">
+                            {isCorrect && isSelected ? (
+                              <FaCircleCheck className="text-green-500 text-sm" />
+                            ) : isSelected && !isCorrect ? (
+                              <FaCircleXmark className="text-red-500 text-sm" />
+                            ) : isCorrect ? (
+                              <FaCircleCheck className="text-green-500 text-sm" />
+                            ) : (
+                              <div className="w-4 h-4" />
+                            )}
+                          </div>
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
               {type === "NoteCompletion" && (
                 <input
                   type="text"
@@ -173,17 +195,10 @@ function CardPracticeQuestionsItem({
             Submit Answers
           </button>
         ) : (
-          <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900 mb-2">
-              {calculateScore().correct}/{calculateScore().total}
-            </div>
-            <div className="text-sm text-gray-600">
-              {Math.round(
-                (calculateScore().correct / calculateScore().total) * 100
-              )}
-              % correct
-            </div>
-          </div>
+          <CorrectionDisplay
+            correct={calculateScore().correct}
+            total={calculateScore().total}
+          />
         )}
       </div>
     </div>

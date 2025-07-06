@@ -2,6 +2,9 @@
 
 import React, { useState } from "react";
 import InstructionBox from "@/app/components/InstructionBox";
+import CorrectionDisplay from "@/app/components/CorrectionDisplay";
+import { FaCircleCheck } from "react-icons/fa6";
+import { FaCircleXmark } from "react-icons/fa6";
 
 interface Question {
   id: number;
@@ -118,35 +121,53 @@ export default function CardPracticeQuestionsCompletion({
                       (() => {
                         const thisGlobalIdx = startIdx;
                         startIdx++;
+                        const isCorrect =
+                          safeTrim(userAnswers[thisGlobalIdx]) ===
+                          safeTrim(flatAnswers[thisGlobalIdx]);
+                        const hasAnswer =
+                          (userAnswers[thisGlobalIdx] || "").trim().length > 0;
+
                         return (
-                          <input
+                          <span
                             key={`blank-${q.id}-${i}`}
-                            type="text"
-                            className={`inline-block w-20 align-middle px-1 py-0.5 rounded border transition-all duration-200 text-sm
-                            ${
-                              submitted
-                                ? safeTrim(userAnswers[thisGlobalIdx]) ===
-                                  safeTrim(flatAnswers[thisGlobalIdx])
-                                  ? "border-green-500 bg-green-50"
-                                  : "border-red-500 bg-red-50"
-                                : !userAnswers[thisGlobalIdx]
-                                ? "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] placeholder-[#1D5554]"
-                                : "border-[#1D5554] text-[#1D5554] bg-white"
-                            }
-                          `}
-                            value={userAnswers[thisGlobalIdx] ?? ""}
-                            onChange={(e) =>
-                              handleChange(thisGlobalIdx, e.target.value)
-                            }
-                            disabled={submitted}
-                            aria-label={`Blank for question ${q.id}`}
-                            style={{ minWidth: "3rem", maxWidth: "6rem" }}
-                            placeholder={
-                              userAnswers[thisGlobalIdx]
-                                ? ""
-                                : `${thisGlobalIdx + 1}`
-                            }
-                          />
+                            className="inline-flex items-center gap-1 relative"
+                          >
+                            <input
+                              type="text"
+                              className={`inline-block w-20 align-middle px-1 py-0.5 rounded border transition-all duration-200 text-sm
+                              ${
+                                submitted
+                                  ? isCorrect
+                                    ? "border-green-500 bg-green-50"
+                                    : "border-red-500 bg-red-50"
+                                  : !userAnswers[thisGlobalIdx]
+                                  ? "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] placeholder-[#1D5554]"
+                                  : "border-[#1D5554] text-[#1D5554] bg-white"
+                              }
+                            `}
+                              value={userAnswers[thisGlobalIdx] ?? ""}
+                              onChange={(e) =>
+                                handleChange(thisGlobalIdx, e.target.value)
+                              }
+                              disabled={submitted}
+                              aria-label={`Blank for question ${q.id}`}
+                              style={{ minWidth: "3rem", maxWidth: "6rem" }}
+                              placeholder={
+                                userAnswers[thisGlobalIdx]
+                                  ? ""
+                                  : `${thisGlobalIdx + 1}`
+                              }
+                            />
+                            {submitted && hasAnswer && (
+                              <div className="flex-shrink-0">
+                                {isCorrect ? (
+                                  <FaCircleCheck className="text-green-500 text-sm" />
+                                ) : (
+                                  <FaCircleXmark className="text-red-500 text-sm" />
+                                )}
+                              </div>
+                            )}
+                          </span>
                         );
                       })()
                     ) : (
@@ -190,14 +211,7 @@ export default function CardPracticeQuestionsCompletion({
                 Submit Answers
               </button>
             ) : (
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900 mb-2">
-                  {score}/{total}
-                </div>
-                <div className="text-sm text-gray-600">
-                  {Math.round((score / total) * 100)}% correct
-                </div>
-              </div>
+              <CorrectionDisplay correct={score} total={total} />
             )}
           </div>
         </form>

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Image from "next/image";
 import InstructionBox from "@/app/components/InstructionBox";
 import ProgressBarOnboarding from "./ProgressBarOnboarding";
+import CorrectionDisplay from "@/app/components/CorrectionDisplay";
+import { FaCircleCheck } from "react-icons/fa6";
+import { FaCircleXmark } from "react-icons/fa6";
 
 interface DiagramLabellingQuestion {
   diagramUrl?: string;
@@ -88,23 +91,47 @@ function CardPracticeQuestionsDiagramLabelling({
                   <span className="inline">
                     {parts.map((part, i) =>
                       part === "[blank]" ? (
-                        <input
+                        <span
                           key={`blank-${idx}-${i}`}
-                          type="text"
-                          className={`inline-block w-20 align-middle px-1 py-0.5 rounded border border-gray-300 bg-gray-50 focus:border-blue-500 hover:border-blue-500 text-sm transition-all duration-200 ${
-                            submitted
-                              ? inputs[idx]?.trim().toLowerCase() ===
-                                (answers[idx] || "").trim().toLowerCase()
-                                ? "border-green-500 bg-green-50"
-                                : "border-red-500 bg-red-50"
-                              : ""
-                          }`}
-                          value={inputs[idx]}
-                          onChange={(e) => handleChange(idx, e.target.value)}
-                          disabled={submitted}
-                          aria-label={`Blank for question ${idx + 1}`}
-                          style={{ minWidth: "3rem", maxWidth: "6rem" }}
-                        />
+                          className="inline-flex items-center gap-1 relative"
+                        >
+                          <input
+                            type="text"
+                            className={`inline-block w-20 align-middle px-1 py-0.5 rounded border border-gray-300 bg-gray-50 focus:border-blue-500 hover:border-blue-500 text-sm transition-all duration-200 ${
+                              submitted
+                                ? inputs[idx]?.trim().toLowerCase() ===
+                                  (answers[idx] || "").trim().toLowerCase()
+                                  ? "border-green-500 bg-green-50"
+                                  : "border-red-500 bg-red-50"
+                                : ""
+                            }`}
+                            value={inputs[idx]}
+                            onChange={(e) => handleChange(idx, e.target.value)}
+                            disabled={submitted}
+                            aria-label={`Blank for question ${idx + 1}`}
+                            style={{ minWidth: "3rem", maxWidth: "6rem" }}
+                          />
+                          {submitted && inputs[idx] && (
+                            <div className="flex-shrink-0">
+                              {inputs[idx]?.trim().toLowerCase() ===
+                              (answers[idx] || "").trim().toLowerCase() ? (
+                                <FaCircleCheck className="text-green-500 text-sm" />
+                              ) : (
+                                <FaCircleXmark className="text-red-500 text-sm" />
+                              )}
+                            </div>
+                          )}
+                          {/* Show correction for wrong answers */}
+                          {submitted &&
+                            inputs[idx] &&
+                            inputs[idx]?.trim().toLowerCase() !==
+                              (answers[idx] || "").trim().toLowerCase() && (
+                              <div className="absolute top-full left-0 mt-1 p-1 bg-gray-100 border border-gray-200 rounded text-xs text-gray-700 whitespace-nowrap z-10">
+                                <span className="font-medium">Correct:</span>{" "}
+                                {answers[idx]}
+                              </div>
+                            )}
+                        </span>
                       ) : (
                         <React.Fragment key={`text-${idx}-${i}`}>
                           {part}
@@ -112,15 +139,6 @@ function CardPracticeQuestionsDiagramLabelling({
                       )
                     )}
                   </span>
-                  {submitted && (
-                    <span
-                      className={
-                        feedback[idx] ? "text-success ml-2" : "text-error ml-2"
-                      }
-                    >
-                      {feedback[idx] ? "✔" : "✗"}
-                    </span>
-                  )}
                 </div>
                 {submitted && (
                   <div className="mt-1 p-2 rounded bg-gray-50">
@@ -144,14 +162,7 @@ function CardPracticeQuestionsDiagramLabelling({
               Submit Answers
             </button>
           ) : (
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900 mb-2">
-                {score}/{total}
-              </div>
-              <div className="text-sm text-gray-600">
-                {Math.round((score / total) * 100)}% correct
-              </div>
-            </div>
+            <CorrectionDisplay correct={score} total={total} />
           )}
         </div>
       </form>

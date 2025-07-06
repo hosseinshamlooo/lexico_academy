@@ -86,24 +86,24 @@
                 "title": "Reasons why polar bears should be protected",
                 "instructions": "Complete the notes below.\n\nChoose ONE WORD ONLY from the passage for each answer.",
                 "content": [
-                    "People think of bears as unintelligent and [blank:8:clumsy].",
+                    "People think of bears as unintelligent and [blank:8:violent].",
                     "However, this may not be correct. For example:",
                     {
                         "type": "bullet",
                         "content": [
-                            "In Tennoji Zoo, a bear has been seen using a branch as a [blank:9:tool]. This allowed him to knock down some [blank:10:fruit]."
+                            "In Tennoji Zoo, a bear has been seen using a branch as a [blank:9:tool]. This allowed him to knock down some [blank:10:meat]."
                         ]
                     },
                     {
                         "type": "bullet",
                         "content": [
-                            "A wild polar bear worked out a method of reaching a platform where a [blank:11:seal] was located."
+                            "A wild polar bear worked out a method of reaching a platform where a [blank:11:photographer] was located."
                         ]
                     },
                     {
                         "type": "bullet",
                         "content": [
-                            "Polar bears have displayed behaviour such as conscious manipulation of objects and activity similar to a [blank:12:human]."
+                            "Polar bears have displayed behaviour such as conscious manipulation of objects and activity similar to a [blank:12:game]."
                         ]
                     },
                     "Bears may also display emotions. For example:",
@@ -130,16 +130,18 @@
         "questionSets": [
             {
                 "type": "matching-headings",
-                "instructions": "Choose the correct heading for each paragraph from the list of headings below.",
+                "instructions": "The passage has seven paragraphs.\n\nChoose the correct heading for each paragraph from the list of headings below.\n\nSelect the correct number i-ix in the boxes.",
                 "headings": [
-                    { "id": "i", "text": "A revolutionary design" },
-                    { "id": "ii", "text": "The architect's legacy" },
-                    { "id": "iii", "text": "A city-sized complex" },
-                    { "id": "iv", "text": "The origins of the pyramid" },
-                    { "id": "v", "text": "Construction challenges" },
-                    { "id": "vi", "text": "The burial chamber and its mysteries" },
-                    { "id": "vii", "text": "Imhotep's contribution" },
-                    { "id": "viii", "text": "The pyramid's historical significance" }
+                    { "id": "i", "text": "The areas and artefacts within the pyramid itself" },
+                    { "id": "ii", "text": "A difficult task for those involved" },
+                    { "id": "iii", "text": "A king who saved his people" },
+                    { "id": "iv", "text": "A single certainty among other less definite facts" },
+                    { "id": "v", "text": "An overview of th external buildings and areas" },
+                    { "id": "vi", "text": "A pyramid design that others copied" },
+                    { "id": "vii", "text": "An idea for changing the design of burial structures" },
+                    { "id": "viii", "text": "An incredible experience despite the few remains" },
+                    { "id": "ix", "text": "The answer to some unexpected questions" }
+
                 ],
                 "questions": [
                     {
@@ -192,7 +194,7 @@
                     },
                     {
                         "id": "q2",
-                        "question": "The area outside the pyramid included accommodation that was occupied by [blank].",
+                        "question": "The area outside the pyramid included accommodation that was occupied by [blank], along with many other buildings and features.",
                         "answer": "priests"
                     },
                     {
@@ -202,7 +204,7 @@
                     },
                     {
                         "id": "q4",
-                        "question": "Any visitors who had not been invited were cleverly prevented from entering the pyramid grounds unless they knew the [blank] of the real entrance.",
+                        "question": "As a result, any visitors who had not been invited were cleverly prevented from entering the pyramid grounds unless they knew the [blank] of the real entrance.",
                         "answer": "location"
                     }
                 ]
@@ -267,7 +269,7 @@
                             "staff making sure that AI produces the results that they want",
                             "staff allowing AI to carry out tasks they ought to do themselves"
                         ],
-                        "answer": "D"
+                        "answer": "C"
                     },
                     {
                         "id": "q30",
@@ -285,7 +287,7 @@
             {
                 "type": "summary-table-completion",
                 "mode": "word-bank",
-                "instructions": "Complete the summary using the list of words, A–G, below. Write the correct letter, A–G, in boxes 31–34 on your answer sheet.",
+                "instructions": "Complete the summary using the list of words below.",
                 "wordBank": [
                     "pressure",
                     "satisfaction",

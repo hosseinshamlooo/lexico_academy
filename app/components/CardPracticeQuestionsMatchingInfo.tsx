@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import ProgressBarOnboarding from "@/app/components/ProgressBarOnboarding";
 import InstructionBox from "@/app/components/InstructionBox";
+import CorrectionDisplay from "@/app/components/CorrectionDisplay";
+import { FaCircleCheck } from "react-icons/fa6";
+import { FaCircleXmark } from "react-icons/fa6";
 
 interface MatchingInfoPerson {
   id: string; // 'A', 'B', 'C'
@@ -109,25 +112,37 @@ function CardPracticeQuestionsMatchingInfo({
                 {idx + 1}
               </span>
               <span className="flex-1 ml-1">{q.question}</span>
-              <input
-                type="text"
-                maxLength={1}
-                className={`w-12 h-9 text-center border-2 rounded-lg text-lg font-bold uppercase focus:outline-none transition-all
-                  ${
-                    submitted
-                      ? userAnswers[idx].toUpperCase() ===
-                        q.answer.toUpperCase()
-                        ? "border-green-500 bg-green-50 text-green-800"
-                        : "border-red-500 bg-red-50 text-red-800"
-                      : "border-[#1D5554] text-[#1D5554] focus:border-[#1D5554] bg-white"
-                  }
-                `}
-                value={userAnswers[idx]}
-                onChange={(e) => handleInputChange(idx, e.target.value)}
-                disabled={submitted}
-                aria-label={`Answer for question ${idx + 1}`}
-                autoComplete="off"
-              />
+              <div className="flex items-center gap-1">
+                <input
+                  type="text"
+                  maxLength={1}
+                  className={`w-12 h-9 text-center border-2 rounded-lg text-lg font-bold uppercase focus:outline-none transition-all
+                      ${
+                        submitted
+                          ? userAnswers[idx].toUpperCase() ===
+                            q.answer.toUpperCase()
+                            ? "border-green-500 bg-green-50 text-green-800"
+                            : "border-red-500 bg-red-50 text-red-800"
+                          : "border-[#1D5554] text-[#1D5554] focus:border-[#1D5554] bg-white"
+                      }
+                    `}
+                  value={userAnswers[idx]}
+                  onChange={(e) => handleInputChange(idx, e.target.value)}
+                  disabled={submitted}
+                  aria-label={`Answer for question ${idx + 1}`}
+                  autoComplete="off"
+                />
+                {submitted && userAnswers[idx] && (
+                  <div className="flex-shrink-0">
+                    {userAnswers[idx].toUpperCase() ===
+                    q.answer.toUpperCase() ? (
+                      <FaCircleCheck className="text-green-500 text-sm" />
+                    ) : (
+                      <FaCircleXmark className="text-red-500 text-sm" />
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -143,14 +158,7 @@ function CardPracticeQuestionsMatchingInfo({
               Submit Answers
             </button>
           ) : (
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900 mb-2">
-                {score}/{questions.length}
-              </div>
-              <div className="text-sm text-gray-600">
-                {Math.round((score / questions.length) * 100)}% correct
-              </div>
-            </div>
+            <CorrectionDisplay correct={score} total={questions.length} />
           )}
         </div>
         {/* Show correct answers below after submit */}

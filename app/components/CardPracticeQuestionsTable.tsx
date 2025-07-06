@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import InstructionBox from "@/app/components/InstructionBox";
 import ProgressBarOnboarding from "@/app/components/ProgressBarOnboarding";
+import CorrectionDisplay from "@/app/components/CorrectionDisplay";
+import { FaCircleCheck } from "react-icons/fa6";
+import { FaCircleXmark } from "react-icons/fa6";
 
 interface TableContentText {
   type: "text";
@@ -162,17 +165,44 @@ export default function CardPracticeQuestionsTable(
               part.type === "text" ? (
                 <span key={i}>{part.text}</span>
               ) : (
-                <input
+                <span
                   key={`${idx}-${i}-${part.id}`}
-                  type="text"
-                  {...getBlankInputProps(
-                    part.id,
-                    userAnswers[part.id] || "",
-                    (v) => handleChange(part.id, v),
-                    submitted,
-                    isCorrect(part.id)
-                  )}
-                />
+                  className="inline-flex items-center gap-1 relative"
+                >
+                  <input
+                    type="text"
+                    {...getBlankInputProps(
+                      part.id,
+                      userAnswers[part.id] || "",
+                      (v) => handleChange(part.id, v),
+                      submitted,
+                      isCorrect(part.id)
+                    )}
+                  />
+                  {submitted &&
+                    (userAnswers[part.id] || "").trim().length > 0 && (
+                      <div className="flex-shrink-0">
+                        {isCorrect(part.id) ? (
+                          <FaCircleCheck className="text-green-500 text-sm" />
+                        ) : (
+                          <FaCircleXmark className="text-red-500 text-sm" />
+                        )}
+                      </div>
+                    )}
+                  {/* Show only the grey correction box for wrong answers */}
+                  {submitted &&
+                    (userAnswers[part.id] || "").trim().length > 0 &&
+                    !isCorrect(part.id) && (
+                      <div className="absolute top-full left-0 mt-1 bg-gray-100 border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 whitespace-nowrap z-10">
+                        <span className="font-semibold text-gray-600">
+                          Correct answer:
+                        </span>{" "}
+                        <span className="text-green-700 font-semibold">
+                          {part.answer}
+                        </span>
+                      </div>
+                    )}
+                </span>
               )
             )}
           </span>
@@ -242,18 +272,10 @@ export default function CardPracticeQuestionsTable(
             Submit Answers
           </button>
         ) : (
-          <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900 mb-2">
-              {blanks.filter((b) => isCorrect(b.id)).length}/{blanks.length}
-            </div>
-            <div className="text-sm text-gray-600">
-              {Math.round(
-                (blanks.filter((b) => isCorrect(b.id)).length / blanks.length) *
-                  100
-              )}
-              % correct
-            </div>
-          </div>
+          <CorrectionDisplay
+            correct={blanks.filter((b) => isCorrect(b.id)).length}
+            total={blanks.length}
+          />
         )}
       </div>
     </div>

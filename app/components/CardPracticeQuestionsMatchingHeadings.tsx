@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import InstructionBox from "@/app/components/InstructionBox";
 import ProgressBarOnboarding from "./ProgressBarOnboarding";
+import CorrectionDisplay from "@/app/components/CorrectionDisplay";
+import { FaCircleCheck } from "react-icons/fa6";
+import { FaCircleXmark } from "react-icons/fa6";
 
 interface MatchingHeadingsQuestion {
   id: string | number;
@@ -82,28 +85,39 @@ export default function CardPracticeQuestionsMatchingHeadings({
                     {idx + 1}.
                   </span>
                   <span className="flex-1 text-gray-900">{q.question}</span>
-                  <select
-                    className={`w-full sm:w-28 h-9 text-center border-2 rounded-lg text-base font-bold focus:outline-none transition-all flex-shrink-0
-                      ${
-                        submitted
-                          ? userAnswers[idx] === q.answer
-                            ? "border-green-500 bg-green-50 text-green-800"
-                            : "border-red-500 bg-red-50 text-red-800"
-                          : "border-[#1D5554] bg-white text-[#1D5554] focus:border-[#1D5554]"
-                      }
-                    `}
-                    value={userAnswers[idx]}
-                    onChange={(e) => handleSelect(idx, e.target.value)}
-                    disabled={submitted}
-                    aria-label={`Heading for question ${idx + 1}`}
-                  >
-                    <option value="">Select</option>
-                    {headings.map((h) => (
-                      <option key={h.id} value={h.id}>
-                        {h.id}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="flex items-center gap-1">
+                    <select
+                      className={`w-full sm:w-28 h-9 text-center border-2 rounded-lg text-base font-bold focus:outline-none transition-all flex-shrink-0
+                          ${
+                            submitted
+                              ? userAnswers[idx] === q.answer
+                                ? "border-green-500 bg-green-50 text-green-800"
+                                : "border-red-500 bg-red-50 text-red-800"
+                              : "border-[#1D5554] bg-white text-[#1D5554] focus:border-[#1D5554]"
+                          }
+                        `}
+                      value={userAnswers[idx]}
+                      onChange={(e) => handleSelect(idx, e.target.value)}
+                      disabled={submitted}
+                      aria-label={`Heading for question ${idx + 1}`}
+                    >
+                      <option value="">Select</option>
+                      {headings.map((h) => (
+                        <option key={h.id} value={h.id}>
+                          {h.id}
+                        </option>
+                      ))}
+                    </select>
+                    {submitted && userAnswers[idx] && (
+                      <div className="flex-shrink-0">
+                        {userAnswers[idx] === q.answer ? (
+                          <FaCircleCheck className="text-green-500 text-sm" />
+                        ) : (
+                          <FaCircleXmark className="text-red-500 text-sm" />
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 {/* Correction box if wrong */}
                 {submitted && userAnswers[idx] !== q.answer && (
@@ -125,14 +139,7 @@ export default function CardPracticeQuestionsMatchingHeadings({
                 Submit Answers
               </button>
             ) : (
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900 mb-2">
-                  {score}/{questions.length}
-                </div>
-                <div className="text-sm text-gray-600">
-                  {Math.round((score / questions.length) * 100)}% correct
-                </div>
-              </div>
+              <CorrectionDisplay correct={score} total={questions.length} />
             )}
           </div>
         </form>
