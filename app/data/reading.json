@@ -84,33 +84,41 @@
                 "type": "summary-table-completion",
                 "mode": "table",
                 "title": "Reasons why polar bears should be protected",
-                "instructions": "",
+                "instructions": "Complete the notes below.\n\nChoose ONE WORD ONLY from the passage for each answer.",
                 "content": [
-                    { "type": "text", "text": "People think of bears as unintelligent and " },
-                    { "type": "blank", "id": "q8", "answer": "clumsy" },
-                    { "type": "text", "text": "." },
-                    { "type": "text", "text": "However, this may not be correct. For example:" },
-                    { "type": "bullet", "content": [
-                        { "type": "text", "text": "In Tennoji Zoo, a bear has been seen using a branch as a " },
-                        { "type": "blank", "id": "q9", "answer": "tool" },
-                        { "type": "text", "text": "." }
-                    ]},
-                    { "type": "bullet", "content": [
-                        { "type": "text", "text": "A wild polar bear worked out a method of reaching a platform where a " },
-                        { "type": "blank", "id": "q11", "answer": "seal" },
-                        { "type": "text", "text": " was located." }
-                    ]},
-                    { "type": "bullet", "content": [
-                        { "type": "text", "text": "Polar bears may also display emotions. For example:" }
-                    ]},
-                    { "type": "bullet", "content": [
-                        { "type": "text", "text": "They may make movements suggesting " },
-                        { "type": "blank", "id": "q13", "answer": "frustration" },
-                        { "type": "text", "text": " if disappointed when hunting." }
-                    ]},
-                    { "type": "bullet", "content": [
-                        { "type": "text", "text": "They may form relationships with other species." }
-                    ]}
+                    "People think of bears as unintelligent and [blank:8:clumsy].",
+                    "However, this may not be correct. For example:",
+                    {
+                        "type": "bullet",
+                        "content": [
+                            "In Tennoji Zoo, a bear has been seen using a branch as a [blank:9:tool]. This allowed him to knock down some [blank:10:fruit]."
+                        ]
+                    },
+                    {
+                        "type": "bullet",
+                        "content": [
+                            "A wild polar bear worked out a method of reaching a platform where a [blank:11:seal] was located."
+                        ]
+                    },
+                    {
+                        "type": "bullet",
+                        "content": [
+                            "Polar bears have displayed behaviour such as conscious manipulation of objects and activity similar to a [blank:12:human]."
+                        ]
+                    },
+                    "Bears may also display emotions. For example:",
+                    {
+                        "type": "bullet",
+                        "content": [
+                            "They may make movements suggesting [blank:13:frustration] if disappointed when hunting."
+                        ]
+                    },
+                    {
+                        "type": "bullet",
+                        "content": [
+                            "They may form relationships with other species."
+                        ]
+                    }
                 ]
             }
         ]
