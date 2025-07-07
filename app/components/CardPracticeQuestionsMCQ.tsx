@@ -137,11 +137,8 @@ export default function CardPracticeQuestionsMCQ({
 
   return (
     <div className="bg-white rounded-lg shadow-[0_0_16px_0_rgba(0,0,0,0.10)] p-6 h-full flex flex-col">
-      <div className="mb-4 flex-shrink-0">
+      <div className="flex-shrink-0">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Questions</h2>
-        {instructions && (
-          <InstructionBox className="mb-3">{instructions}</InstructionBox>
-        )}
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="h-2 rounded-full transition-all duration-500"
@@ -160,6 +157,9 @@ export default function CardPracticeQuestionsMCQ({
           {Object.values(selectedAnswers).filter((a) => a.length > 0).length} of{" "}
           {questions.length} questions answered
         </p>
+        {instructions && (
+          <InstructionBox className="mt-3">{instructions}</InstructionBox>
+        )}
       </div>
       <div className="space-y-6 flex-1 overflow-y-auto scrollbar-hide">
         {questions.map((question) => {
@@ -170,7 +170,7 @@ export default function CardPracticeQuestionsMCQ({
             : 1;
           return (
             <div key={question.id} className="rounded-lg p-4 bg-white">
-              <InstructionBox className="mb-3">
+              <InstructionBox className="mt-3">
                 <div className="leading-8">{question.question}</div>
               </InstructionBox>
               <div className="space-y-2">

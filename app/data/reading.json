@@ -538,7 +538,8 @@
                             "The risk they pose has been exaggerated.",
                             "They are more plentiful in animal life than plant life.",
                             "They will continue to exist for longer than the human race."
-                        ]
+                        ],
+                        "answer": "D"
                     },
                     {
                         "id": "q15",
@@ -548,7 +549,8 @@
                             "some parts of the body contain relatively few microbes.",
                             "the average individual has more microbial cells than human ones.",
                             "scientists have limited understanding of how microbial cells behave."
-                        ]
+                        ],
+                        "answer": "C"
                     },
                     {
                         "id": "q16",
@@ -558,14 +560,16 @@
                             "comparing scientists' theories about microbes",
                             "describing confusion among scientists",
                             "giving details of how microbes cause disease"
-                        ]
+                        ],
+                        "answer": "A"
                     }
                 ]
             },
             {
                 "type": "summary-table-completion",
                 "mode": "word-bank",
-                "instructions": "Complete the summary using the list of words, A–H, below. Write the correct letter, A–H, in boxes 17–20 on your answer sheet.",
+                "instructions": "Complete the summary using the list of words below.",
+                "title": "We should be more tolerant of microbes",
                 "wordBank": [
                     "solution",
                     "partnership",
@@ -577,27 +581,12 @@
                     "nutrition"
                 ],
                 "questions": [
-                    {
-                        "id": "q17",
-                        "question": "Many have a beneficial effect, and only a relatively small number lead to [blank].",
-                        "answer": "illness"
-                    },
-                    {
-                        "id": "q18",
-                        "question": "we should accept that our relationship with microbes is one based on [blank] .",
-                        "answer": "partnership"
-                    },
-                    {
-                        "id": "q19",
-                        "question": "Our poor [blank], our overuse of antibiotics,",
-                        "answer": "nutrition"
-                    },
-                    {
-                        "id": "q20",
-                        "question": "and our excessive focus on [blank] are upsetting the bacterial balance.",
-                        "answer": "cleanliness"
-                    }
-                ]
+                                {
+                                "id": 1,
+                                "question": "Yong's book argues that we should be more tolerant of microbes. Many have a beneficial effect, and only a relatively small number lead to [blank]. And although it is misleading to think of microbes as 'friendly', we should also stop thinking of them as the enemy. In fact, we should accept that our relationship with microbes is one based on [blank].\n\nNew research shows that microbes have numerous benefits for humans. Amongst other things, they aid digestion, remove poisons, produce vitamins and may even help reduce obesity. However, there is a growing problem. Our poor [blank], our overuse of antibiotics, and our excessive focus on [blank] are upsetting the bacterial balance and may be contributing to the huge increase in allergies and immune system problems.",
+                                "answer": ["illness", "partnership", "nutrition", "cleanliness"]
+                                }
+                            ]
             },
             {
                 "type": "fact-opinion-judgement",
@@ -607,55 +596,62 @@
                         "id": "q21",
                         "question": "It is possible that using antibacterial products in the home fails to have the desired effect.",
                         "options": [
-                            "YES",
-                            "NO",
-                            "NOT GIVEN"
-                        ]
+                            "Yes",
+                            "No",
+                            "Not Given"
+                        ],
+                        "answer": "Yes"
+
                     },
                     {
                         "id": "q22",
                         "question": "It is a good idea to ensure that children come into contact with as few bacteria as possible.",
                         "options": [
-                            "YES",
-                            "NO",
-                            "NOT GIVEN"
-                        ]
+                            "Yes",
+                            "No",
+                            "Not Given"
+                        ],
+                        "answer": "No"
                     },
                     {
                         "id": "q23",
                         "question": "Yong's book contains more case studies than are necessary.",
                         "options": [
-                            "YES",
-                            "NO",
-                            "NOT GIVEN"
-                        ]
+                            "Yes",
+                            "No",
+                            "Not Given"
+                        ],
+                        "answer": "Not Given"
                     },
                     {
                         "id": "q24",
                         "question": "The case study about bacteria that prevent squid from being attacked may have limited appeal.",
                         "options": [
-                            "YES",
-                            "NO",
-                            "NOT GIVEN"
-                        ]
+                            "Yes",
+                            "No",
+                            "Not Given"
+                        ],
+                        "answer": "Yes"
                     },
                     {
                         "id": "q25",
                         "question": "Efforts to control dengue fever have been surprisingly successful.",
                         "options": [
-                            "YES",
-                            "NO",
-                            "NOT GIVEN"
-                        ]
+                            "Yes",
+                            "No",
+                            "Not Given"
+                        ],
+                        "answer": "Not Given"
                     },
                     {
                         "id": "q26",
                         "question": "Microbes that reduce the risk of infection have already been put inside the walls of some hospital wards.",
                         "options": [
-                            "YES",
-                            "NO",
-                            "NOT GIVEN"
-                        ]
+                            "Yes",
+                            "No",
+                            "Not Given"
+                        ],
+                        "answer": "No"
                     }
                 ]
             }
@@ -678,7 +674,8 @@
                             "A basic assumption about wisdom may be wrong.",
                             "Concepts of wisdom may depend on the society we belong to.",
                             "There is still much to be discovered about the nature of wisdom."
-                        ]
+                        ],
+                        "answer": "B"
                     },
                     {
                         "id": "q28",
@@ -688,7 +685,8 @@
                             "Earlier research into it was based on unreliable data.",
                             "The importance of certain influences on it was underestimated.",
                             "Various branches of psychology define it according to their own criteria."
-                        ]
+                        ],
+                        "answer": "C"
                     },
                     {
                         "id": "q29",
@@ -698,7 +696,8 @@
                             "will be different in different circumstances.",
                             "may be determined by particular aspects of their personality.",
                             "should develop over time as a result of their life experiences."
-                        ]
+                        ],
+                        "answer": "B"
                     },
                     {
                         "id": "q30",
@@ -708,14 +707,16 @@
                             "an example of the type of person who is likely to reason wisely",
                             "a controversial view about the benefits of reasoning wisely",
                             "a recommended strategy that can help people to reason wisely"
-                        ]
+                        ],
+                        "answer": "D"
                     }
                 ]
             },
             {
                 "type": "summary-table-completion",
                 "mode": "word-bank",
-                "instructions": "Complete the summary using the list of words, A–J, below. Write the correct letter, A–J, in boxes 31–35 on your answer sheet.",
+                "title": "The characteristics of wise reasoning",
+                "instructions": "Complete the summary using the list of words below.",
                 "wordBank": [
                     "opinions",
                     "confidence",
@@ -731,29 +732,10 @@
                 "questions": [
                     {
                         "id": "q31",
-                        "question": "It is important to have a certain degree of [blank] regarding the extent of our knowledge.",
-                        "answer": "modesty"
-                    },
-                    {
-                        "id": "q32",
-                        "question": "and to take into account [blank] which may not be the same as our own.",
-                        "answer": "opinions"
-                    },
-                    {
-                        "id": "q33",
-                        "question": "We should also be able to take a broad [blank] of any situation.",
-                        "answer": "view"
-                    },
-                    {
-                        "id": "q34",
-                        "question": "Grossmann also believes that it is better to regard scenarios with [blank].",
-                        "answer": "objectivity"
-                    },
-                    {
-                        "id": "q35",
-                        "question": "By avoiding the first-person perspective, we focus more on [blank] and on other moral ideals, which in turn leads to wiser decision-making.",
-                        "answer": "fairness"
+                        "question": "Igor Grossmann and colleagues have established four characteristics which enable us to make wise decisions. It is important to have a certain degree of [blank] regarding the extent of our knowledge, and to take into account [blank] which may not be the same as our own. We should also be able to take a broad [blank] of any situation. Another key characteristic is being aware of the likelihood of alterations in the way that people relate to each other.\n\nGrossmann also believes that it is better to regard scenarios with [blank].By avoiding the first-person perspective, we focus more on [blank] and on other moral ideals, which in turn leads to wiser decision-making.",
+                        "answer": ["modesty", "opinions", "view", "objectivity", "fairness"]
                     }
+                    
                 ]
             },
             {
@@ -764,46 +746,51 @@
                         "id": "q36",
                         "question": "Students participating in the job prospects experiment could choose one of two perspectives to take.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "False"
                     },
                     {
                         "id": "q37",
                         "question": "Participants in the couples experiment were aware that they were taking part in a study about wise reasoning.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "Not Given"
                     },
                     {
                         "id": "q38",
                         "question": "In the couples experiments, the length of the couples' relationships had an impact on the results.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "Not Given"
                     },
                     {
                         "id": "q39",
                         "question": "In both experiments, the participants who looked at the situation from a more detached viewpoint tended to make wiser decisions.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "True"
                     },
                     {
                         "id": "q40",
                         "question": "Grossmann believes that a person's wisdom is determined by their intelligence to only a very limited extent.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "True"
                     }
                 ]
             }
@@ -822,95 +809,68 @@
                         "id": "q1",
                         "question": "The Romans' shipbuilding skills were passed on to the Greeks and the Egyptians.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "False"
                     },
                     {
                         "id": "q2",
                         "question": "Skilled craftsmen were needed for the mortise and tenon method of fixing planks.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "Not Given"
                     },
                     {
                         "id": "q3",
                         "question": "The later practice used by Mediterranean shipbuilders involved building the hull before the frame.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "False"
                     },
                     {
                         "id": "q4",
                         "question": "The Romans called the Mediterranean Sea Mare Nostrum because they dominated its use.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "True"
                     },
                     {
                         "id": "q5",
                         "question": "Most rowers on ships were people from the Roman army.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "True"
                     }
                 ]
             },
             {
                 "type": "summary-table-completion",
                 "mode": "input",
-                "instructions": "Complete the summary below. Choose ONE WORD ONLY from the passage for each answer. Write your answers in boxes 6–13 on your answer sheet.",
+                "title": "Warships and merchant ships",
+                "instructions": "Complete the summary below. Choose ONE WORD ONLY from the passage for each answer.",
                 "questions": [
                     {
-                        "id": "q6",
-                        "question": "Warships were designed so that they were [blank] and moved quickly.",
-                        "answer": "lightweight"
-                    },
-                    {
-                        "id": "q7",
-                        "question": "A battering ram made of [blank] was included in the design for attacking and damaging the timber and oars of enemy ships.",
-                        "answer": "bronze"
-                    },
-                    {
-                        "id": "q8",
-                        "question": "Warships, such as the 'trireme', had rowers on three different [blank] .",
-                        "answer": "levels"
-                    },
-                    {
-                        "id": "q9",
-                        "question": "Unlike warships, merchant ships had a broad [blank] that lay far below the surface of the sea.",
-                        "answer": "hull"
-                    },
-                    {
-                        "id": "q10",
-                        "question": "They had both square and [blank] sails.",
-                        "answer": "triangular"
-                    },
-                    {
-                        "id": "q11",
-                        "question": "On merchant ships and warships, [blank] was used to ensure rowers moved their oars in and out of the water at the same time.",
-                        "answer": "music"
-                    },
-                    {
-                        "id": "q12",
-                        "question": "Quantities of agricultural goods such as [blank] were transported by merchant ships to two main ports in Italy.",
-                        "answer": "grain"
-                    },
-                    {
-                        "id": "q13",
-                        "question": "The ships were pulled to the shore by [blank] .",
-                        "answer": "towboats"
+                        "id": 1,
+                        "question": 
+                            "Warships were designed so that they were [blank] and moved quickly. They often remained afloat after battles and were able to sail close to land as they lacked any additional weight. A battering ram made of [blank] was included in the design for attacking and damaging the timber and oars of enemy ships. Warships, such as the 'trireme', had rowers on three different [blank].\n\nUnlike warships, merchant ships had a broad [blank] that lay far below the surface of the sea. Merchant ships were steered through the water with the help of large rudders and a tiller bar. They had both square and [blank] sails. On merchant ships and warships, [blank] was used to ensure rowers moved their oars in and out of the water at the same time.\n\nQuantities of agricultural goods such as [blank] were transported by merchant ships to two main ports in Italy. The ships were pulled to the shore by [blank]. When the weather was clear and they could see islands or land, sailors used landmarks that they knew to help them navigate their route.",
+                        "answer": ["lightweight", "bronze","levels","hull","triangular","music","grain","towboats"]
                     }
                 ]
+                
             }
         ]
     },

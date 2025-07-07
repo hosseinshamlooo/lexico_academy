@@ -30,6 +30,7 @@ interface QuestionSet {
   mode?: string;
   headings?: { id: string; text: string }[];
   instructions?: string;
+  title?: string;
 }
 
 interface PracticeData {
@@ -194,6 +195,7 @@ export default function PracticePage() {
         }))
       : [],
     instructions: questionSet.instructions,
+    title: questionSet.title,
   };
 
   // For matching-info type

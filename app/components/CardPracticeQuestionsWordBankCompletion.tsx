@@ -8,6 +8,7 @@ interface Question {
   id: string | number;
   question: string;
   answer: string;
+  paragraphs?: string[];
 }
 
 interface CardPracticeQuestionsWordBankCompletionProps {
@@ -16,20 +17,12 @@ interface CardPracticeQuestionsWordBankCompletionProps {
     questions: Question[];
     mode: string;
     instructions?: string;
+    title?: string;
   };
 }
 
-function extractBlankSentence(str: string) {
-  // Extract the sentence containing [blank]
-  const blankIdx = str.indexOf("[blank]");
-  if (blankIdx === -1) return str;
-  // Find previous period
-  let start = str.lastIndexOf(".", blankIdx);
-  start = start === -1 ? 0 : start + 1;
-  // Find next period
-  let end = str.indexOf(".", blankIdx + 7);
-  end = end === -1 ? str.length : end + 1;
-  return str.slice(start, end).trim();
+function safeMatch(str: string | undefined | null, regex: RegExp): string[] {
+  return typeof str === "string" ? str.match(regex) || [] : [];
 }
 
 // Only renders if questionSet.mode === 'word-bank'
@@ -49,7 +42,7 @@ export default function CardPracticeQuestionsWordBankCompletion({
   const uniqueQuestions = questionSet.questions.map((q, idx) => ({
     q,
     idx,
-    sentence: extractBlankSentence(q.question),
+    sentence: q.question,
   }));
 
   // Build a flat list of all blanks across all questions
@@ -96,12 +89,6 @@ export default function CardPracticeQuestionsWordBankCompletion({
     setBank(updatedBank);
   }
 
-  function handleInput(globalIdx: number, value: string) {
-    const updated = [...userAnswers];
-    updated[globalIdx] = value;
-    setUserAnswers(updated);
-  }
-
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     console.log("Submit triggered");
@@ -119,27 +106,6 @@ export default function CardPracticeQuestionsWordBankCompletion({
 
   const answeredCount = userAnswers.filter((a) => a && a.trim() !== "").length;
   const total = totalBlanks;
-
-  // Precompute blank indices for each question to avoid mutation during render
-  const questionBlankIndices = uniqueQuestions.map(({ q }, qIdx) => {
-    const numBlanks = (
-      extractBlankSentence(q.question).match(/\[blank\]/g) || []
-    ).length;
-    const indices = [];
-    let start = 0;
-    for (let i = 0, count = 0; i < qIdx; i++) {
-      count += (
-        extractBlankSentence(uniqueQuestions[i].q.question).match(
-          /\[blank\]/g
-        ) || []
-      ).length;
-      start = count;
-    }
-    for (let i = 0; i < numBlanks; i++) {
-      indices.push(start + i);
-    }
-    return indices;
-  });
 
   // Render
   console.log("Render: submitted =", submitted);
@@ -198,153 +164,139 @@ export default function CardPracticeQuestionsWordBankCompletion({
       <div className="flex-1 overflow-y-auto scrollbar-hide">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="mb-6 text-base leading-8 text-gray-900 space-y-4">
-            {uniqueQuestions.map(({ sentence }, qIdx) => {
-              const parts = sentence.split(/(\[blank\])/g);
-              const numBlanks = (sentence.match(/\[blank\]/g) || []).length;
-              // For summary correction: collect userVals and correctAnswers for this question's blanks
-              const blankIndices = questionBlankIndices[qIdx];
-              const userVals = blankIndices.map((idx) => userAnswers[idx]);
-              const correctAnswers = blankIndices.map(
-                (idx) => blankMap[idx]?.answer ?? ""
-              );
-              let blankCounter = 0; // Local counter for this question's blanks
-              const jsx = (
+            {/* Render the title below the word bank, above the question text */}
+            {questionSet.title && (
+              <h1 className="text-xl font-bold text-center mb-4 text-black">
+                {questionSet.title}
+              </h1>
+            )}
+            {uniqueQuestions.map(({ q, sentence }, qIdx) => {
+              const paragraphs = q.paragraphs || sentence.split(/\r?\n\r?\n/);
+              console.log("paragraphs", paragraphs);
+              let globalBlankCounter = 0;
+              return (
                 <div
                   key={qIdx}
                   className="flex flex-col items-start gap-2 w-full"
                 >
-                  <span className="leading-8">
-                    {parts.map((part, i) =>
-                      part === "[blank]" ? (
-                        (() => {
-                          const blankIdx = blankIndices[blankCounter++];
-                          const blankObj = blankMap[blankIdx];
-                          const userVal = userAnswers[blankIdx];
-                          const correctAnswer = blankObj?.answer ?? "";
-                          return (
-                            <span
-                              key={`blank-${qIdx}-${i}`}
-                              className="inline-block align-middle mx-1"
-                              onDragOver={(e) => {
-                                if (!submitted) e.preventDefault();
-                              }}
-                              onDrop={() => handleDrop(blankIdx)}
-                            >
-                              {questionSet.mode === "word-bank" ? (
-                                <span className="inline-flex items-center gap-1 relative">
-                                  <button
-                                    type="button"
-                                    className={`inline-block w-24 h-8 rounded border-2 align-middle text-center transition-all font-medium
-                                      ${
-                                        userVal
-                                          ? submitted
-                                            ? userVal?.trim().toLowerCase() ===
-                                              correctAnswer.trim().toLowerCase()
-                                              ? "border-green-500 bg-green-50 text-green-800"
-                                              : "border-red-500 bg-red-50 text-red-800"
-                                            : "border-[#1D5554] text-[#1D5554] bg-white hover:bg-[#e6f4f3]"
-                                          : draggedWord
-                                          ? "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] animate-pulse"
-                                          : "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] hover:bg-[#d0eae8]"
-                                      }
-                                    `}
-                                    onClick={() => handleRemove(blankIdx)}
-                                    disabled={submitted || !userVal}
+                  {paragraphs.map((para, paraIdx) => {
+                    const safePara = typeof para === "string" ? para : "";
+                    return (
+                      <p key={paraIdx} className="mb-4">
+                        {safePara.split(/(\[blank\])/g).map((part, i) =>
+                          part === "[blank]"
+                            ? (() => {
+                                const blankIdx = globalBlankCounter++;
+                                const blankObj = blankMap[blankIdx];
+                                const userVal = userAnswers[blankIdx];
+                                const correctAnswer = blankObj?.answer ?? "";
+                                return (
+                                  <span
+                                    key={`blank-${qIdx}-${paraIdx}-${i}`}
+                                    className="inline-block align-middle mx-1"
+                                    onDragOver={(e) => {
+                                      if (!submitted) e.preventDefault();
+                                    }}
+                                    onDrop={() => handleDrop(blankIdx)}
                                   >
-                                    {userVal ? (
-                                      <span>
-                                        {userVal}
-                                        {!submitted && (
-                                          <span className="ml-2 text-lg">
-                                            ×
-                                          </span>
+                                    {questionSet.mode === "word-bank" ? (
+                                      <span className="inline-flex items-center gap-1 relative">
+                                        <button
+                                          type="button"
+                                          className={`inline-block w-24 h-8 rounded border-2 align-middle text-center transition-all font-medium
+                                        ${
+                                          userVal
+                                            ? submitted
+                                              ? userVal
+                                                  ?.trim()
+                                                  .toLowerCase() ===
+                                                correctAnswer
+                                                  .trim()
+                                                  .toLowerCase()
+                                                ? "border-green-500 bg-green-50 text-green-800"
+                                                : "border-red-500 bg-red-50 text-red-800"
+                                              : "border-[#1D5554] text-[#1D5554] bg-white hover:bg-[#e6f4f3]"
+                                            : draggedWord
+                                            ? "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] animate-pulse"
+                                            : "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] hover:bg-[#d0eae8]"
+                                        }
+                                      `}
+                                          onClick={() => handleRemove(blankIdx)}
+                                          disabled={submitted || !userVal}
+                                        >
+                                          {userVal ? (
+                                            <span>
+                                              {userVal}
+                                              {!submitted && (
+                                                <span className="ml-2 text-lg">
+                                                  ×
+                                                </span>
+                                              )}
+                                            </span>
+                                          ) : (
+                                            <span className="font-semibold text-[#1D5554]">
+                                              {blankIdx + 1}
+                                            </span>
+                                          )}
+                                        </button>
+                                        {submitted && userVal && (
+                                          <div className="flex-shrink-0">
+                                            {userVal?.trim().toLowerCase() ===
+                                            correctAnswer
+                                              .trim()
+                                              .toLowerCase() ? (
+                                              <FaCircleCheck className="text-green-500 text-sm" />
+                                            ) : (
+                                              <FaCircleXmark className="text-red-500 text-sm" />
+                                            )}
+                                          </div>
                                         )}
                                       </span>
-                                    ) : (
-                                      <span className="font-semibold text-[#1D5554]">
-                                        {blankIdx + 1}
-                                      </span>
-                                    )}
-                                  </button>
-                                  {submitted && userVal && (
-                                    <div className="flex-shrink-0">
-                                      {userVal?.trim().toLowerCase() ===
-                                      correctAnswer.trim().toLowerCase() ? (
-                                        <FaCircleCheck className="text-green-500 text-sm" />
-                                      ) : (
-                                        <FaCircleXmark className="text-red-500 text-sm" />
-                                      )}
-                                    </div>
-                                  )}
-                                </span>
-                              ) : (
-                                <span className="inline-flex items-center gap-1 relative">
-                                  <input
-                                    type="text"
-                                    className={`inline-block w-24 h-8 align-middle px-2 py-1 rounded border-2 transition-all duration-200 text-sm font-medium
-                                      ${
-                                        submitted
-                                          ? userVal?.trim().toLowerCase() ===
-                                            correctAnswer.trim().toLowerCase()
-                                            ? "border-green-500 bg-green-50 text-green-800"
-                                            : "border-red-500 bg-red-50 text-red-800"
-                                          : "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] hover:bg-[#d0eae8] focus:border-[#1D5554] focus:bg-white"
-                                      }
-                                    `}
-                                    value={userVal || ""}
-                                    onChange={(e) =>
-                                      handleInput(blankIdx, e.target.value)
-                                    }
-                                    disabled={submitted}
-                                    aria-label={`Blank for question ${
-                                      qIdx + 1
-                                    }`}
-                                    placeholder={`${blankIdx + 1}`}
-                                  />
-                                  {submitted && userVal && (
-                                    <div className="flex-shrink-0">
-                                      {userVal?.trim().toLowerCase() ===
-                                      correctAnswer.trim().toLowerCase() ? (
-                                        <FaCircleCheck className="text-green-500 text-sm" />
-                                      ) : (
-                                        <FaCircleXmark className="text-red-500 text-sm" />
-                                      )}
-                                    </div>
-                                  )}
-                                </span>
-                              )}
-                            </span>
-                          );
-                        })()
-                      ) : (
-                        <React.Fragment key={i}>{part}</React.Fragment>
-                      )
-                    )}
-                  </span>
+                                    ) : null}
+                                  </span>
+                                );
+                              })()
+                            : part
+                        )}
+                      </p>
+                    );
+                  })}
                   {/* Show correct answers in a full-width box under each question after submit, but only if at least one answer is wrong */}
                   {submitted &&
-                    userVals.some(
-                      (val, i) =>
-                        val?.trim().toLowerCase() !==
-                        correctAnswers[i].trim().toLowerCase()
-                    ) && (
-                      <div className="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 mt-2 text-sm text-gray-700">
-                        <span className="font-semibold text-gray-600">
-                          Correct answer{numBlanks > 1 ? "s" : ""}:{" "}
-                        </span>
-                        {correctAnswers.map((ans, i) => (
-                          <span key={i} className="inline-block mr-2">
-                            <span className="text-green-700 font-semibold">
-                              {ans}
-                            </span>
-                            {i < correctAnswers.length - 1 && <span>, </span>}
+                    (() => {
+                      // For summary correction: collect userVals and correctAnswers for this question's blanks
+                      const numBlanksSafeMatch = safeMatch(
+                        sentence,
+                        /\[blank\]/g
+                      ).length;
+                      const userVals: string[] = [];
+                      const correctAnswers: string[] = [];
+                      for (let i = 0; i < numBlanksSafeMatch; i++) {
+                        userVals.push(userAnswers[i] || "");
+                        correctAnswers.push(blankMap[i]?.answer ?? "");
+                      }
+                      return userVals.some(
+                        (val, i) =>
+                          val?.trim().toLowerCase() !==
+                          correctAnswers[i].trim().toLowerCase()
+                      ) ? (
+                        <div className="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 mt-2 text-sm text-gray-700">
+                          <span className="font-semibold text-gray-600">
+                            Correct answer{numBlanksSafeMatch > 1 ? "s" : ""}:{" "}
                           </span>
-                        ))}
-                      </div>
-                    )}
+                          {correctAnswers.map((ans, i) => (
+                            <span key={i} className="inline-block mr-2">
+                              <span className="text-green-700 font-semibold">
+                                {ans}
+                              </span>
+                              {i < correctAnswers.length - 1 && <span>, </span>}
+                            </span>
+                          ))}
+                        </div>
+                      ) : null;
+                    })()}
                 </div>
               );
-              return jsx;
             })}
           </div>
           <div className="mt-6 pt-4 border-t border-gray-200">
