@@ -882,35 +882,34 @@
             {
                 "type": "matching-info",
                 "mode": "match",
-                "instructions": "Which section contains the following information? Write the correct letter, A–H, in boxes 14–19 on your answer sheet.",
+                "instructions": "Which section contains the following information?",
                 "questions": [
-                    { "id": "q14", "question": "an explanation for weapons being left behind in the mountains" },
-                    { "id": "q15", "question": "a reference to the physical difficulties involved in an archaeological expedition" },
-                    { "id": "q16", "question": "an explanation of why less food may have been available" },
-                    { "id": "q17", "question": "a reference to the possibility of future archaeological discoveries" },
-                    { "id": "q18", "question": "examples of items that would have been traded" },
-                    { "id": "q19", "question": "a reference to the pressure archaeologists are under to work quickly" }
+                    { "id": "q14", "question": "an explanation for weapons being left behind in the mountains", "answer": "D"},
+                    { "id": "q15", "question": "a reference to the physical difficulties involved in an archaeological expedition", "answer": "C"},
+                    { "id": "q16", "question": "an explanation of why less food may have been available", "answer": "F" },
+                    { "id": "q17", "question": "a reference to the possibility of future archaeological discoveries", "answer": "H" },
+                    { "id": "q18", "question": "examples of items that would have been traded","answer": "G"  },
+                    { "id": "q19", "question": "a reference to the pressure archaeologists are under to work quickly", "answer": "H" }
                 ]
             },
             {
                 "type": "summary-table-completion",
                 "mode": "input",
-                "instructions": "Complete the summary below. Choose ONE WORD ONLY from the passage for each answer. Write your answers in boxes 20–22 on your answer sheet.",
+                "title": "Interesting finds at an archaeological site",
+                "instructions": "Complete the summary below.\n\nChoose ONE WORD ONLY from the passage for each answer.",
                 "questions": [
-                    { 
-                        "id": "q20", 
-                        "question": "Organic materials such as animal skins and textiles are not discovered very often at archaeological sites. They have little protection against  [blank], which means that they decay relatively quickly.", 
-                        "answer": "microorganisms" },
-                    { 
-                        "id": "q21", 
-                        "question": "In the past, there were trade routes through these mountains and [blank] gathered there in the summer months to avoid being attacked by [blank] on lower ground.", 
-                        "answer": ["reindeer", "insects"] }
-                    
+                    {
+                        "id": 1,
+                        "question": 
+                            "Organic materials such as animal skins and textiles are not discovered very often at archaeological sites. They have little protection against [blank] which means that they decay relatively quickly. But this is not always the case. If temperatures are low enough, fragile artefacts can be preserved for thousands of years.\n\nA team of archaeologists have been working in the mountains in Oppland in Norway to recover artefacts revealed by shrinking ice cover. In the past, there were trade routes through these mountains and [blank] the summer months to avoid being attacked by [blank] gathered there in on lower ground. The people who used these mountains left things behind and it is those objects that are of interest to archaeologists.",
+                        "answer": [["microorganisms","micro-organisms"], "reindeer","insects"]
+                    }
                 ]
+                
             },
             {
                 "type": "multiple-choice",
-                "instructions": "Choose TWO letters, A–E. Write the correct letters in boxes 23 and 24 on your answer sheet. Which TWO of the following statements does the writer make about the discoveries of Barrett's team?",
+                "instructions": "Choose TWO options.",
                 "questions": [
                     {
                         "id": "q23",
@@ -922,7 +921,7 @@
                             "Radiocarbon dating of artefacts produced some unreliable results.",
                             "More artefacts were found in Oppland than at any other mountain site."
                         ],
-                        "answer": ["C", "E"]
+                        "answer": ["C", "B"]
                     },
                     {
                         "id": "q24",
@@ -953,93 +952,105 @@
                         "id": "q27",
                         "question": "The Cambridge scientists' discovery of the 'thermometer molecule' caused surprise among other scientists.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "Not Given"
                     },
                     {
                         "id": "q28",
                         "question": "The target for agricultural production by 2050 could be missed.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "True"
                     },
                     {
                         "id": "q29",
                         "question": "Wheat and rice suffer from a rise in temperatures.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "True"
                     },
                     {
                         "id": "q30",
                         "question": "It may be possible to develop crops that require less water.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "Not Given"
                     },
                     {
                         "id": "q31",
                         "question": "Plants grow faster in sunlight than in shade.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "False"
                     },
                     {
                         "id": "q32",
                         "question": "Phytochromes change their state at the same speed day and night.",
                         "options": [
-                            "TRUE",
-                            "FALSE",
-                            "NOT GIVEN"
-                        ]
+                            "True",
+                            "False",
+                            "Not Given"
+                        ],
+                        "answer": "False"
                     }
                 ]
             },
             {
                 "type": "matching-info",
-                "mode": "people",
-                "instructions": "Which section contains the following information? Write the correct letter, A–H, in boxes 33–37 on your answer sheet.",
+                "mode": "match",
+                "instructions": "Which section contains the following information?\n\nWrite the correct letter.",
                 "questions": [
                     {
                         "id": "q33",
-                        "question": "mention of specialists who can make use of the research findings"
+                        "question": "mention of specialists who can make use of the research findings",
+                        "answer":"H"
+
                     },
                     {
                         "id": "q34",
-                        "question": "a reference to a potential benefit of the research findings"
+                        "question": "a reference to a potential benefit of the research findings",
+                        "answer":"D"
                     },
                     {
                         "id": "q35",
-                        "question": "scientific support for a traditional saying"
+                        "question": "scientific support for a traditional saying",
+                        "answer":"G"
                     },
                     {
                         "id": "q36",
-                        "question": "a reference to people traditionally making plans based on plant behaviour"
+                        "question": "a reference to people traditionally making plans based on plant behaviour",
+                        "answer":"C"
                     },
                     {
                         "id": "q37",
-                        "question": "a reference to where the research has been reported"
+                        "question": "a reference to where the research has been reported",
+                        "answer":"A"
                     }
                 ]
             },
             {
-                "type": "summary-table-completion",
-                "mode":"input",
-                "instructions": "Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer. Write your answers in boxes 38–40 on your answer sheet.",
-                "content": [
-                    "Daffodils are likely to flower early in response to [blank:q38:warm] weather.",
-                    "If ash trees come into leaf before oak trees, the weather in [blank:q39:summer] will probably be wet.",
-                    "The research was carried out using a particular species of [blank:q40:Arabidopsis] ."
+                "type": "short-completion",
+                "mode": "input",
+                "instructions": "Complete the sentences below.\n\nChoose NO MORE THAN TWO WORDS from the passage for each answer.",
+                "questions": [
+                    { "question": "Daffodils are likely to flower early in response to [blank] weather.", "answer": ["warm", "winter"]},
+                    { "question": "If ash trees come into leaf before oak trees, the weather in [blank] will probably be wet.", "answer": "summer" },
+                    { "question": "The research was carried out using a particular species of [blank] .", "answer":"Arabidopsis" }
                 ]
             }
         ]

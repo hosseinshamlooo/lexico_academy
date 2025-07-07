@@ -155,8 +155,10 @@ function CardPracticeQuestionsMatchingInfo({
                       Correct answer:
                     </span>{" "}
                     <span className="text-green-700 font-semibold">
-                      {q.answer} (
-                      {people.find((p) => p.id === q.answer)?.name || ""})
+                      {q.answer}
+                      {people.find((p) => p.id === q.answer)?.name
+                        ? ` (${people.find((p) => p.id === q.answer)?.name})`
+                        : ""}
                     </span>
                   </div>
                 )}
@@ -168,9 +170,7 @@ function CardPracticeQuestionsMatchingInfo({
           {!submitted ? (
             <button
               type="submit"
-              disabled={userAnswers.some(
-                (a) => !["A", "B", "C"].includes(a.toUpperCase())
-              )}
+              disabled={!userAnswers.every((a) => a && a.trim() !== "")}
               className="w-full bg-[#1D5554] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#174342] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
               Submit Answers

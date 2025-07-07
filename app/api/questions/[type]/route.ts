@@ -57,14 +57,27 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     return new Response(JSON.stringify({ error: 'No questions found' }), { status: 404 });
   }
 
-  const randomPassage: Passage = passages[Math.floor(Math.random() * passages.length)];
-  const questionSet: QuestionSet | undefined = randomPassage.questionSets.find((qs: QuestionSet) => qs.type === typeStr);
+  const url = new URL(request.url);
+  const passageId = url.searchParams.get('passageId');
+
+  let selectedPassage: Passage | undefined;
+  if (passageId) {
+    selectedPassage = passages.find(p => p.passageId === passageId);
+  } else {
+    selectedPassage = passages[0]; // fallback: first
+  }
+
+  if (!selectedPassage) {
+    return new Response(JSON.stringify({ error: 'No questions found' }), { status: 404 });
+  }
+
+  const questionSet: QuestionSet | undefined = selectedPassage.questionSets.find((qs: QuestionSet) => qs.type === typeStr);
 
   return new Response(
     JSON.stringify({
-      passageId: randomPassage.passageId,
-      title: randomPassage.title,
-      passage: randomPassage.passage,
+      passageId: selectedPassage.passageId,
+      title: selectedPassage.title,
+      passage: selectedPassage.passage,
       questionSet: questionSet,
     }),
     { status: 200, headers: { 'Content-Type': 'application/json' } }

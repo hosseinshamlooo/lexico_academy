@@ -25,6 +25,17 @@ function safeMatch(str: string | undefined | null, regex: RegExp): string[] {
   return typeof str === "string" ? str.match(regex) || [] : [];
 }
 
+// Helper: check if user answer matches any valid answer (string or array)
+function safeTrim(val: string | undefined | null) {
+  return (val ?? "").trim().toLowerCase();
+}
+function isCorrectAnswer(user: string | null, correct: string | string[]) {
+  if (Array.isArray(correct)) {
+    return correct.some((ans) => safeTrim(user) === safeTrim(ans));
+  }
+  return safeTrim(user) === safeTrim(correct);
+}
+
 // Only renders if questionSet.mode === 'word-bank'
 export default function CardPracticeQuestionsWordBankCompletion({
   questionSet,
@@ -46,7 +57,11 @@ export default function CardPracticeQuestionsWordBankCompletion({
   }));
 
   // Build a flat list of all blanks across all questions
-  const blankMap: { qIdx: number; blankIdx: number; answer: string }[] = [];
+  const blankMap: {
+    qIdx: number;
+    blankIdx: number;
+    answer: string | string[];
+  }[] = [];
   let totalBlanks = 0;
   uniqueQuestions.forEach(({ q }, qIdx) => {
     const answersArr = Array.isArray(q.answer) ? q.answer : [q.answer];
@@ -97,10 +112,7 @@ export default function CardPracticeQuestionsWordBankCompletion({
 
   const score = blankMap.reduce(
     (acc, { answer }, idx) =>
-      acc +
-      (userAnswers[idx]?.trim().toLowerCase() === answer.trim().toLowerCase()
-        ? 1
-        : 0),
+      acc + (isCorrectAnswer(userAnswers[idx], answer) ? 1 : 0),
     0
   );
 
@@ -190,6 +202,10 @@ export default function CardPracticeQuestionsWordBankCompletion({
                                 const blankObj = blankMap[blankIdx];
                                 const userVal = userAnswers[blankIdx];
                                 const correctAnswer = blankObj?.answer ?? "";
+                                const isCorrect = isCorrectAnswer(
+                                  userVal,
+                                  correctAnswer
+                                );
                                 return (
                                   <span
                                     key={`blank-${qIdx}-${paraIdx}-${i}`}
@@ -207,12 +223,7 @@ export default function CardPracticeQuestionsWordBankCompletion({
                                         ${
                                           userVal
                                             ? submitted
-                                              ? userVal
-                                                  ?.trim()
-                                                  .toLowerCase() ===
-                                                correctAnswer
-                                                  .trim()
-                                                  .toLowerCase()
+                                              ? isCorrect
                                                 ? "border-green-500 bg-green-50 text-green-800"
                                                 : "border-red-500 bg-red-50 text-red-800"
                                               : "border-[#1D5554] text-[#1D5554] bg-white hover:bg-[#e6f4f3]"
@@ -241,10 +252,7 @@ export default function CardPracticeQuestionsWordBankCompletion({
                                         </button>
                                         {submitted && userVal && (
                                           <div className="flex-shrink-0">
-                                            {userVal?.trim().toLowerCase() ===
-                                            correctAnswer
-                                              .trim()
-                                              .toLowerCase() ? (
+                                            {isCorrect ? (
                                               <FaCircleCheck className="text-green-500 text-sm" />
                                             ) : (
                                               <FaCircleXmark className="text-red-500 text-sm" />
@@ -269,16 +277,14 @@ export default function CardPracticeQuestionsWordBankCompletion({
                         sentence,
                         /\[blank\]/g
                       ).length;
-                      const userVals: string[] = [];
-                      const correctAnswers: string[] = [];
+                      const userVals: (string | null)[] = [];
+                      const correctAnswers: (string | string[])[] = [];
                       for (let i = 0; i < numBlanksSafeMatch; i++) {
                         userVals.push(userAnswers[i] || "");
                         correctAnswers.push(blankMap[i]?.answer ?? "");
                       }
                       return userVals.some(
-                        (val, i) =>
-                          val?.trim().toLowerCase() !==
-                          correctAnswers[i].trim().toLowerCase()
+                        (val, i) => !isCorrectAnswer(val, correctAnswers[i])
                       ) ? (
                         <div className="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 mt-2 text-sm text-gray-700">
                           <span className="font-semibold text-gray-600">
@@ -287,7 +293,7 @@ export default function CardPracticeQuestionsWordBankCompletion({
                           {correctAnswers.map((ans, i) => (
                             <span key={i} className="inline-block mr-2">
                               <span className="text-green-700 font-semibold">
-                                {ans}
+                                {Array.isArray(ans) ? ans.join(" / ") : ans}
                               </span>
                               {i < correctAnswers.length - 1 && <span>, </span>}
                             </span>

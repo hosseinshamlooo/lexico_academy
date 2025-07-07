@@ -51,11 +51,25 @@ function getParagraphs(q: {
   return [];
 }
 
+// Helper: check if user answer matches any valid answer (string or array)
+function isCorrectAnswer(user: string, correct: string | string[]) {
+  if (Array.isArray(correct)) {
+    return correct.some((ans) => safeTrim(user) === safeTrim(ans));
+  }
+  return safeTrim(user) === safeTrim(correct);
+}
+
 export default function CardPracticeQuestionsCompletion({
   questionSet,
 }: CardPracticeQuestionsCompletionProps) {
+  React.useEffect(() => {
+    // Debug: log the questions array to verify answer structure
+    // Remove or comment out after debugging
+    // eslint-disable-next-line no-console
+    console.log("DEBUG: questionSet.questions", questionSet.questions);
+  }, [questionSet.questions]);
   // Build a flat array of all answers in order, matching the number of [blank]s in each question
-  const flatAnswers: string[] = [];
+  const flatAnswers: (string | string[])[] = [];
   const blankCounts: number[] = [];
   questionSet.questions.forEach((q) => {
     let numBlanks = 0;
@@ -72,9 +86,15 @@ export default function CardPracticeQuestionsCompletion({
       numBlanks = (q.question.match(/\[blank\]/g) || []).length;
     }
     blankCounts.push(numBlanks);
+    // Accept both string and array for answers
     const answerArr = Array.isArray(q.answer) ? q.answer : [q.answer];
     for (let i = 0; i < numBlanks; i++) {
-      flatAnswers.push(answerArr[i] ?? "");
+      // If only one blank and q.answer is an array, use the whole array
+      if (numBlanks === 1 && Array.isArray(q.answer)) {
+        flatAnswers.push(q.answer);
+      } else {
+        flatAnswers.push(answerArr[i] ?? "");
+      }
     }
   });
   const totalBlanks = flatAnswers.length;
@@ -107,7 +127,7 @@ export default function CardPracticeQuestionsCompletion({
 
   const score = flatAnswers.reduce(
     (acc, answer, idx) =>
-      acc + (safeTrim(userAnswers[idx]) === safeTrim(answer) ? 1 : 0),
+      acc + (isCorrectAnswer(userAnswers[idx], answer) ? 1 : 0),
     0
   );
 
@@ -149,7 +169,6 @@ export default function CardPracticeQuestionsCompletion({
             let startIdx = 0;
             for (let i = 0; i < qIdx; i++) startIdx += blankCounts[i];
             let paraBlankCounter = 0;
-            console.log("paragraphs", paragraphs);
             return (
               <div key={q.id} className="mb-6">
                 {(paragraphs || [])
@@ -177,9 +196,10 @@ export default function CardPracticeQuestionsCompletion({
                               (() => {
                                 const thisGlobalIdx = thisStartIdx + localIdx;
                                 localIdx++;
-                                const isCorrect =
-                                  safeTrim(userAnswers[thisGlobalIdx]) ===
-                                  safeTrim(flatAnswers[thisGlobalIdx]);
+                                const isCorrect = isCorrectAnswer(
+                                  userAnswers[thisGlobalIdx],
+                                  flatAnswers[thisGlobalIdx]
+                                );
                                 const hasAnswer =
                                   (userAnswers[thisGlobalIdx] || "").trim()
                                     .length > 0;
@@ -191,16 +211,16 @@ export default function CardPracticeQuestionsCompletion({
                                     <input
                                       type="text"
                                       className={`inline-block w-24 h-8 align-middle px-2 py-1 rounded border-2 transition-all duration-200 text-sm font-medium
-                                      ${
-                                        submitted
-                                          ? isCorrect
-                                            ? "border-green-500 bg-green-50 text-green-800"
-                                            : "border-red-500 bg-red-50 text-red-800"
-                                          : !userAnswers[thisGlobalIdx]
-                                          ? "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] placeholder-[#1D5554] hover:bg-[#d0eae8]"
-                                          : "border-[#1D5554] text-[#1D5554] bg-white hover:bg-[#e6f4f3]"
-                                      }
-                                    `}
+                                        ${
+                                          submitted
+                                            ? isCorrect
+                                              ? "border-green-500 bg-green-50 text-green-800"
+                                              : "border-red-500 bg-red-50 text-red-800"
+                                            : !userAnswers[thisGlobalIdx]
+                                            ? "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] placeholder-[#1D5554] hover:bg-[#d0eae8]"
+                                            : "border-[#1D5554] text-[#1D5554] bg-white hover:bg-[#e6f4f3]"
+                                        }
+                                      `}
                                       value={userAnswers[thisGlobalIdx] ?? ""}
                                       onChange={(e) =>
                                         handleChange(
@@ -243,8 +263,7 @@ export default function CardPracticeQuestionsCompletion({
                     (_, i) => startIdx + i
                   ).some(
                     (bIdx) =>
-                      safeTrim(userAnswers[bIdx]) !==
-                      safeTrim(flatAnswers[bIdx])
+                      !isCorrectAnswer(userAnswers[bIdx], flatAnswers[bIdx])
                   ) && (
                     <div className="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 mt-2 text-sm text-gray-700">
                       <span className="font-semibold text-gray-600">
@@ -253,14 +272,19 @@ export default function CardPracticeQuestionsCompletion({
                       {Array.from(
                         { length: paraBlankCounter },
                         (_, i) => startIdx + i
-                      ).map((bIdx, i) => (
-                        <span key={bIdx} className="inline-block mr-2">
-                          <span className="text-green-700 font-semibold">
-                            {flatAnswers[bIdx] || "—"}
+                      ).map((bIdx, i) => {
+                        const correct = flatAnswers[bIdx];
+                        return (
+                          <span key={bIdx} className="inline-block mr-2">
+                            <span className="text-green-700 font-semibold">
+                              {Array.isArray(correct)
+                                ? correct.join(" / ")
+                                : correct || "—"}
+                            </span>
+                            {i < paraBlankCounter - 1 && <span>, </span>}
                           </span>
-                          {i < paraBlankCounter - 1 && <span>, </span>}
-                        </span>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
               </div>

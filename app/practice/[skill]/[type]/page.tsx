@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import PracticeHeader from "@/app/components/PracticeHeader";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import CardPracticePassage from "@/app/components/CardPracticePassage";
 import CardPracticeQuestionsMCQ from "@/app/components/CardPracticeQuestionsMCQ";
 import CardPracticeQuestionsWordBankCompletion from "@/app/components/CardPracticeQuestionsWordBankCompletion";
@@ -68,14 +68,18 @@ interface TableQuestionSet extends Partial<QuestionSet> {
 
 export default function PracticePage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const type = params?.type as string;
+  const passageId = searchParams.get("passageId");
   const [data, setData] = useState<PracticeData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchPracticeData() {
       try {
-        const response = await fetch(`/api/questions/${type}?skill=reading`);
+        let url = `/api/questions/${type}?skill=reading`;
+        if (passageId) url += `&passageId=${encodeURIComponent(passageId)}`;
+        const response = await fetch(url);
         const practiceData = await response.json();
         setData({
           passage: {
@@ -92,7 +96,7 @@ export default function PracticePage() {
     }
 
     if (type) fetchPracticeData();
-  }, [type]);
+  }, [type, passageId]);
 
   if (loading) {
     return (
