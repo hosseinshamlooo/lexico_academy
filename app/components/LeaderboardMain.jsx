@@ -39,7 +39,7 @@ const dummyLeaderboard = {
 function LeagueBadges({ badges }) {
   // Index 3 is the current league (Ruby)
   return (
-    <div className="flex gap-6 mb-2 justify-center items-end">
+    <div className="flex gap-10 mb-2 justify-center items-end">
       {badges.map((b, i) => {
         // Color mapping for shields
         let color = "text-gray-300";
@@ -57,7 +57,7 @@ function LeagueBadges({ badges }) {
             className={`relative flex items-center justify-center ${isCurrent ? "text-4xl" : "text-3xl"} ${color}`}
             style={{ minWidth: isCurrent ? 44 : 36, minHeight: isCurrent ? 44 : 36 }}
           >
-            <FaShield className={`${isCurrent ? "text-6xl" : "text-5xl"}`} />
+            <FaShield className={`${isCurrent ? "text-7xl" : "text-6xl"}`} />
             {!b.filled && (
               <PiKeyholeFill className="absolute text-gray-500 text-2xl" style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} />
             )}
@@ -148,7 +148,7 @@ export default function LeaderboardMain() {
                 {users.map((user, idx) => (
                   <React.Fragment key={user.rank}>
                     {idx === 5 && <PromotionZoneRow />}
-                    {idx === 15 && <DemotionZoneRow />}
+                    {idx === 14 && <DemotionZoneRow />}
                     <LeaderboardRow user={user} />
                   </React.Fragment>
                 ))}

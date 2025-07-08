@@ -6,6 +6,7 @@ import CardProfileSummary from "../components/CardProfileSummary";
 import SidebarMenu from "../components/SidebarMenu";
 import CardPracticeQuestions from "../components/CardPracticeQuestions";
 import LeaderboardMain from "../components/LeaderboardMain";
+import CardMockTests from "../components/CardMockTests";
 import React from "react";
 
 export default function DashboardPage() {
@@ -42,6 +43,8 @@ export default function DashboardPage() {
         <div className="flex-1">
           {activeView === "Leaderboards" ? (
             <LeaderboardMain />
+          ) : activeView === "Test" ? (
+            <CardMockTests />
           ) : (
             <CardPracticeQuestions />
           )}
