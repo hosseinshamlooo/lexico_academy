@@ -5,9 +5,12 @@ import DashboardHeader from "../components/DashboardHeader";
 import CardProfileSummary from "../components/CardProfileSummary";
 import SidebarMenu from "../components/SidebarMenu";
 import CardPracticeQuestions from "../components/CardPracticeQuestions";
+import LeaderboardMain from "../components/LeaderboardMain";
+import React from "react";
 
 export default function DashboardPage() {
   const { isLoaded, isSignedIn, user } = useUser();
+  const [activeView, setActiveView] = React.useState("Practice");
 
   if (!isLoaded) return null;
   if (!isSignedIn) return <RedirectToSignIn />;
@@ -34,10 +37,14 @@ export default function DashboardPage() {
       {/* Flex container for sidebar and main content */}
       <div className="flex flex-col md:flex-row gap-6 mt-6">
         <div className="md:w-1/4">
-          <SidebarMenu />
+          <SidebarMenu onSelectView={setActiveView} activeView={activeView} />
         </div>
         <div className="flex-1">
-          <CardPracticeQuestions />
+          {activeView === "Leaderboards" ? (
+            <LeaderboardMain />
+          ) : (
+            <CardPracticeQuestions />
+          )}
         </div>
       </div>
     </div>

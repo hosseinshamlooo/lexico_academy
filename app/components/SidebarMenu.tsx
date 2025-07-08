@@ -6,7 +6,6 @@ const mainMenuItems = [
   {
     label: "Practice",
     icon: <FaHome className="text-2xl" />,
-    active: true,
   },
   {
     label: "Test",
@@ -33,7 +32,15 @@ const bottomMenuItems = [
   },
 ];
 
-export default function SidebarMenu() {
+interface SidebarMenuProps {
+  onSelectView?: (view: string) => void;
+  activeView?: string;
+}
+
+export default function SidebarMenu({
+  onSelectView,
+  activeView,
+}: SidebarMenuProps) {
   return (
     <aside className="h-full min-h-screen w-64 bg-white flex flex-col py-8 px-4 text-[#1D5554] border-r border-gray-100 ml-44">
       {/* Main Menu */}
@@ -43,11 +50,12 @@ export default function SidebarMenu() {
             key={item.label}
             className={`flex items-center gap-4 px-4 py-3 rounded-xl text-lg font-bold transition-all duration-200
               ${
-                item.active
+                activeView === item.label
                   ? "bg-[#1D5554] text-white shadow-md"
                   : "hover:bg-[#E8F5F5] hover:text-[#1D5554]"
               }
             `}
+            onClick={() => onSelectView && onSelectView(item.label)}
           >
             {item.icon}
             <span className="tracking-wide">{item.label}</span>
