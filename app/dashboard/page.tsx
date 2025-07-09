@@ -7,11 +7,12 @@ import SidebarMenu from "../components/SidebarMenu";
 import CardPracticeQuestions from "../components/CardPracticeQuestions";
 import LeaderboardMain from "../components/LeaderboardMain";
 import CardMockTests from "../components/CardMockTests";
+import CardLessons from "../components/CardLessons";
 import React from "react";
 
 export default function DashboardPage() {
   const { isLoaded, isSignedIn, user } = useUser();
-  const [activeView, setActiveView] = React.useState("Practice");
+  const [activeView, setActiveView] = React.useState("Lesson");
 
   if (!isLoaded) return null;
   if (!isSignedIn) return <RedirectToSignIn />;
@@ -45,8 +46,10 @@ export default function DashboardPage() {
             <LeaderboardMain />
           ) : activeView === "Test" ? (
             <CardMockTests />
-          ) : (
+          ) : activeView === "Practice" ? (
             <CardPracticeQuestions />
+          ) : (
+            <CardLessons />
           )}
         </div>
       </div>

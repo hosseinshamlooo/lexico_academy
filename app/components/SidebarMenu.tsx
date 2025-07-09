@@ -1,11 +1,15 @@
 import React from "react";
 import { FaHome, FaUser, FaCog } from "react-icons/fa";
-import { FaNoteSticky, FaMedal, FaComments } from "react-icons/fa6";
+import { FaNoteSticky, FaMedal, FaComments, FaDumbbell } from "react-icons/fa6";
 
 const mainMenuItems = [
   {
-    label: "Practice",
+    label: "Lessons",
     icon: <FaHome className="text-2xl" />,
+  },
+  {
+    label: "Practice",
+    icon: <FaDumbbell className="text-2xl" />,
   },
   {
     label: "Test",
