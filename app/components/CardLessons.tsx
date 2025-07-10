@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { FaCheckCircle, FaLock } from "react-icons/fa";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
@@ -828,14 +828,16 @@ function LessonCard({
   unit,
   completed,
   locked,
+  scrollable,
 }: {
   unit: Unit;
   completed: boolean;
   locked?: boolean;
+  scrollable?: boolean;
 }) {
   return (
     <div
-      className={`relative bg-white border border-gray-300 shadow p-6 w-full max-w-2xl mx-auto flex flex-col mb-3 mt-3 min-h-[200px] ${
+      className={`relative bg-white border border-gray-300 shadow p-6 w-full max-w-2xl mx-auto flex flex-col mb-3 mt-3 min-h-[260px] max-h-[380px] ${
         completed ? "opacity-100" : ""
       } ${locked ? "opacity-60" : ""}`}
       style={{ borderRadius: "18px" }}
@@ -854,18 +856,20 @@ function LessonCard({
         </span>
       </div>
       <hr className="border-gray-200 mb-3" />
-      <p className="text-gray-600 text-sm mb-3 break-words">
-        {unit.description || ""}
-      </p>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {unit.lessons.map((skill: string, i: number) => (
-          <span
-            key={i}
-            className="bg-gray-100 px-4 py-1 rounded-full text-base font-bold text-gray-600"
-          >
-            {skill}
-          </span>
-        ))}
+      <div className={`flex-1 ${scrollable ? "overflow-y-auto" : ""}`}>
+        <p className="text-gray-600 text-sm mb-3 break-words">
+          {unit.description || ""}
+        </p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {unit.lessons.map((skill: string, i: number) => (
+            <span
+              key={i}
+              className="bg-gray-100 px-4 py-1 rounded-full text-base font-bold text-gray-600"
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
       </div>
       <div className="flex items-center justify-between mt-2">
         <ProgressBar percent={unit.mastery || 0} />
@@ -888,15 +892,25 @@ export default function CardLessons() {
   const [showAll, setShowAll] = useState(false); // default is collapsed (show more)
   const [moduleIdx, setModuleIdx] = useState(0);
   const currentModule = modules[moduleIdx];
-  // Only show the first two cards when collapsed, all when expanded
   const visibleUnits = showAll
     ? currentModule.units
     : currentModule.units.slice(0, 2);
+
+  // Ref for the scrollable journey container
+  const journeyRef = useRef<HTMLDivElement>(null);
 
   const handlePrev = () =>
     setModuleIdx((idx) => (idx === 0 ? modules.length - 1 : idx - 1));
   const handleNext = () =>
     setModuleIdx((idx) => (idx === modules.length - 1 ? 0 : idx + 1));
+
+  // Handler for Hide button: jump to top (no smooth)
+  const handleHide = () => {
+    setShowAll(false);
+    if (journeyRef.current) {
+      journeyRef.current.scrollTo({ top: 0 });
+    }
+  };
 
   return (
     <div className="flex justify-center items-start w-full min-h-screen overflow-hidden">
@@ -948,6 +962,7 @@ export default function CardLessons() {
           style={{ minHeight: 0 }}
         >
           <div
+            ref={journeyRef}
             className={`relative flex flex-col items-center w-full ${
               showAll ? "overflow-y-auto" : ""
             } scrollbar-hide`}
@@ -964,6 +979,7 @@ export default function CardLessons() {
                   unit={unit}
                   completed={unit.mastery === 100}
                   locked={idx >= 1}
+                  scrollable={showAll}
                 />
                 {/* Dashed Path (not after last card) */}
                 {idx !== visibleUnits.length - 1 && (
@@ -1014,7 +1030,7 @@ export default function CardLessons() {
                 <button
                   className="flex flex-col items-center text-[#1D5554] font-bold text-sm tracking-widest select-none focus:outline-none bg-white/80 px-4 py-2 rounded-xl"
                   style={{ boxShadow: "none", border: "none" }}
-                  onClick={() => setShowAll(false)}
+                  onClick={handleHide}
                 >
                   <span>HIDE</span>
                   <svg
