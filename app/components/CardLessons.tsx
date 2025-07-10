@@ -1,276 +1,1040 @@
-import React from "react";
-import {
-  FaPlay,
-  FaCheckCircle,
-  FaLock,
-  FaUnlock,
-  FaBook,
-  FaGraduationCap,
-  FaClock,
-} from "react-icons/fa";
-import { FaCircleArrowRight } from "react-icons/fa6";
+import React, { useState } from "react";
+import { FaCheckCircle, FaLock } from "react-icons/fa";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
-const mockLessons = [
+const modules = [
   {
-    id: 1,
-    title: "Introduction to IELTS Reading",
-    description:
-      "Learn the basics of IELTS Academic Reading test format and strategies",
-    duration: "15 minutes",
-    difficulty: "Beginner",
-    status: "completed", // available, completed, locked
-    progress: 100,
-    skills: ["Test Format", "Time Management", "Skimming"],
-    estimatedScore: null,
+    key: "listening",
+    label: "Listening",
+    units: [
+      {
+        title: "Introduction to IELTS Listening",
+        mastery: 0,
+        lessons: [
+          "Introduction to IELTS Listening",
+          "Understanding the Test Format",
+          "Time Management",
+        ],
+      },
+      {
+        title: "Skimming and Scanning Techniques",
+        mastery: 0,
+        lessons: [
+          "Skimming and Scanning Techniques",
+          "Speed Reading",
+          "Information Retrieval",
+        ],
+      },
+      {
+        title: "Understanding Question Types",
+        mastery: 0,
+        lessons: [
+          "Understanding Question Types",
+          "MCQ Listening",
+          "True/False Listening",
+        ],
+      },
+      {
+        title: "Academic Vocabulary Building",
+        mastery: 0,
+        lessons: [
+          "Academic Vocabulary Building",
+          "Context Clues",
+          "Word Families",
+        ],
+      },
+      {
+        title: "Complex Sentence Analysis",
+        mastery: 0,
+        lessons: ["Complex Sentence Analysis", "Grammar", "Comprehension"],
+      },
+      {
+        title: "Critical Reading Strategies",
+        mastery: 0,
+        lessons: ["Critical Reading Strategies", "Inference", "Analysis"],
+      },
+      {
+        title: "Paraphrasing Skills",
+        mastery: 0,
+        lessons: ["Paraphrasing Skills", "Rewording", "Vocabulary"],
+      },
+      {
+        title: "Identifying Main Ideas",
+        mastery: 0,
+        lessons: ["Identifying Main Ideas", "Summarizing", "Main Idea"],
+      },
+      {
+        title: "Inference Questions",
+        mastery: 0,
+        lessons: ["Inference Questions", "Context Clues", "Inference"],
+      },
+      {
+        title: "Matching Headings",
+        mastery: 0,
+        lessons: ["Matching Headings", "Headings", "Matching"],
+      },
+      {
+        title: "True/False/Not Given",
+        mastery: 0,
+        lessons: ["True/False/Not Given", "True/False", "Logic"],
+      },
+      {
+        title: "Yes/No/Not Given",
+        mastery: 0,
+        lessons: ["Yes/No/Not Given", "Yes/No", "Logic"],
+      },
+      {
+        title: "Matching Information",
+        mastery: 0,
+        lessons: ["Matching Information", "Information", "Matching"],
+      },
+      {
+        title: "Matching Features",
+        mastery: 0,
+        lessons: ["Matching Features", "Features", "Matching"],
+      },
+      {
+        title: "Matching Sentence Endings",
+        mastery: 0,
+        lessons: ["Matching Sentence Endings", "Sentence Endings", "Matching"],
+      },
+      {
+        title: "Sentence Completion",
+        mastery: 0,
+        lessons: ["Sentence Completion", "Grammar", "Completion"],
+      },
+      {
+        title: "Short Answer Questions",
+        mastery: 0,
+        lessons: ["Short Answer Questions", "Detail Finding", "Short Answer"],
+      },
+      {
+        title: "Table Completion",
+        mastery: 0,
+        lessons: ["Table Completion", "Data Extraction", "Table"],
+      },
+      {
+        title: "Summary Completion",
+        mastery: 0,
+        lessons: ["Summary Completion", "Completion", "Summary"],
+      },
+      {
+        title: "Diagram Label Completion",
+        mastery: 0,
+        lessons: ["Diagram Label Completion", "Labeling", "Diagram"],
+      },
+      {
+        title: "Flowchart Completion",
+        mastery: 0,
+        lessons: ["Flowchart Completion", "Completion", "Flowchart"],
+      },
+      {
+        title: "Note Completion",
+        mastery: 0,
+        lessons: ["Note Completion", "Key Points", "Note"],
+      },
+      {
+        title: "Form Completion",
+        mastery: 0,
+        lessons: ["Form Completion", "Details", "Form"],
+      },
+      {
+        title: "Multiple Choice Questions",
+        mastery: 0,
+        lessons: ["Multiple Choice Questions", "Options", "Multiple Choice"],
+      },
+      {
+        title: "Word Limit Practice",
+        mastery: 0,
+        lessons: ["Word Limit Practice", "Conciseness", "Word Limit"],
+      },
+      {
+        title: "Spelling and Grammar",
+        mastery: 0,
+        lessons: ["Spelling and Grammar", "Spelling", "Grammar"],
+      },
+      {
+        title: "Reading for Detail",
+        mastery: 0,
+        lessons: ["Reading for Detail", "Detail", "Comprehension"],
+      },
+      {
+        title: "Understanding Synonyms",
+        mastery: 0,
+        lessons: ["Understanding Synonyms", "Synonyms", "Vocabulary"],
+      },
+      {
+        title: "Order Tracking",
+        mastery: 0,
+        lessons: ["Order Tracking", "Sequencing", "Order"],
+      },
+      {
+        title: "Fact Extraction",
+        mastery: 0,
+        lessons: ["Fact Extraction", "Key Points", "Fact"],
+      },
+      {
+        title: "Gap Filling",
+        mastery: 0,
+        lessons: ["Gap Filling", "Vocabulary", "Gap"],
+      },
+      {
+        title: "Grammar Check",
+        mastery: 0,
+        lessons: ["Grammar Check", "Correction", "Grammar"],
+      },
+      {
+        title: "Tense Match",
+        mastery: 0,
+        lessons: ["Tense Match", "Grammar", "Tense"],
+      },
+      {
+        title: "Phrase Listening",
+        mastery: 0,
+        lessons: ["Phrase Listening", "Listening", "Phrases"],
+      },
+      {
+        title: "Speaker Identification",
+        mastery: 0,
+        lessons: ["Speaker Identification", "Listening", "Speaker ID"],
+      },
+      {
+        title: "Viewpoint Linking",
+        mastery: 0,
+        lessons: ["Viewpoint Linking", "Linking", "Viewpoint"],
+      },
+    ],
   },
   {
-    id: 2,
-    title: "Skimming and Scanning Techniques",
-    description:
-      "Master the essential reading techniques for quick information retrieval",
-    duration: "20 minutes",
-    difficulty: "Beginner",
-    status: "completed",
-    progress: 100,
-    skills: ["Skimming", "Scanning", "Speed Reading"],
-    estimatedScore: null,
+    key: "reading",
+    label: "Reading",
+    units: [
+      {
+        title: "Introduction to IELTS Reading",
+        mastery: 0,
+        lessons: [
+          "Introduction to IELTS Reading",
+          "Understanding the Test Format",
+          "Time Management",
+        ],
+      },
+      {
+        title: "Skimming and Scanning Techniques",
+        mastery: 0,
+        lessons: [
+          "Skimming and Scanning Techniques",
+          "Speed Reading",
+          "Information Retrieval",
+        ],
+      },
+      {
+        title: "Understanding Question Types",
+        mastery: 0,
+        lessons: [
+          "Understanding Question Types",
+          "MCQ Reading",
+          "True/False Reading",
+        ],
+      },
+      {
+        title: "Academic Vocabulary Building",
+        mastery: 0,
+        lessons: [
+          "Academic Vocabulary Building",
+          "Context Clues",
+          "Word Families",
+        ],
+      },
+      {
+        title: "Complex Sentence Analysis",
+        mastery: 0,
+        lessons: ["Complex Sentence Analysis", "Grammar", "Comprehension"],
+      },
+      {
+        title: "Critical Reading Strategies",
+        mastery: 0,
+        lessons: ["Critical Reading Strategies", "Inference", "Analysis"],
+      },
+      {
+        title: "Paraphrasing Skills",
+        mastery: 0,
+        lessons: ["Paraphrasing Skills", "Rewording", "Vocabulary"],
+      },
+      {
+        title: "Identifying Main Ideas",
+        mastery: 0,
+        lessons: ["Identifying Main Ideas", "Summarizing", "Main Idea"],
+      },
+      {
+        title: "Inference Questions",
+        mastery: 0,
+        lessons: ["Inference Questions", "Context Clues", "Inference"],
+      },
+      {
+        title: "Matching Headings",
+        mastery: 0,
+        lessons: ["Matching Headings", "Headings", "Matching"],
+      },
+      {
+        title: "True/False/Not Given",
+        mastery: 0,
+        lessons: ["True/False/Not Given", "True/False", "Logic"],
+      },
+      {
+        title: "Yes/No/Not Given",
+        mastery: 0,
+        lessons: ["Yes/No/Not Given", "Yes/No", "Logic"],
+      },
+      {
+        title: "Matching Information",
+        mastery: 0,
+        lessons: ["Matching Information", "Information", "Matching"],
+      },
+      {
+        title: "Matching Features",
+        mastery: 0,
+        lessons: ["Matching Features", "Features", "Matching"],
+      },
+      {
+        title: "Matching Sentence Endings",
+        mastery: 0,
+        lessons: ["Matching Sentence Endings", "Sentence Endings", "Matching"],
+      },
+      {
+        title: "Sentence Completion",
+        mastery: 0,
+        lessons: ["Sentence Completion", "Grammar", "Completion"],
+      },
+      {
+        title: "Short Answer Questions",
+        mastery: 0,
+        lessons: ["Short Answer Questions", "Detail Finding", "Short Answer"],
+      },
+      {
+        title: "Table Completion",
+        mastery: 0,
+        lessons: ["Table Completion", "Data Extraction", "Table"],
+      },
+      {
+        title: "Summary Completion",
+        mastery: 0,
+        lessons: ["Summary Completion", "Completion", "Summary"],
+      },
+      {
+        title: "Diagram Label Completion",
+        mastery: 0,
+        lessons: ["Diagram Label Completion", "Labeling", "Diagram"],
+      },
+      {
+        title: "Flowchart Completion",
+        mastery: 0,
+        lessons: ["Flowchart Completion", "Completion", "Flowchart"],
+      },
+      {
+        title: "Note Completion",
+        mastery: 0,
+        lessons: ["Note Completion", "Key Points", "Note"],
+      },
+      {
+        title: "Form Completion",
+        mastery: 0,
+        lessons: ["Form Completion", "Details", "Form"],
+      },
+      {
+        title: "Multiple Choice Questions",
+        mastery: 0,
+        lessons: ["Multiple Choice Questions", "Options", "Multiple Choice"],
+      },
+      {
+        title: "Word Limit Practice",
+        mastery: 0,
+        lessons: ["Word Limit Practice", "Conciseness", "Word Limit"],
+      },
+      {
+        title: "Spelling and Grammar",
+        mastery: 0,
+        lessons: ["Spelling and Grammar", "Spelling", "Grammar"],
+      },
+      {
+        title: "Reading for Detail",
+        mastery: 0,
+        lessons: ["Reading for Detail", "Detail", "Comprehension"],
+      },
+      {
+        title: "Understanding Synonyms",
+        mastery: 0,
+        lessons: ["Understanding Synonyms", "Synonyms", "Vocabulary"],
+      },
+      {
+        title: "Order Tracking",
+        mastery: 0,
+        lessons: ["Order Tracking", "Sequencing", "Order"],
+      },
+      {
+        title: "Fact Extraction",
+        mastery: 0,
+        lessons: ["Fact Extraction", "Key Points", "Fact"],
+      },
+      {
+        title: "Gap Filling",
+        mastery: 0,
+        lessons: ["Gap Filling", "Vocabulary", "Gap"],
+      },
+      {
+        title: "Grammar Check",
+        mastery: 0,
+        lessons: ["Grammar Check", "Correction", "Grammar"],
+      },
+      {
+        title: "Tense Match",
+        mastery: 0,
+        lessons: ["Tense Match", "Grammar", "Tense"],
+      },
+      {
+        title: "Phrase Listening",
+        mastery: 0,
+        lessons: ["Phrase Listening", "Listening", "Phrases"],
+      },
+      {
+        title: "Speaker Identification",
+        mastery: 0,
+        lessons: ["Speaker Identification", "Listening", "Speaker ID"],
+      },
+      {
+        title: "Viewpoint Linking",
+        mastery: 0,
+        lessons: ["Viewpoint Linking", "Linking", "Viewpoint"],
+      },
+    ],
   },
   {
-    id: 3,
-    title: "Understanding Question Types",
-    description:
-      "Learn to identify and approach different IELTS question formats",
-    duration: "25 minutes",
-    difficulty: "Intermediate",
-    status: "available",
-    progress: 0,
-    skills: ["MCQ", "True/False", "Matching", "Completion"],
-    estimatedScore: null,
+    key: "writing",
+    label: "Writing",
+    units: [
+      {
+        title: "Introduction to IELTS Writing",
+        mastery: 0,
+        lessons: [
+          "Introduction to IELTS Writing",
+          "Understanding the Test Format",
+          "Time Management",
+        ],
+      },
+      {
+        title: "Task 1: Letter Writing",
+        mastery: 0,
+        lessons: ["Task 1: Letter Writing", "Letter Writing", "Structure"],
+      },
+      {
+        title: "Task 2: Essay Writing",
+        mastery: 0,
+        lessons: ["Task 2: Essay Writing", "Essay Writing", "Structure"],
+      },
+      {
+        title: "Academic Vocabulary Building",
+        mastery: 0,
+        lessons: [
+          "Academic Vocabulary Building",
+          "Context Clues",
+          "Word Families",
+        ],
+      },
+      {
+        title: "Complex Sentence Analysis",
+        mastery: 0,
+        lessons: ["Complex Sentence Analysis", "Grammar", "Comprehension"],
+      },
+      {
+        title: "Critical Reading Strategies",
+        mastery: 0,
+        lessons: ["Critical Reading Strategies", "Inference", "Analysis"],
+      },
+      {
+        title: "Paraphrasing Skills",
+        mastery: 0,
+        lessons: ["Paraphrasing Skills", "Rewording", "Vocabulary"],
+      },
+      {
+        title: "Identifying Main Ideas",
+        mastery: 0,
+        lessons: ["Identifying Main Ideas", "Summarizing", "Main Idea"],
+      },
+      {
+        title: "Inference Questions",
+        mastery: 0,
+        lessons: ["Inference Questions", "Context Clues", "Inference"],
+      },
+      {
+        title: "Matching Headings",
+        mastery: 0,
+        lessons: ["Matching Headings", "Headings", "Matching"],
+      },
+      {
+        title: "True/False/Not Given",
+        mastery: 0,
+        lessons: ["True/False/Not Given", "True/False", "Logic"],
+      },
+      {
+        title: "Yes/No/Not Given",
+        mastery: 0,
+        lessons: ["Yes/No/Not Given", "Yes/No", "Logic"],
+      },
+      {
+        title: "Matching Information",
+        mastery: 0,
+        lessons: ["Matching Information", "Information", "Matching"],
+      },
+      {
+        title: "Matching Features",
+        mastery: 0,
+        lessons: ["Matching Features", "Features", "Matching"],
+      },
+      {
+        title: "Matching Sentence Endings",
+        mastery: 0,
+        lessons: ["Matching Sentence Endings", "Sentence Endings", "Matching"],
+      },
+      {
+        title: "Sentence Completion",
+        mastery: 0,
+        lessons: ["Sentence Completion", "Grammar", "Completion"],
+      },
+      {
+        title: "Short Answer Questions",
+        mastery: 0,
+        lessons: ["Short Answer Questions", "Detail Finding", "Short Answer"],
+      },
+      {
+        title: "Table Completion",
+        mastery: 0,
+        lessons: ["Table Completion", "Data Extraction", "Table"],
+      },
+      {
+        title: "Summary Completion",
+        mastery: 0,
+        lessons: ["Summary Completion", "Completion", "Summary"],
+      },
+      {
+        title: "Diagram Label Completion",
+        mastery: 0,
+        lessons: ["Diagram Label Completion", "Labeling", "Diagram"],
+      },
+      {
+        title: "Flowchart Completion",
+        mastery: 0,
+        lessons: ["Flowchart Completion", "Completion", "Flowchart"],
+      },
+      {
+        title: "Note Completion",
+        mastery: 0,
+        lessons: ["Note Completion", "Key Points", "Note"],
+      },
+      {
+        title: "Form Completion",
+        mastery: 0,
+        lessons: ["Form Completion", "Details", "Form"],
+      },
+      {
+        title: "Multiple Choice Questions",
+        mastery: 0,
+        lessons: ["Multiple Choice Questions", "Options", "Multiple Choice"],
+      },
+      {
+        title: "Word Limit Practice",
+        mastery: 0,
+        lessons: ["Word Limit Practice", "Conciseness", "Word Limit"],
+      },
+      {
+        title: "Spelling and Grammar",
+        mastery: 0,
+        lessons: ["Spelling and Grammar", "Spelling", "Grammar"],
+      },
+      {
+        title: "Reading for Detail",
+        mastery: 0,
+        lessons: ["Reading for Detail", "Detail", "Comprehension"],
+      },
+      {
+        title: "Understanding Synonyms",
+        mastery: 0,
+        lessons: ["Understanding Synonyms", "Synonyms", "Vocabulary"],
+      },
+      {
+        title: "Order Tracking",
+        mastery: 0,
+        lessons: ["Order Tracking", "Sequencing", "Order"],
+      },
+      {
+        title: "Fact Extraction",
+        mastery: 0,
+        lessons: ["Fact Extraction", "Key Points", "Fact"],
+      },
+      {
+        title: "Gap Filling",
+        mastery: 0,
+        lessons: ["Gap Filling", "Vocabulary", "Gap"],
+      },
+      {
+        title: "Grammar Check",
+        mastery: 0,
+        lessons: ["Grammar Check", "Correction", "Grammar"],
+      },
+      {
+        title: "Tense Match",
+        mastery: 0,
+        lessons: ["Tense Match", "Grammar", "Tense"],
+      },
+      {
+        title: "Phrase Listening",
+        mastery: 0,
+        lessons: ["Phrase Listening", "Listening", "Phrases"],
+      },
+      {
+        title: "Speaker Identification",
+        mastery: 0,
+        lessons: ["Speaker Identification", "Listening", "Speaker ID"],
+      },
+      {
+        title: "Viewpoint Linking",
+        mastery: 0,
+        lessons: ["Viewpoint Linking", "Linking", "Viewpoint"],
+      },
+    ],
   },
   {
-    id: 4,
-    title: "Academic Vocabulary Building",
-    description: "Expand your academic vocabulary for better comprehension",
-    duration: "30 minutes",
-    difficulty: "Intermediate",
-    status: "locked",
-    progress: 0,
-    skills: ["Vocabulary", "Context Clues", "Word Families"],
-    estimatedScore: null,
-  },
-  {
-    id: 5,
-    title: "Complex Sentence Analysis",
-    description: "Learn to break down complex academic sentences",
-    duration: "35 minutes",
-    difficulty: "Advanced",
-    status: "locked",
-    progress: 0,
-    skills: ["Grammar", "Sentence Structure", "Comprehension"],
-    estimatedScore: null,
-  },
-  {
-    id: 6,
-    title: "Critical Reading Strategies",
-    description:
-      "Develop critical thinking skills for advanced reading comprehension",
-    duration: "40 minutes",
-    difficulty: "Advanced",
-    status: "locked",
-    progress: 0,
-    skills: ["Critical Thinking", "Inference", "Analysis"],
-    estimatedScore: null,
+    key: "speaking",
+    label: "Speaking",
+    units: [
+      {
+        title: "Introduction to IELTS Speaking",
+        mastery: 0,
+        lessons: [
+          "Introduction to IELTS Speaking",
+          "Understanding the Test Format",
+          "Time Management",
+        ],
+      },
+      {
+        title: "Task 1: Speaking",
+        mastery: 0,
+        lessons: ["Task 1: Speaking", "Speaking", "Structure"],
+      },
+      {
+        title: "Task 2: Speaking",
+        mastery: 0,
+        lessons: ["Task 2: Speaking", "Speaking", "Structure"],
+      },
+      {
+        title: "Academic Vocabulary Building",
+        mastery: 0,
+        lessons: [
+          "Academic Vocabulary Building",
+          "Context Clues",
+          "Word Families",
+        ],
+      },
+      {
+        title: "Complex Sentence Analysis",
+        mastery: 0,
+        lessons: ["Complex Sentence Analysis", "Grammar", "Comprehension"],
+      },
+      {
+        title: "Critical Reading Strategies",
+        mastery: 0,
+        lessons: ["Critical Reading Strategies", "Inference", "Analysis"],
+      },
+      {
+        title: "Paraphrasing Skills",
+        mastery: 0,
+        lessons: ["Paraphrasing Skills", "Rewording", "Vocabulary"],
+      },
+      {
+        title: "Identifying Main Ideas",
+        mastery: 0,
+        lessons: ["Identifying Main Ideas", "Summarizing", "Main Idea"],
+      },
+      {
+        title: "Inference Questions",
+        mastery: 0,
+        lessons: ["Inference Questions", "Context Clues", "Inference"],
+      },
+      {
+        title: "Matching Headings",
+        mastery: 0,
+        lessons: ["Matching Headings", "Headings", "Matching"],
+      },
+      {
+        title: "True/False/Not Given",
+        mastery: 0,
+        lessons: ["True/False/Not Given", "True/False", "Logic"],
+      },
+      {
+        title: "Yes/No/Not Given",
+        mastery: 0,
+        lessons: ["Yes/No/Not Given", "Yes/No", "Logic"],
+      },
+      {
+        title: "Matching Information",
+        mastery: 0,
+        lessons: ["Matching Information", "Information", "Matching"],
+      },
+      {
+        title: "Matching Features",
+        mastery: 0,
+        lessons: ["Matching Features", "Features", "Matching"],
+      },
+      {
+        title: "Matching Sentence Endings",
+        mastery: 0,
+        lessons: ["Matching Sentence Endings", "Sentence Endings", "Matching"],
+      },
+      {
+        title: "Sentence Completion",
+        mastery: 0,
+        lessons: ["Sentence Completion", "Grammar", "Completion"],
+      },
+      {
+        title: "Short Answer Questions",
+        mastery: 0,
+        lessons: ["Short Answer Questions", "Detail Finding", "Short Answer"],
+      },
+      {
+        title: "Table Completion",
+        mastery: 0,
+        lessons: ["Table Completion", "Data Extraction", "Table"],
+      },
+      {
+        title: "Summary Completion",
+        mastery: 0,
+        lessons: ["Summary Completion", "Completion", "Summary"],
+      },
+      {
+        title: "Diagram Label Completion",
+        mastery: 0,
+        lessons: ["Diagram Label Completion", "Labeling", "Diagram"],
+      },
+      {
+        title: "Flowchart Completion",
+        mastery: 0,
+        lessons: ["Flowchart Completion", "Completion", "Flowchart"],
+      },
+      {
+        title: "Note Completion",
+        mastery: 0,
+        lessons: ["Note Completion", "Key Points", "Note"],
+      },
+      {
+        title: "Form Completion",
+        mastery: 0,
+        lessons: ["Form Completion", "Details", "Form"],
+      },
+      {
+        title: "Multiple Choice Questions",
+        mastery: 0,
+        lessons: ["Multiple Choice Questions", "Options", "Multiple Choice"],
+      },
+      {
+        title: "Word Limit Practice",
+        mastery: 0,
+        lessons: ["Word Limit Practice", "Conciseness", "Word Limit"],
+      },
+      {
+        title: "Spelling and Grammar",
+        mastery: 0,
+        lessons: ["Spelling and Grammar", "Spelling", "Grammar"],
+      },
+      {
+        title: "Reading for Detail",
+        mastery: 0,
+        lessons: ["Reading for Detail", "Detail", "Comprehension"],
+      },
+      {
+        title: "Understanding Synonyms",
+        mastery: 0,
+        lessons: ["Understanding Synonyms", "Synonyms", "Vocabulary"],
+      },
+      {
+        title: "Order Tracking",
+        mastery: 0,
+        lessons: ["Order Tracking", "Sequencing", "Order"],
+      },
+      {
+        title: "Fact Extraction",
+        mastery: 0,
+        lessons: ["Fact Extraction", "Key Points", "Fact"],
+      },
+      {
+        title: "Gap Filling",
+        mastery: 0,
+        lessons: ["Gap Filling", "Vocabulary", "Gap"],
+      },
+      {
+        title: "Grammar Check",
+        mastery: 0,
+        lessons: ["Grammar Check", "Correction", "Grammar"],
+      },
+      {
+        title: "Tense Match",
+        mastery: 0,
+        lessons: ["Tense Match", "Grammar", "Tense"],
+      },
+      {
+        title: "Phrase Listening",
+        mastery: 0,
+        lessons: ["Phrase Listening", "Listening", "Phrases"],
+      },
+      {
+        title: "Speaker Identification",
+        mastery: 0,
+        lessons: ["Speaker Identification", "Listening", "Speaker ID"],
+      },
+      {
+        title: "Viewpoint Linking",
+        mastery: 0,
+        lessons: ["Viewpoint Linking", "Linking", "Viewpoint"],
+      },
+    ],
   },
 ];
 
-function LessonCard({ lesson }) {
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty.toLowerCase()) {
-      case "beginner":
-        return "text-green-600 bg-green-100";
-      case "intermediate":
-        return "text-yellow-600 bg-yellow-100";
-      case "advanced":
-        return "text-red-600 bg-red-100";
-      default:
-        return "text-gray-600 bg-gray-100";
-    }
-  };
-
-  const getStatusIcon = () => {
-    switch (lesson.status) {
-      case "completed":
-        return <FaCheckCircle className="text-green-500 text-2xl" />;
-      case "locked":
-        return <FaLock className="text-gray-400 text-2xl" />;
-      default:
-        return <FaPlay className="text-[#1D5554] text-2xl" />;
-    }
-  };
-
-  const getStatusText = () => {
-    switch (lesson.status) {
-      case "completed":
-        return "Completed";
-      case "locked":
-        return "Locked";
-      default:
-        return "Start Lesson";
-    }
-  };
-
-  const getStatusButtonClass = () => {
-    switch (lesson.status) {
-      case "completed":
-        return "bg-green-100 text-green-700 hover:bg-green-200";
-      case "locked":
-        return "bg-gray-100 text-gray-500 cursor-not-allowed";
-      default:
-        return "bg-[#1D5554] text-white hover:bg-[#1D5554]/90";
-    }
-  };
-
+function ProgressBar({ percent }: { percent: number }) {
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex-1">
-          <h3 className="text-xl font-bold text-[#1D5554] mb-2">
-            {lesson.title}
-          </h3>
-          <p className="text-gray-600 text-sm mb-3">{lesson.description}</p>
-        </div>
+    <div className="flex items-center gap-2">
+      <div className="w-40 h-2 bg-gray-200 rounded-full overflow-hidden">
         <div
-          className={`px-3 py-1 rounded-full text-xs font-semibold ${getDifficultyColor(
-            lesson.difficulty
-          )}`}
+          className="h-2 rounded-full bg-[#1D5554] transition-all duration-500"
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+      <span className="text-sm font-bold text-gray-700">{percent}%</span>
+    </div>
+  );
+}
+
+function formatDuration(minutes: number) {
+  return `${minutes || 25}min`;
+}
+
+// Define a type for Unit
+interface Unit {
+  title: string;
+  description?: string;
+  duration?: number;
+  lessons: string[];
+  mastery: number;
+}
+
+function LessonCard({
+  unit,
+  completed,
+  locked,
+}: {
+  unit: Unit;
+  completed: boolean;
+  locked?: boolean;
+}) {
+  return (
+    <div
+      className={`relative bg-white border border-gray-300 shadow p-6 w-full max-w-2xl mx-auto flex flex-col mb-3 mt-3 min-h-[200px] ${
+        completed ? "opacity-100" : ""
+      } ${locked ? "opacity-60" : ""}`}
+      style={{ borderRadius: "18px" }}
+    >
+      <div className="flex items-center justify-between mb-2">
+        <h3
+          className="text-2xl font-extrabold text-[#1D5554] pr-2 break-words"
+          title={unit.title}
         >
-          {lesson.difficulty}
-        </div>
-      </div>
-
-      <div className="flex items-center gap-6 mb-4 text-sm text-gray-600">
-        <div className="flex items-center gap-2">
-          <FaClock className="text-gray-400" />
-          <span>{lesson.duration}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <FaBook className="text-gray-400" />
-          <span>{lesson.skills.length} skills</span>
-        </div>
-      </div>
-
-      {lesson.status === "completed" && (
-        <div className="mb-4 p-3 bg-green-50 rounded-lg">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-green-700">
-              Progress: {lesson.progress}%
-            </span>
-            <FaGraduationCap className="text-green-500" />
-          </div>
-          <div className="w-full bg-green-200 rounded-full h-2">
-            <div
-              className="bg-green-500 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${lesson.progress}%` }}
-            ></div>
-          </div>
-        </div>
-      )}
-
-      {lesson.status === "available" && lesson.progress > 0 && (
-        <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-blue-700">
-              Progress: {lesson.progress}%
-            </span>
-            <FaBook className="text-blue-500" />
-          </div>
-          <div className="w-full bg-blue-200 rounded-full h-2">
-            <div
-              className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${lesson.progress}%` }}
-            ></div>
-          </div>
-        </div>
-      )}
-
-      <div className="mb-4">
-        <div className="flex flex-wrap gap-2">
-          {lesson.skills.map((skill, index) => (
-            <span
-              key={index}
-              className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          {getStatusIcon()}
-          <span className="text-sm font-medium text-gray-700">
-            {getStatusText()}
+          {unit.title}
+        </h3>
+        <span className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-gray-200 bg-white">
+          <span className="text-sm font-bold flex items-center justify-center w-full h-full text-center">
+            {formatDuration(unit.duration ?? 25)}
           </span>
-        </div>
-        <button
-          className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 ${getStatusButtonClass()}`}
-          disabled={lesson.status === "locked"}
-        >
-          {lesson.status === "completed" ? (
-            <>
-              <span>Review</span>
-              <FaCircleArrowRight className="text-sm" />
-            </>
-          ) : lesson.status === "locked" ? (
-            <>
-              <span>Unlock</span>
-              <FaLock className="text-sm" />
-            </>
-          ) : (
-            <>
-              <span>Start</span>
-              <FaPlay className="text-sm" />
-            </>
-          )}
-        </button>
+        </span>
+      </div>
+      <hr className="border-gray-200 mb-3" />
+      <p className="text-gray-600 text-sm mb-3 break-words">
+        {unit.description || ""}
+      </p>
+      <div className="flex flex-wrap gap-2 mb-4">
+        {unit.lessons.map((skill: string, i: number) => (
+          <span
+            key={i}
+            className="bg-gray-100 px-4 py-1 rounded-full text-base font-bold text-gray-600"
+          >
+            {skill}
+          </span>
+        ))}
+      </div>
+      <div className="flex items-center justify-between mt-2">
+        <ProgressBar percent={unit.mastery || 0} />
+        {completed && (
+          <span className="flex items-center gap-1 text-green-600 font-bold text-sm bg-green-100 px-3 py-1 rounded-full">
+            <FaCheckCircle className="text-green-500" /> Completed
+          </span>
+        )}
+        {locked && (
+          <span className="flex items-center gap-1 text-gray-500 font-bold text-sm bg-gray-100 px-3 py-1 rounded-full">
+            <FaLock className="text-gray-400" /> Locked
+          </span>
+        )}
       </div>
     </div>
   );
 }
 
 export default function CardLessons() {
+  const [showAll, setShowAll] = useState(false); // default is collapsed (show more)
+  const [moduleIdx, setModuleIdx] = useState(0);
+  const currentModule = modules[moduleIdx];
+  // Only show the first two cards when collapsed, all when expanded
+  const visibleUnits = showAll
+    ? currentModule.units
+    : currentModule.units.slice(0, 2);
+
+  const handlePrev = () =>
+    setModuleIdx((idx) => (idx === 0 ? modules.length - 1 : idx - 1));
+  const handleNext = () =>
+    setModuleIdx((idx) => (idx === modules.length - 1 ? 0 : idx + 1));
+
   return (
-    <div className="flex justify-center items-start w-full min-h-screen">
+    <div className="flex justify-center items-start w-full min-h-screen overflow-hidden">
       <div
         className="bg-white rounded-2xl p-10 w-full flex flex-col"
-        style={{ maxWidth: "1200px" }}
+        style={{
+          maxWidth: "900px",
+          height: "calc(100vh - 48px)",
+          minHeight: 480,
+          overflow: "hidden",
+        }}
       >
+        {/* Header Section */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-extrabold text-[#1D5554] mb-2 tracking-tighter">
-            Learning Path
+            Learn
           </h1>
           <p className="text-gray-600 text-lg">
-            Master IELTS Academic Reading through structured lessons
+            Master IELTS Academic Reading, Listening, Writing, and Speaking
+            through structured lessons
           </p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockLessons.map((lesson) => (
-            <LessonCard key={lesson.id} lesson={lesson} />
-          ))}
+        {/* Module Switcher with Arrows */}
+        <div className="flex items-center justify-center gap-2 mb-8">
+          <button
+            onClick={handlePrev}
+            className="p-1 rounded-full bg-white/70 hover:bg-white/90 text-[#1D5554] transition-all"
+            style={{ minWidth: 32, minHeight: 32 }}
+          >
+            <MdKeyboardArrowLeft size={28} />
+          </button>
+          <span
+            className="text-lg font-semibold text-[#1D5554] px-3 py-1 rounded-xl bg-white/70"
+            style={{ letterSpacing: "-0.5px" }}
+          >
+            {currentModule.label}
+          </span>
+          <button
+            onClick={handleNext}
+            className="p-1 rounded-full bg-white/70 hover:bg-white/90  text-[#1D5554] transition-all"
+            style={{ minWidth: 32, minHeight: 32 }}
+          >
+            <MdKeyboardArrowRight size={28} />
+          </button>
         </div>
-
-        <div className="mt-8 p-6 bg-blue-50 rounded-2xl border border-blue-200">
-          <h3 className="text-lg font-bold text-[#1D5554] mb-2">
-            Learning Tips
-          </h3>
-          <ul className="text-sm text-gray-700 space-y-1">
-            <li>• Complete lessons in order to unlock advanced content</li>
-            <li>• Practice the skills you learn in the Practice section</li>
-            <li>• Review completed lessons to reinforce your learning</li>
-            <li>• Each lesson builds upon the previous ones</li>
-          </ul>
+        {/* Journey Path and Cards - scrollable only when showAll is true */}
+        <div
+          className="relative flex flex-col items-center w-full flex-1"
+          style={{ minHeight: 0 }}
+        >
+          <div
+            className={`relative flex flex-col items-center w-full ${
+              showAll ? "overflow-y-auto" : ""
+            } scrollbar-hide`}
+            style={{
+              maxHeight: showAll ? "calc(100vh - 320px)" : "900px",
+              minHeight: "360px",
+              transition: "max-height 0.4s",
+            }}
+          >
+            {visibleUnits.map((unit, idx) => (
+              <React.Fragment key={unit.title}>
+                {/* Only show the first two cards when collapsed, all when expanded */}
+                <LessonCard
+                  unit={unit}
+                  completed={unit.mastery === 100}
+                  locked={idx >= 1}
+                />
+                {/* Dashed Path (not after last card) */}
+                {idx !== visibleUnits.length - 1 && (
+                  <div className="flex flex-col items-center w-full">
+                    <div className="flex justify-center w-full">
+                      <div
+                        className="h-20 w-1 mx-auto border-l-4 border-dashed transition-all duration-500"
+                        style={{
+                          borderColor:
+                            unit.mastery === 100 ? "#1D5554" : "#a3a3a3",
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
+              </React.Fragment>
+            ))}
+            {/* Show More/Hide sticky button at the bottom */}
+            {/* Show More button after the last visible card (not sticky) */}
+            {!showAll && currentModule.units.length > 2 && (
+              <div className="flex justify-center mt-6">
+                <button
+                  className="flex flex-col items-center text-[#1D5554] font-bold text-sm tracking-widest select-none focus:outline-none bg-white/80 px-4 py-2 rounded-xl"
+                  style={{ boxShadow: "none", border: "none" }}
+                  onClick={() => setShowAll(true)}
+                >
+                  <span>SHOW MORE</span>
+                  <svg
+                    className="w-6 h-6 mt-1 transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
+            {/* Hide button only after the last card when showAll is true */}
+            {showAll && currentModule.units.length > 2 && (
+              <div className="flex justify-center mt-6">
+                <button
+                  className="flex flex-col items-center text-[#1D5554] font-bold text-sm tracking-widest select-none focus:outline-none bg-white/80 px-4 py-2 rounded-xl"
+                  style={{ boxShadow: "none", border: "none" }}
+                  onClick={() => setShowAll(false)}
+                >
+                  <span>HIDE</span>
+                  <svg
+                    className="w-6 h-6 mt-1 transition-transform duration-300 rotate-180"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

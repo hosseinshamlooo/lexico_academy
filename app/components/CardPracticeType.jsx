@@ -7,7 +7,7 @@ function capitalizeFirst(str) {
 function CardPracticeType({ title, progress, questionTypes, onClick }) {
   return (
     <div
-      className={`relative bg-white rounded-3xl p-6 w-full min-w-[320px] max-w-md transition-all duration-300 border border-gray-200 shadow-md flex flex-col group hover:min-w-[380px] hover:-translate-y-2 hover:shadow-2xl hover:bg-[#1D5554] hover:border-[#1D5554] hover:text-white cursor-pointer`}
+      className={`relative bg-white rounded-3xl p-6 w-full min-w-[320px] max-w-md transition-all duration-300 border border-gray-200 shadow-md flex flex-col group hover:scale-y-105 hover:-translate-y-2 hover:shadow-2xl hover:bg-[#1D5554] hover:border-[#1D5554] hover:text-white cursor-pointer`}
       onClick={onClick}
       tabIndex={0}
       role="button"

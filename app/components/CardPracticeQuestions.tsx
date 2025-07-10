@@ -187,7 +187,6 @@ function CardPracticeQuestions() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(0);
   const [showAll, setShowAll] = useState(false);
-  const { heading, description } = tabs[activeTab];
 
   // Get the appropriate data based on active tab
   const getPracticeData = () => {
@@ -228,77 +227,86 @@ function CardPracticeQuestions() {
   };
 
   return (
-    <div className="w-full rounded-none px-4 md:px-10 py-6 mr-30">
-      {/* Tab Navigation */}
-      <div className="flex flex-row gap-4 justify-center mb-8">
-        {tabs.map((tab, idx) => (
-          <button
-            key={tab.label}
-            className={`flex items-center gap-2 px-6 py-3 rounded-3xl font-bold transition-all duration-300 border-3 text-lg tracking-tight relative
-              ${
-                !tab.active
-                  ? "bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed opacity-60"
-                  : activeTab === idx
-                  ? "bg-[#1D5554] border-[#1D5554] text-white scale-105 z-10"
-                  : "bg-white border-[#1D5554] text-[#1D5554] hover:bg-[#17403f] hover:text-white hover:border-[#17403f]"
-              }
-            `}
-            onClick={() => handleTabClick(idx)}
-            disabled={!tab.active}
-          >
-            {tab.icon}
-            <span>{tab.label}</span>
-          </button>
-        ))}
-      </div>
-      {/* Content */}
-      <div className="flex items-center justify-between mb-2">
-        <h2 className="text-3xl font-extrabold text-[#1D5554] tracking-tighter">
-          {heading}
-        </h2>
-      </div>
-      <p className="text-lg text-gray-600 font-semibold mb-14">{description}</p>
-      {/* Practice Type Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {visibleCards.map((item: PracticeTypeData) => {
-          return (
-            <CardPracticeType
-              key={item.title}
-              title={item.title}
-              progress={item.progress}
-              questionTypes={item.questionTypes}
-              onClick={() => handleCardClick(item)}
-            />
-          );
-        })}
-      </div>
-      {/* See All / Hide Button - Only show if more than 6 cards */}
-      {hasMoreThan6Cards && (
-        <div className="flex justify-center mt-10">
-          <button
-            className="flex flex-col items-center text-[#1D5554] font-bold text-sm tracking-widest select-none focus:outline-none"
-            onClick={() => setShowAll((prev) => !prev)}
-          >
-            <span>{showAll ? "HIDE" : "SEE ALL"}</span>
-            <svg
-              className={`w-6 h-6 mt-1 transition-transform duration-300 ${
-                showAll ? "rotate-180" : "rotate-0"
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
+    <div className="flex justify-center items-start w-full min-h-screen">
+      <div
+        className="bg-white rounded-2xl p-10 w-full flex flex-col"
+        style={{ maxWidth: "1200px" }}
+      >
+        {/* Header Section */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-extrabold text-[#1D5554] mb-2 tracking-tighter">
+            Practice
+          </h1>
+          <p className="text-gray-600 text-lg">
+            Sharpen your skills with targeted practice questions across all
+            IELTS sections
+          </p>
         </div>
-      )}
+
+        {/* Tab Navigation */}
+        <div className="flex flex-row gap-4 justify-center mb-8">
+          {tabs.map((tab, idx) => (
+            <button
+              key={tab.label}
+              className={`flex items-center gap-2 px-6 py-3 rounded-3xl font-bold transition-all duration-300 border-3 text-lg tracking-tight relative
+                ${
+                  !tab.active
+                    ? "bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed opacity-60"
+                    : activeTab === idx
+                    ? "bg-[#1D5554] border-[#1D5554] text-white scale-105 z-10"
+                    : "bg-white border-[#1D5554] text-[#1D5554] hover:bg-[#17403f] hover:text-white hover:border-[#17403f]"
+                }
+              `}
+              onClick={() => handleTabClick(idx)}
+              disabled={!tab.active}
+            >
+              {tab.icon}
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+        {/* Practice Type Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {visibleCards.map((item: PracticeTypeData) => {
+            return (
+              <CardPracticeType
+                key={item.title}
+                title={item.title}
+                progress={item.progress}
+                questionTypes={item.questionTypes}
+                onClick={() => handleCardClick(item)}
+              />
+            );
+          })}
+        </div>
+        {/* See All / Hide Button - Only show if more than 6 cards */}
+        {hasMoreThan6Cards && (
+          <div className="flex justify-center mt-10">
+            <button
+              className="flex flex-col items-center text-[#1D5554] font-bold text-sm tracking-widest select-none focus:outline-none"
+              onClick={() => setShowAll((prev) => !prev)}
+            >
+              <span>{showAll ? "HIDE" : "SEE ALL"}</span>
+              <svg
+                className={`w-6 h-6 mt-1 transition-transform duration-300 ${
+                  showAll ? "rotate-180" : "rotate-0"
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
