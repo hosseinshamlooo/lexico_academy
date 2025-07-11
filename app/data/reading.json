@@ -1080,6 +1080,58 @@
         "weight",
         "climbing"
       ]
+    },
+    {
+      "type": "fact-opinion-judgement",
+      "instructions": "Do the following statements agree with the information given in the passage?\n\nSelect 'True' if the statement agrees with the information, 'False' if the statement contradicts the information, 'Not Given' if there is no information on this.",
+      "questions": [
+        {
+          "id": "q7",
+          "question": "The counter-excavation method completely replaced the qanat method in the 6th century BCE.",
+          "options": ["True", "False", "Not Given"],
+          "answer": "False"
+        },
+        {
+          "id": "q8",
+          "question": "Only experienced builders were employed to construct a tunnel using the counter-excavation method.",
+          "options": ["True", "False", "Not Given"],
+          "answer": "Not Given"
+        },
+        {
+          "id": "q9",
+          "question": "The information about a problem that occurred during the construction of the Saldae aqueduct system was found in an ancient book.",
+          "options": ["True", "False", "Not Given"],
+          "answer": "False"
+        },
+        {
+          "id": "q10",
+          "question": "The mistake made by the builders of the Saldae aqueduct system was that the two parts of the tunnel failed to meet.",
+          "options": ["True", "False", "Not Given"],
+          "answer": "True"
+        }
+      ]
+    },
+    {
+      "type": "short-completion",
+      "mode": "input",
+      "instructions": "Answer the questions below.\n\nChoose NO MORE THAN TWO WORDS from the passage for each answer.",
+      "questions": [
+        {
+          "id": "q11",
+          "question": "What type of mineral were the Dolaucothi mines in Wales built to extract? [blank]",
+          "answer": ["gold"]
+        },
+        {
+          "id": "q12",
+          "question": "In addition to the patron, whose name might be carved onto a tunnel? [blank]",
+          "answer": ["architect", "architect's", "architect's name", "the architect", "the architect's", "the architect's name"]
+        },
+        {
+          "id": "q13",
+          "question": "What part of Seleuceia Pieria was the Çevlik tunnel built to protect? [blank]",
+          "answer": ["harbor", "harbour", "the harbor", "the harbour"]
+        }
+      ]
     }
   ]
 },
@@ -1090,7 +1142,7 @@
   "questionSets": [
     {
       "type": "multiple-choice",
-      "instructions": "Choose the correct letter, A, B, C or D. Write the correct letter in boxes 14–17 on your answer sheet.",
+      "instructions": "Choose the correct letter, A, B, C or D.",
       "questions": [
         {
           "id": "q14",
@@ -1100,7 +1152,8 @@
             "Technology can be used to help youngsters to read.",
             "Travellers should be encouraged to use technology on planes.",
             "Playing games is a more popular use of technology than reading."
-          ]
+          ],
+          "answer":"A"
         },
         {
           "id": "q15",
@@ -1110,7 +1163,8 @@
             "We should pay attention to what might be lost when innovation occurs.",
             "We should encourage more young people to become involved in innovation.",
             "There is a difference between developing products and developing ideas."
-          ]
+          ],
+          "answer":"B"
         },
         {
           "id": "q16",
@@ -1120,7 +1174,8 @@
             "Reading can be done using many different mediums.",
             "Writing systems make unexpected demands on the brain.",
             "Some brain circuits adjust to whatever is required of them."
-          ]
+          ],
+          "answer":"D"
         },
         {
           "id": "q17",
@@ -1130,14 +1185,16 @@
             "has influenced what they select to read.",
             "does not worry him as much as it does others.",
             "does not match the views of the general public."
-          ]
+          ],
+          "answer":"B"
         }
       ]
     },
     {
       "type": "summary-table-completion",
       "mode":"word-bank",
-      "instructions": "Complete the summary using the list of words, A–H, below. Write the correct letter, A–H, in boxes 18–22 on your answer sheet.",
+      "instructions": "Complete the summary using the list of words below.",
+      "title":"Studies on digital screen use",
       "wordBank": [
         "fast",
         "isolated",
@@ -1149,21 +1206,24 @@
         "thorough"
       ],
       "questions": [
-        { "id": "q18", "question": "There have been many studies on digital screen use, showing some [blank] trends." },
-        { "id": "q19", "question": "Her team then used a question-and-answer technique to find out how [blank] each group's understanding of the plot was." },
-        { "id": "q20", "question": "with those who read screens finding the order of information [blank] to recall." },
-        { "id": "q21", "question": "Studies by Ziming Liu show that students are tending to read [blank] words and phrases in a text to save time." },
-        { "id": "q22", "question": "this approach, she says, gives the reader a superficial understanding of the [blank] content of material, leaving no time for thought." }
+        {
+                                "id": 1,
+                                "question": "There have been many studies on digital screen use, showing some [blank] trends. Psychologist Anne Mangen gave high-school students a short story to read, half using digital and half using print mediums. Her team then used a question-and-answer technique to find out how [blank]  each group's understanding of the plot was. The findings showed a clear pattern in the responses, with those who read screens finding the order of information [blank]  to recall.\n\nStudies by Ziming Liu show that students are tending to read [blank]  words and phrases in a text to save time. This approach, she says, gives the reader a superficial understanding of the [blank] content of material, leaving no time for thought.",
+                                "answer": ["worrying", "thorough", "hard", "isolated", "emotional"]
+                                }
+        
       ]
     },
     {
       "type": "fact-opinion-judgement",
       "instructions": "Do the following statements agree with the information given in the passage?\n\nSelect 'True' if the statement agrees with the information, 'False' if the statement contradicts the information, 'Not Given' if there is no information on this.",
       "questions": [
-        { "id": "q23", "question": "The medium we use to read can affect our choice of reading content.", "options": ["YES", "NO", "NOT GIVEN"] },
-        { "id": "q24", "question": "Some age groups are more likely to lose their complex reading skills than others.", "options": ["YES", "NO", "NOT GIVEN"] },
-        { "id": "q25", "question": "False information has become more widespread in today's digital era.", "options": ["YES", "NO", "NOT GIVEN"] },
-        { "id": "q26", "question": "We still have opportunities to rectify the problems that technology is presenting.", "options": ["YES", "NO", "NOT GIVEN"] }
+        { "id": "q23", "question": "The medium we use to read can affect our choice of reading content.", 
+        "options": ["Yes", "No", "Not Given"], "answer": "Yes" },
+        { "id": "q24", "question": "Some age groups are more likely to lose their complex reading skills than others.", "options": ["Yes", "No", "Not Given"], "answer": "No" },
+        { "id": "q25", "question": "False information has become more widespread in today's digital era.", 
+        "options": ["Yes", "No", "Not Given"], "answer": "Not Given" },
+        { "id": "q26", "question": "We still have opportunities to rectify the problems that technology is presenting.", "options": ["Yes", "No", "Not Given"], "answer": "Yes" }
       ]
     }
   ]
@@ -1176,7 +1236,7 @@
   "questionSets": [
     {
     "type": "multiple-choice",
-    "instructions": "Choose the correct letter, A, B, C or D. Write the correct letter in boxes 33–35 on your answer sheet.",
+    "instructions": "Choose the correct letter, A, B, C or D.",
     "questions": [
       {
         "id": "q33",
@@ -1187,7 +1247,7 @@
           "highlighting the existence of a problem",
           "explaining the reasons for a phenomenon"
         ],
-        "answer": "D"
+        "answer": "C"
       },
       {
         "id": "q34",
@@ -1198,7 +1258,7 @@
           "They would rather wait for the technology to be tested over a period of time.",
           "Misunderstandings about how it works make it seem more challenging than it is."
         ],
-        "answer": "D"
+        "answer": "B"
       },
       {
         "id": "q35",
@@ -1209,7 +1269,7 @@
           "Its reports of incidents involving AI are often inaccurate.",
           "It gives the impression that AI failures are due to designer error."
         ],
-        "answer": "D"
+        "answer": "A"
       }
     ]
   },
@@ -1227,12 +1287,12 @@
                     { "id": "viii", "text": "A surprisingly successful AI application" }
                 ],
                 "questions": [
-                    { "id": "q27", "question": "Section A" },
-                    { "id": "q28", "question": "Section B" },
-                    { "id": "q29", "question": "Section C" },
-                    { "id": "q30", "question": "Section D" },
-                    { "id": "q31", "question": "Section E" },
-                    { "id": "q32", "question": "Section F" }
+                    { "id": "q27", "question": "Section A", "answer": "iii" },
+                    { "id": "q28", "question": "Section B", "answer": "vi" },
+                    { "id": "q29", "question": "Section C", "answer": "ii" },
+                    { "id": "q30", "question": "Section D", "answer": "i" },
+                    { "id": "q31", "question": "Section E", "answer": "vii" },
+                    { "id": "q32", "question": "Section F", "answer": "v" }
                 ]
             },
   {
@@ -1242,32 +1302,38 @@
       {
         "id": "q36",
         "question": "Subjective depictions of AI in sci-fi films make people change their opinions about automation.",
-        "options": ["YES", "NO", "NOT GIVEN"]
+        "options": ["Yes", "No", "Not Given"],
+        "answer": "No"
       },
       {
         "id": "q37",
         "question": "Portrayals of AI in media and entertainment are likely to become more positive.",
-        "options": ["YES", "NO", "NOT GIVEN"]
+        "options": ["Yes", "No", "Not Given"],
+        "answer": "Not Given"
       },
       {
         "id": "q38",
         "question": "Rejection of the possibilities of AI may have a negative effect on many people's lives.",
-        "options": ["YES", "NO", "NOT GIVEN"]
+        "options": ["Yes", "No", "Not Given"],
+        "answer": "Yes"
       },
       {
         "id": "q39",
         "question": "Familiarity with AI has very little impact on people's attitudes to the technology.",
-        "options": ["YES", "NO", "NOT GIVEN"]
+        "options": ["Yes", "No", "Not Given"],
+        "answer": "No"
       },
       {
         "id": "q40",
         "question": "AI applications which users are able to modify are more likely to gain consumer approval.",
-        "options": ["YES", "NO", "NOT GIVEN"]
+        "options": ["Yes", "No", "Not Given"],
+        "answer": "Yes"
       }
     ]
 }
   ]
 }
 ]
+
 
 
