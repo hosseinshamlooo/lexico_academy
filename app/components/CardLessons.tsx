@@ -991,7 +991,25 @@ export default function CardLessons() {
     "Practice & Review",
   ];
 
-  // For Listening and Reading, only show the first 30 units/cards and 5 dividers
+  // Divider titles for Writing
+  const writingUnitTitles = [
+    "Introduction to IELTS Writing",
+    "How to Write",
+    "Fundamentals of Task 1",
+    "Fundamentals of Task 2",
+    "Advanced Writing Strategies",
+  ];
+
+  // Divider titles for Speaking
+  const speakingUnitTitles = [
+    "Introduction to IELTS Speaking",
+    "Introduction & Interview",
+    "Long Turn (Cue Card)",
+    "Discussion",
+    "Pronunciation & Advanced Speaking",
+  ];
+
+  // For Listening, Reading, Writing, and Speaking, only show the first 30 units/cards and 5 dividers
   const cardLimit = 30;
   let limitedVisibleUnits = visibleUnits;
   let dividerTitles: string[] = [];
@@ -1001,6 +1019,12 @@ export default function CardLessons() {
   } else if (currentModule.key === "reading") {
     limitedVisibleUnits = visibleUnits.slice(0, cardLimit);
     dividerTitles = readingUnitTitles;
+  } else if (currentModule.key === "writing") {
+    limitedVisibleUnits = visibleUnits.slice(0, cardLimit);
+    dividerTitles = writingUnitTitles;
+  } else if (currentModule.key === "speaking") {
+    limitedVisibleUnits = visibleUnits.slice(0, cardLimit);
+    dividerTitles = speakingUnitTitles;
   }
 
   // Ref for the scrollable journey container
