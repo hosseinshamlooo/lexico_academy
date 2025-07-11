@@ -16,7 +16,7 @@ const modules = [
     units: [
       {
         title: "Introduction to IELTS Listening",
-        mastery: 0,
+        mastery: 100,
         lessons: [
           "Introduction to IELTS Listening",
           "Understanding the Test Format",
@@ -973,12 +973,35 @@ export default function CardLessons() {
     ? currentModule.units
     : currentModule.units.slice(0, 2);
 
-  // For Listening, only show the first 30 units/cards and 5 dividers
-  const listeningCardLimit = 30;
-  const limitedVisibleUnits =
-    currentModule.key === "listening"
-      ? visibleUnits.slice(0, listeningCardLimit)
-      : visibleUnits;
+  // Divider titles for Listening
+  const listeningUnitTitles = [
+    "Introduction to IELTS Listening",
+    "Social Survival",
+    "Social Context",
+    "Academic Discussion",
+    "Academic Lecture",
+  ];
+
+  // Divider titles for Reading
+  const readingUnitTitles = [
+    "Introduction to IELTS Reading",
+    "Skimming & Scanning",
+    "Detailed Reading Skills",
+    "Advanced Strategies",
+    "Practice & Review",
+  ];
+
+  // For Listening and Reading, only show the first 30 units/cards and 5 dividers
+  const cardLimit = 30;
+  let limitedVisibleUnits = visibleUnits;
+  let dividerTitles: string[] = [];
+  if (currentModule.key === "listening") {
+    limitedVisibleUnits = visibleUnits.slice(0, cardLimit);
+    dividerTitles = listeningUnitTitles;
+  } else if (currentModule.key === "reading") {
+    limitedVisibleUnits = visibleUnits.slice(0, cardLimit);
+    dividerTitles = readingUnitTitles;
+  }
 
   // Ref for the scrollable journey container
   const journeyRef = useRef<HTMLDivElement>(null);
@@ -995,15 +1018,6 @@ export default function CardLessons() {
       journeyRef.current.scrollTo({ top: 0 });
     }
   };
-
-  // Divider titles for Listening
-  const listeningUnitTitles = [
-    "Introduction to IELTS Listening",
-    "Social Survival",
-    "Social Context",
-    "Academic Discussion",
-    "Academic Lecture",
-  ];
 
   return (
     <div className="flex justify-center items-start w-full min-h-screen overflow-hidden">
@@ -1069,27 +1083,25 @@ export default function CardLessons() {
             {limitedVisibleUnits.map((unit, idx) => (
               <React.Fragment key={unit.title}>
                 {/* Insert the first divider before the first card */}
-                {idx === 0 && currentModule.key === "listening" && (
+                {idx === 0 && dividerTitles.length > 0 && (
                   <div className="flex items-center w-full my-8">
                     <div className="flex-grow h-1.5 bg-gray-300 rounded-full" />
                     <span className="mx-4 text-xl font-bold text-gray-400 whitespace-nowrap select-none">
-                      {listeningUnitTitles[0]}
+                      {dividerTitles[0]}
                     </span>
                     <div className="flex-grow h-1.5 bg-gray-300 rounded-full" />
                   </div>
                 )}
                 {/* Insert divider every 6 cards, except before the first card */}
-                {idx % 6 === 0 &&
-                  idx !== 0 &&
-                  currentModule.key === "listening" && (
-                    <div className="flex items-center w-full my-8">
-                      <div className="flex-grow h-1.5 bg-gray-300 rounded-full" />
-                      <span className="mx-4 text-xl font-bold text-gray-400 whitespace-nowrap select-none">
-                        {listeningUnitTitles[Math.floor(idx / 6)]}
-                      </span>
-                      <div className="flex-grow h-1.5 bg-gray-300 rounded-full" />
-                    </div>
-                  )}
+                {idx % 6 === 0 && idx !== 0 && dividerTitles.length > 0 && (
+                  <div className="flex items-center w-full my-8">
+                    <div className="flex-grow h-1.5 bg-gray-300 rounded-full" />
+                    <span className="mx-4 text-xl font-bold text-gray-400 whitespace-nowrap select-none">
+                      {dividerTitles[Math.floor(idx / 6)]}
+                    </span>
+                    <div className="flex-grow h-1.5 bg-gray-300 rounded-full" />
+                  </div>
+                )}
                 {/* Render the LessonCard as before */}
                 <LessonCard
                   unit={unit}
