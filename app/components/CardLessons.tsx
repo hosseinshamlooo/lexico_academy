@@ -1,5 +1,12 @@
 import React, { useState, useRef } from "react";
-import { FaCheckCircle, FaLock } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaLock,
+  FaHeadphones,
+  FaBookOpen,
+  FaPencilAlt,
+  FaMicrophone,
+} from "react-icons/fa";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const modules = [
@@ -797,16 +804,30 @@ const modules = [
   },
 ];
 
-function ProgressBar({ percent }: { percent: number }) {
+function ProgressBar({
+  percent,
+  completed,
+}: {
+  percent: number;
+  completed: boolean;
+}) {
   return (
     <div className="flex items-center gap-2">
       <div className="w-40 h-2 bg-gray-200 rounded-full overflow-hidden">
         <div
-          className="h-2 rounded-full bg-[#1D5554] transition-all duration-500"
+          className={`h-2 rounded-full transition-all duration-500 ${
+            completed ? "bg-gray-400" : "bg-[#1D5554]"
+          }`}
           style={{ width: `${percent}%` }}
         />
       </div>
-      <span className="text-sm font-bold text-gray-700">{percent}%</span>
+      <span
+        className={`text-sm font-bold ${
+          completed ? "text-gray-300" : "text-gray-700"
+        }`}
+      >
+        {percent}%
+      </span>
     </div>
   );
 }
@@ -828,65 +849,114 @@ function LessonCard({
   unit,
   completed,
   locked,
-  scrollable,
+  action,
+  idx,
 }: {
   unit: Unit;
   completed: boolean;
   locked?: boolean;
-  scrollable?: boolean;
+  action?: "review" | "start" | null;
+  idx: number;
 }) {
+  // For the first card, always show 100% completed
+  const percent = idx === 0 ? 100 : unit.mastery || 0;
   return (
     <div
-      className={`relative bg-white border border-gray-300 shadow p-6 w-full max-w-2xl mx-auto flex flex-col mb-3 mt-3 min-h-[260px] max-h-[380px] ${
+      className={`relative ${
+        completed
+          ? "bg-[#1D5554] border-4 border-[#1D5554]"
+          : "bg-white border border-gray-300"
+      } shadow p-6 w-full max-w-2xl mx-auto flex flex-col mb-3 mt-3 min-h-[320px] max-h-[440px] ${
         completed ? "opacity-100" : ""
       } ${locked ? "opacity-60" : ""}`}
-      style={{ borderRadius: "18px" }}
+      style={{ borderRadius: "18px", overflow: "hidden" }}
     >
       <div className="flex items-center justify-between mb-2">
-        <h3
-          className="text-2xl font-extrabold text-[#1D5554] pr-2 break-words"
-          title={unit.title}
+        <div className="flex items-center gap-3">
+          <h3
+            className={`text-2xl font-extrabold pr-2 break-words ${
+              completed ? "text-gray-200" : "text-[#1D5554]"
+            }`}
+            title={unit.title}
+          >
+            {unit.title}
+          </h3>
+          {completed && (
+            <span className="flex items-center gap-1 font-bold text-sm bg-gray-700/30 text-gray-200 px-3 py-1 rounded-full border border-gray-400">
+              <FaCheckCircle className="text-gray-300" /> Completed
+            </span>
+          )}
+        </div>
+        <span
+          className={`flex items-center justify-center w-12 h-12 rounded-full border-2 ${
+            completed
+              ? "border-gray-400 bg-[#223c3b] text-gray-200"
+              : "border-gray-200 bg-white"
+          }`}
         >
-          {unit.title}
-        </h3>
-        <span className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-gray-200 bg-white">
-          <span className="text-sm font-bold flex items-center justify-center w-full h-full text-center">
+          <span
+            className={`text-sm font-bold flex items-center justify-center w-full h-full text-center ${
+              completed ? "text-gray-200" : ""
+            }`}
+          >
             {formatDuration(unit.duration ?? 25)}
           </span>
         </span>
       </div>
-      <hr className="border-gray-200 mb-3" />
-      <div className={`flex-1 ${scrollable ? "overflow-y-auto" : ""}`}>
-        <p className="text-gray-600 text-sm mb-3 break-words">
-          {unit.description || ""}
-        </p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {unit.lessons.map((skill: string, i: number) => (
-            <span
-              key={i}
-              className="bg-gray-100 px-4 py-1 rounded-full text-base font-bold text-gray-600"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="flex items-center justify-between mt-2">
-        <ProgressBar percent={unit.mastery || 0} />
-        {completed && (
-          <span className="flex items-center gap-1 text-green-600 font-bold text-sm bg-green-100 px-3 py-1 rounded-full">
-            <FaCheckCircle className="text-green-500" /> Completed
+      <hr
+        className={`mb-3 ${completed ? "border-gray-200" : "border-gray-200"}`}
+      />
+      <p
+        className={`text-sm mb-3 break-words ${
+          completed ? "text-gray-300 font-semibold" : "text-gray-600"
+        }`}
+      >
+        {unit.description || ""}
+      </p>
+      <div className="flex flex-wrap gap-2 mb-4">
+        {unit.lessons.map((skill: string, i: number) => (
+          <span
+            key={i}
+            className={`px-4 py-1 rounded-full text-base font-bold ${
+              completed
+                ? "bg-gray-700/30 text-gray-200 border border-gray-400"
+                : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {skill}
           </span>
-        )}
+        ))}
+      </div>
+      <div className="flex items-center justify-between mt-2 mb-2">
+        <ProgressBar percent={percent} completed={completed} />
         {locked && (
           <span className="flex items-center gap-1 text-gray-500 font-bold text-sm bg-gray-100 px-3 py-1 rounded-full">
             <FaLock className="text-gray-400" /> Locked
           </span>
         )}
       </div>
+      <div className="flex justify-end mt-4">
+        {action === "review" && (
+          <button className="bg-gray-200 text-[#1D5554] font-bold px-6 py-2 rounded-xl shadow hover:bg-gray-300 transition-all">
+            Review
+          </button>
+        )}
+        {action === "start" && (
+          <button className="bg-[#1D5554] text-white font-bold px-6 py-2 rounded-xl shadow hover:bg-[#17403f] transition-all">
+            Start
+          </button>
+        )}
+      </div>
     </div>
   );
 }
+
+const moduleIcons = {
+  Listening: <FaHeadphones className="text-xl text-[#1D5554]" />,
+  Reading: <FaBookOpen className="text-xl text-[#1D5554]" />,
+  Writing: <FaPencilAlt className="text-xl text-[#1D5554]" />,
+  Speaking: <FaMicrophone className="text-xl text-[#1D5554]" />,
+};
 
 export default function CardLessons() {
   const [showAll, setShowAll] = useState(false); // default is collapsed (show more)
@@ -937,21 +1007,22 @@ export default function CardLessons() {
         <div className="flex items-center justify-center gap-2 mb-8">
           <button
             onClick={handlePrev}
-            className="p-1 rounded-full bg-white/70 hover:bg-white/90 text-[#1D5554] transition-all"
-            style={{ minWidth: 32, minHeight: 32 }}
+            className="flex-shrink-0 p-1 rounded-full bg-white/70 hover:bg-white/90 text-[#1D5554] transition-all"
+            style={{ minWidth: 40, minHeight: 40 }}
           >
             <MdKeyboardArrowLeft size={28} />
           </button>
           <span
-            className="text-lg font-semibold text-[#1D5554] px-3 py-1 rounded-xl bg-white/70"
-            style={{ letterSpacing: "-0.5px" }}
+            className="flex items-center gap-2 text-lg font-semibold text-[#1D5554] px-4 py-2 rounded-xl bg-white/70 min-w-[180px] justify-center"
+            style={{ letterSpacing: "-0.5px", minHeight: 40 }}
           >
-            {currentModule.label}
+            {moduleIcons[currentModule.label as keyof typeof moduleIcons]}
+            <span>{currentModule.label}</span>
           </span>
           <button
             onClick={handleNext}
-            className="p-1 rounded-full bg-white/70 hover:bg-white/90  text-[#1D5554] transition-all"
-            style={{ minWidth: 32, minHeight: 32 }}
+            className="flex-shrink-0 p-1 rounded-full bg-white/70 hover:bg-white/90 text-[#1D5554] transition-all"
+            style={{ minWidth: 40, minHeight: 40 }}
           >
             <MdKeyboardArrowRight size={28} />
           </button>
@@ -974,23 +1045,22 @@ export default function CardLessons() {
           >
             {visibleUnits.map((unit, idx) => (
               <React.Fragment key={unit.title}>
-                {/* Only show the first two cards when collapsed, all when expanded */}
                 <LessonCard
                   unit={unit}
-                  completed={unit.mastery === 100}
-                  locked={idx >= 1}
-                  scrollable={showAll}
+                  completed={idx === 0}
+                  locked={idx >= 2}
+                  action={idx === 0 ? "review" : idx === 1 ? "start" : null}
+                  idx={idx}
                 />
-                {/* Dashed Path (not after last card) */}
                 {idx !== visibleUnits.length - 1 && (
                   <div className="flex flex-col items-center w-full">
                     <div className="flex justify-center w-full">
                       <div
-                        className="h-20 w-1 mx-auto border-l-4 border-dashed transition-all duration-500"
-                        style={{
-                          borderColor:
-                            unit.mastery === 100 ? "#1D5554" : "#a3a3a3",
-                        }}
+                        className={`h-20 w-1 mx-auto border-l-4 transition-all duration-500 ${
+                          idx === 0
+                            ? "border-[#1D5554] border-solid"
+                            : "border-gray-300 border-dashed"
+                        }`}
                       ></div>
                     </div>
                   </div>
