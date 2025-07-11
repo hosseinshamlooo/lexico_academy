@@ -913,18 +913,25 @@ function LessonCard({
       >
         {unit.description || ""}
       </p>
-      <div className="flex flex-wrap gap-2 mb-4">
+      {/* Render lessons with divider every 6 */}
+      <div className="flex flex-wrap gap-2 mb-4 w-full">
         {unit.lessons.map((skill: string, i: number) => (
-          <span
-            key={i}
-            className={`px-4 py-1 rounded-full text-base font-bold ${
-              completed
-                ? "bg-gray-700/30 text-gray-200 border border-gray-400"
-                : "bg-gray-100 text-gray-600"
-            }`}
-          >
-            {skill}
-          </span>
+          <React.Fragment key={i}>
+            <span
+              className={`px-4 py-1 rounded-full text-base font-bold ${
+                completed
+                  ? "bg-gray-700/30 text-gray-200 border border-gray-400"
+                  : "bg-gray-100 text-gray-600"
+              }`}
+            >
+              {skill}
+            </span>
+            {(i + 1) % 6 === 0 && i !== unit.lessons.length - 1 && (
+              <div className="w-full flex items-center my-4">
+                <div className="flex-grow h-px bg-gray-200" />
+              </div>
+            )}
+          </React.Fragment>
         ))}
       </div>
       <div className="flex items-center justify-between mt-2 mb-2">
@@ -966,6 +973,13 @@ export default function CardLessons() {
     ? currentModule.units
     : currentModule.units.slice(0, 2);
 
+  // For Listening, only show the first 30 units/cards and 5 dividers
+  const listeningCardLimit = 30;
+  const limitedVisibleUnits =
+    currentModule.key === "listening"
+      ? visibleUnits.slice(0, listeningCardLimit)
+      : visibleUnits;
+
   // Ref for the scrollable journey container
   const journeyRef = useRef<HTMLDivElement>(null);
 
@@ -981,6 +995,15 @@ export default function CardLessons() {
       journeyRef.current.scrollTo({ top: 0 });
     }
   };
+
+  // Divider titles for Listening
+  const listeningUnitTitles = [
+    "Introduction to IELTS Listening",
+    "Social Survival",
+    "Social Context",
+    "Academic Discussion",
+    "Academic Lecture",
+  ];
 
   return (
     <div className="flex justify-center items-start w-full min-h-screen overflow-hidden">
@@ -1043,8 +1066,31 @@ export default function CardLessons() {
               transition: "max-height 0.4s",
             }}
           >
-            {visibleUnits.map((unit, idx) => (
+            {limitedVisibleUnits.map((unit, idx) => (
               <React.Fragment key={unit.title}>
+                {/* Insert the first divider before the first card */}
+                {idx === 0 && currentModule.key === "listening" && (
+                  <div className="flex items-center w-full my-8">
+                    <div className="flex-grow h-1.5 bg-gray-300 rounded-full" />
+                    <span className="mx-4 text-xl font-bold text-gray-400 whitespace-nowrap select-none">
+                      {listeningUnitTitles[0]}
+                    </span>
+                    <div className="flex-grow h-1.5 bg-gray-300 rounded-full" />
+                  </div>
+                )}
+                {/* Insert divider every 6 cards, except before the first card */}
+                {idx % 6 === 0 &&
+                  idx !== 0 &&
+                  currentModule.key === "listening" && (
+                    <div className="flex items-center w-full my-8">
+                      <div className="flex-grow h-1.5 bg-gray-300 rounded-full" />
+                      <span className="mx-4 text-xl font-bold text-gray-400 whitespace-nowrap select-none">
+                        {listeningUnitTitles[Math.floor(idx / 6)]}
+                      </span>
+                      <div className="flex-grow h-1.5 bg-gray-300 rounded-full" />
+                    </div>
+                  )}
+                {/* Render the LessonCard as before */}
                 <LessonCard
                   unit={unit}
                   completed={idx === 0}
@@ -1052,7 +1098,8 @@ export default function CardLessons() {
                   action={idx === 0 ? "review" : idx === 1 ? "start" : null}
                   idx={idx}
                 />
-                {idx !== visibleUnits.length - 1 && (
+                {/* Lines between cards: solid after first, dashed after others */}
+                {idx !== limitedVisibleUnits.length - 1 && (
                   <div className="flex flex-col items-center w-full">
                     <div className="flex justify-center w-full">
                       <div
