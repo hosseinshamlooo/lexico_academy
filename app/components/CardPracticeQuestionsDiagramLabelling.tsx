@@ -85,6 +85,10 @@ function CardPracticeQuestionsDiagramLabelling({
         <div className="space-y-4">
           {questions.map((q, idx) => {
             const parts = q.question.split(/(\[blank\])/g);
+            const isCorrect =
+              submitted &&
+              inputs[idx]?.trim().toLowerCase() ===
+                (answers[idx] || "").trim().toLowerCase();
             return (
               <div key={q.id} className="flex flex-col gap-1 py-2 px-0">
                 <div className="text-gray-900 mb-1 text-base leading-8 flex items-center flex-wrap gap-2">
@@ -100,8 +104,7 @@ function CardPracticeQuestionsDiagramLabelling({
                             className={`inline-block w-24 h-8 align-middle px-2 py-1 rounded border-2 transition-all duration-200 text-sm font-medium
                               ${
                                 submitted
-                                  ? inputs[idx]?.trim().toLowerCase() ===
-                                    (answers[idx] || "").trim().toLowerCase()
+                                  ? isCorrect
                                     ? "border-green-500 bg-green-50 text-green-800"
                                     : "border-red-500 bg-red-50 text-red-800"
                                   : "border-[#1D5554] bg-[#e6f4f3] text-[#1D5554] hover:bg-[#d0eae8] focus:border-[#1D5554] focus:bg-white"
@@ -115,24 +118,13 @@ function CardPracticeQuestionsDiagramLabelling({
                           />
                           {submitted && inputs[idx] && (
                             <div className="flex-shrink-0">
-                              {inputs[idx]?.trim().toLowerCase() ===
-                              (answers[idx] || "").trim().toLowerCase() ? (
+                              {isCorrect ? (
                                 <FaCircleCheck className="text-green-500 text-sm" />
                               ) : (
                                 <FaCircleXmark className="text-red-500 text-sm" />
                               )}
                             </div>
                           )}
-                          {/* Show correction for wrong answers */}
-                          {submitted &&
-                            inputs[idx] &&
-                            inputs[idx]?.trim().toLowerCase() !==
-                              (answers[idx] || "").trim().toLowerCase() && (
-                              <div className="absolute top-full left-0 mt-1 p-1 bg-gray-100 border border-gray-200 rounded text-xs text-gray-700 whitespace-nowrap z-10">
-                                <span className="font-medium">Correct:</span>{" "}
-                                {answers[idx]}
-                              </div>
-                            )}
                         </span>
                       ) : (
                         <React.Fragment key={`text-${idx}-${i}`}>
@@ -142,12 +134,15 @@ function CardPracticeQuestionsDiagramLabelling({
                     )}
                   </span>
                 </div>
-                {submitted && (
-                  <div className="mt-1 p-2 rounded bg-gray-50">
-                    <span className="text-sm text-gray-700 font-medium">
-                      Correct answer:
-                    </span>{" "}
-                    {answers[idx]}
+                {/* Only show correction box under the line if answer is wrong and submitted */}
+                {submitted && inputs[idx] && !isCorrect && (
+                  <div className="mt-2 p-2 rounded bg-gray-50 border border-gray-200">
+                    <span className="text-sm font-medium text-gray-700">
+                      Correct answer:{" "}
+                    </span>
+                    <span className="text-green-700 font-bold">
+                      {answers[idx]}
+                    </span>
                   </div>
                 )}
               </div>
