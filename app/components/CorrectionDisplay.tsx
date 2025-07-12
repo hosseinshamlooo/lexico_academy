@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FaBoltLightning } from "react-icons/fa6";
 import { TbTargetArrow } from "react-icons/tb";
 
@@ -6,6 +6,21 @@ interface CorrectionDisplayProps {
   correct: number;
   total: number;
   percentage?: number;
+}
+
+// Confetti particle interface
+interface ConfettiParticle {
+  id: number;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  color: string;
+  rotation: number;
+  rotationSpeed: number;
+  opacity: number;
+  gravity: number;
 }
 
 function getGradeLabel(percentage: number) {
@@ -51,6 +66,69 @@ function useCountUp(endValue: number, duration: number, delay: number = 0) {
   return count;
 }
 
+// Confetti hook
+function useConfetti() {
+  const [particles, setParticles] = useState<ConfettiParticle[]>([]);
+
+  const createConfetti = useCallback(() => {
+    const colors = [
+      "#FFD65A", // Gold
+      "#3A7C7B", // Primary green
+      "#D9F061", // Accent yellow
+      "#FF5A5F", // Red
+      "#1D5554", // Dark green
+      "#E5E7E3", // Light gray
+    ];
+
+    const newParticles: ConfettiParticle[] = [];
+    const particleCount = 80; // Much more particles for explosive effect
+
+    for (let i = 0; i < particleCount; i++) {
+      newParticles.push({
+        id: i,
+        x: Math.random() * window.innerWidth,
+        y: -20 - Math.random() * 200, // Start higher above viewport for more dramatic effect
+        vx: (Math.random() - 0.5) * 25, // Much more horizontal spread
+        vy: Math.random() * 15 + 5, // Much faster initial velocity
+        size: Math.random() * 6 + 3, // Smaller particles (3-9px) for more explosive look
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * 360,
+        rotationSpeed: (Math.random() - 0.5) * 30, // Faster rotation
+        opacity: 1,
+        gravity: 0.4 + Math.random() * 0.3, // Slightly stronger gravity for faster fall
+      });
+    }
+
+    setParticles(newParticles);
+  }, []);
+
+  useEffect(() => {
+    if (particles.length === 0) return;
+
+    const animationFrame = requestAnimationFrame(() => {
+      setParticles((prevParticles) =>
+        prevParticles
+          .map((particle) => ({
+            ...particle,
+            x: particle.x + particle.vx,
+            y: particle.y + particle.vy,
+            vy: particle.vy + particle.gravity,
+            rotation: particle.rotation + particle.rotationSpeed,
+            opacity: particle.opacity > 0.1 ? particle.opacity - 0.008 : 0, // Faster fade out for more explosive feel
+          }))
+          .filter(
+            (particle) =>
+              particle.opacity > 0 && particle.y < window.innerHeight + 100
+          )
+      );
+    });
+
+    return () => cancelAnimationFrame(animationFrame);
+  }, [particles]);
+
+  return { particles, createConfetti };
+}
+
 export default function CorrectionDisplay({
   correct,
   total,
@@ -65,25 +143,31 @@ export default function CorrectionDisplay({
   const animatedXP = useCountUp(xp, 1500, 100); // Start 100ms after component mounts
   const animatedPercentage = useCountUp(calculatedPercentage, 2000, 1500); // Start 1.5s after component mounts
 
-  // Audio effects
-  useEffect(() => {
-    const audio = new Audio("/433649__dersuperanton__plopp-bubble-popping.wav");
+  // Confetti system
+  const { particles, createConfetti } = useConfetti();
 
-    // Play sound when XP box appears (exactly when it mounts)
+  // Audio effects and confetti trigger - only run once on mount
+  useEffect(() => {
+    const audio = new Audio("/401542__conarb13__pop-sound.mp3");
+
+    // Play sound and trigger confetti when XP box appears
     const xpTimer = setTimeout(() => {
       audio.play().catch((e) => console.log("Audio play failed:", e));
+      createConfetti(); // Trigger confetti explosion
     }, 0);
 
-    // Play sound when grade box appears (exactly when it mounts)
+    // Play sound when grade box appears
     const gradeTimer = setTimeout(() => {
       audio.play().catch((e) => console.log("Audio play failed:", e));
+      // Second confetti burst for grade
+      setTimeout(() => createConfetti(), 200);
     }, 1000);
 
     return () => {
       clearTimeout(xpTimer);
       clearTimeout(gradeTimer);
     };
-  }, []);
+  }, []); // Empty dependency array - only run once on mount
 
   // Shared box style
   const boxStyle = {
@@ -103,7 +187,28 @@ export default function CorrectionDisplay({
   };
 
   return (
-    <div className="flex justify-center items-center gap-8 py-4 bg-transparent">
+    <div className="flex justify-center items-center gap-8 py-4 bg-transparent relative">
+      {/* Confetti Canvas */}
+      <div className="fixed inset-0 pointer-events-none z-50">
+        {particles.map((particle) => (
+          <div
+            key={particle.id}
+            className="absolute"
+            style={{
+              left: particle.x,
+              top: particle.y,
+              width: particle.size,
+              height: particle.size,
+              backgroundColor: particle.color,
+              borderRadius: "50%",
+              transform: `rotate(${particle.rotation}deg)`,
+              opacity: particle.opacity,
+              boxShadow: `0 0 ${particle.size / 2}px ${particle.color}`,
+            }}
+          />
+        ))}
+      </div>
+
       <style jsx>{`
         @keyframes popIn {
           0% {
