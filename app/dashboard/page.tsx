@@ -8,11 +8,30 @@ import CardPracticeQuestions from "../components/CardPracticeQuestions";
 import LeaderboardMain from "../components/LeaderboardMain";
 import CardMockTests from "../components/CardMockTests";
 import CardLessons from "../components/CardLessons";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 export default function DashboardPage() {
   const { isLoaded, isSignedIn, user } = useUser();
   const [activeView, setActiveView] = React.useState("Lesson");
+  const [userXP, setUserXP] = useState(0);
+
+  useEffect(() => {
+    async function fetchUserXP() {
+      try {
+        const response = await fetch("/api/user/xp");
+        if (response.ok) {
+          const data = await response.json();
+          setUserXP(data.xp);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user XP:", error);
+      }
+    }
+
+    if (isSignedIn) {
+      fetchUserXP();
+    }
+  }, [isSignedIn]);
 
   if (!isLoaded) return null;
   if (!isSignedIn) return <RedirectToSignIn />;
@@ -31,7 +50,7 @@ export default function DashboardPage() {
         name={user?.firstName || user?.username || "User"}
         username={user?.username || "User"}
         streak={10}
-        xp={100}
+        xp={userXP}
         level={2}
         skillsUnlocked={3}
         totalSkills={10}

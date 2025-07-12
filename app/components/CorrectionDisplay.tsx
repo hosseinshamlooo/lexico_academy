@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { FaBoltLightning } from "react-icons/fa6";
 import { TbTargetArrow } from "react-icons/tb";
+import Link from "next/link";
 
 interface CorrectionDisplayProps {
   correct: number;
@@ -143,31 +144,76 @@ export default function CorrectionDisplay({
   const animatedXP = useCountUp(xp, 1500, 100); // Start 100ms after component mounts
   const animatedPercentage = useCountUp(calculatedPercentage, 2000, 1500); // Start 1.5s after component mounts
 
+  // Button visibility state
+  const [showButton, setShowButton] = useState(false);
+
   // Confetti system
   const { particles, createConfetti } = useConfetti();
 
   // Audio effects and confetti trigger - only run once on mount
   useEffect(() => {
-    const audio = new Audio("/401542__conarb13__pop-sound.mp3");
+    const boxAudio = new Audio("/401542__conarb13__pop-sound.mp3");
+    const confettiAudio = new Audio(
+      "/486161__ruben_uitenweerde__champagne-cork-pop.wav"
+    );
 
-    // Play sound and trigger confetti when XP box appears
+    // Play box sound when XP box appears
     const xpTimer = setTimeout(() => {
-      audio.play().catch((e) => console.log("Audio play failed:", e));
-      createConfetti(); // Trigger confetti explosion
+      boxAudio.play().catch((e) => console.log("Box audio play failed:", e));
     }, 0);
 
-    // Play sound when grade box appears
+    // Play box sound when grade box appears
     const gradeTimer = setTimeout(() => {
-      audio.play().catch((e) => console.log("Audio play failed:", e));
-      // Second confetti burst for grade
-      setTimeout(() => createConfetti(), 200);
+      boxAudio.play().catch((e) => console.log("Box audio play failed:", e));
     }, 1000);
+
+    // Trigger confetti and cork pop only if grade is 80% or higher
+    const confettiTimer = setTimeout(() => {
+      if (calculatedPercentage >= 80) {
+        confettiAudio
+          .play()
+          .catch((e) => console.log("Confetti audio play failed:", e));
+        createConfetti(); // Trigger confetti explosion
+      }
+    }, 1500); // Wait for both boxes to fully appear and settle
+
+    // Show button after grade box appears
+    const buttonTimer = setTimeout(() => {
+      setShowButton(true);
+    }, 2000); // Show button at 2 seconds
+
+    // Add earned XP to user's total
+    const xpUpdateTimer = setTimeout(async () => {
+      try {
+        const response = await fetch("/api/user/xp", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ earnedXP: xp }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(
+            `XP updated! Earned: ${data.earnedXP}, New total: ${data.xp}`
+          );
+        } else {
+          console.error("Failed to update XP");
+        }
+      } catch (error) {
+        console.error("Error updating XP:", error);
+      }
+    }, 2500); // Update XP after the celebration completes
 
     return () => {
       clearTimeout(xpTimer);
       clearTimeout(gradeTimer);
+      clearTimeout(confettiTimer);
+      clearTimeout(buttonTimer);
+      clearTimeout(xpUpdateTimer);
     };
-  }, []); // Empty dependency array - only run once on mount
+  }, [calculatedPercentage, createConfetti, xp]); // Add xp to dependencies
 
   // Shared box style
   const boxStyle = {
@@ -187,7 +233,7 @@ export default function CorrectionDisplay({
   };
 
   return (
-    <div className="flex justify-center items-center gap-8 py-4 bg-transparent relative">
+    <div className="flex justify-center items-center gap-8 py-8 bg-transparent relative -mt-6">
       {/* Confetti Canvas */}
       <div className="fixed inset-0 pointer-events-none z-50">
         {particles.map((particle) => (
@@ -224,12 +270,30 @@ export default function CorrectionDisplay({
           }
         }
 
+        @keyframes buttonPopIn {
+          0% {
+            opacity: 0;
+            transform: scale(0.3) translateY(20px);
+          }
+          50% {
+            transform: scale(1.1) translateY(-5px);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+
         .xp-box {
           animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .grade-box {
           animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1s both;
+        }
+
+        .continue-button {
+          animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) 2s both;
         }
       `}</style>
       {/* XP Box */}
@@ -350,6 +414,18 @@ export default function CorrectionDisplay({
           </div>
         </div>
       </div>
+
+      {/* Continue Button */}
+      {showButton && (
+        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2">
+          <Link
+            href="/dashboard"
+            className="continue-button hero-btn hero-btn-primary text-normal tracking-tighter mt-8 font-bold py-2 px-12 rounded-full cursor-pointer transition-all duration-200 hover:scale-105"
+          >
+            Exit
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
