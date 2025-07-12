@@ -45,8 +45,32 @@ export default function CorrectionDisplay({
 
   return (
     <div className="flex justify-center items-center gap-8 py-4 bg-transparent">
+      <style jsx>{`
+        @keyframes popIn {
+          0% {
+            opacity: 0;
+            transform: scale(0.3) translateY(20px);
+          }
+          50% {
+            transform: scale(1.1) translateY(-5px);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+
+        .xp-box {
+          animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .grade-box {
+          animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1s both;
+        }
+      `}</style>
       {/* XP Box */}
       <div
+        className="xp-box"
         style={{
           ...boxStyle,
           borderColor: "#FFD65A",
@@ -90,7 +114,7 @@ export default function CorrectionDisplay({
             className="flex items-center gap-2 font-semibold"
             style={{ color: "#FFD65A", fontSize: "16px" }}
           >
-            <FaBoltLightning style={{ color: "#FFD65A" }} size={24} />
+            <FaBoltLightning style={{ color: "#FFD65A" }} size={20} />
             <span
               style={{
                 fontSize: "20px",
@@ -105,6 +129,7 @@ export default function CorrectionDisplay({
       </div>
       {/* Grade Box */}
       <div
+        className="grade-box"
         style={{
           ...boxStyle,
           borderColor: "#3A7C7B",
