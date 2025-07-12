@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaBoltLightning } from "react-icons/fa6";
 import { TbTargetArrow } from "react-icons/tb";
 
@@ -16,6 +16,41 @@ function getGradeLabel(percentage: number) {
   return "GOOD EFFORT";
 }
 
+// Custom hook for counting animation
+function useCountUp(endValue: number, duration: number, delay: number = 0) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const startTime = Date.now();
+      const startValue = 0;
+
+      const updateCount = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Exponential easing that slows down much earlier
+        const exponentialEase = 1 - Math.pow(1 - progress, 3);
+        const currentValue = Math.floor(
+          startValue + (endValue - startValue) * exponentialEase
+        );
+
+        setCount(currentValue);
+
+        if (progress < 1) {
+          requestAnimationFrame(updateCount);
+        }
+      };
+
+      updateCount();
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [endValue, duration, delay]);
+
+  return count;
+}
+
 export default function CorrectionDisplay({
   correct,
   total,
@@ -25,6 +60,30 @@ export default function CorrectionDisplay({
     percentage ?? Math.round((correct / total) * 100);
   const xp = correct * 10;
   const gradeLabel = getGradeLabel(calculatedPercentage);
+
+  // Animated values
+  const animatedXP = useCountUp(xp, 1500, 100); // Start 100ms after component mounts
+  const animatedPercentage = useCountUp(calculatedPercentage, 2000, 1500); // Start 1.5s after component mounts
+
+  // Audio effects
+  useEffect(() => {
+    const audio = new Audio("/433649__dersuperanton__plopp-bubble-popping.wav");
+
+    // Play sound when XP box appears (exactly when it mounts)
+    const xpTimer = setTimeout(() => {
+      audio.play().catch((e) => console.log("Audio play failed:", e));
+    }, 0);
+
+    // Play sound when grade box appears (exactly when it mounts)
+    const gradeTimer = setTimeout(() => {
+      audio.play().catch((e) => console.log("Audio play failed:", e));
+    }, 1000);
+
+    return () => {
+      clearTimeout(xpTimer);
+      clearTimeout(gradeTimer);
+    };
+  }, []);
 
   // Shared box style
   const boxStyle = {
@@ -61,11 +120,11 @@ export default function CorrectionDisplay({
         }
 
         .xp-box {
-          animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+          animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .grade-box {
-          animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1s both;
+          animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1s both;
         }
       `}</style>
       {/* XP Box */}
@@ -122,7 +181,7 @@ export default function CorrectionDisplay({
                 letterSpacing: "-0.5px",
               }}
             >
-              {xp}
+              {animatedXP}
             </span>
           </div>
         </div>
@@ -181,7 +240,7 @@ export default function CorrectionDisplay({
                 letterSpacing: "-0.5px",
               }}
             >
-              {calculatedPercentage}%
+              {animatedPercentage}%
             </span>
           </div>
         </div>
