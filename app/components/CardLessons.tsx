@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import {
   FaCheckCircle,
   FaLock,
@@ -851,12 +852,14 @@ function LessonCard({
   locked,
   action,
   idx,
+  onActionClick,
 }: {
   unit: Unit;
   completed: boolean;
   locked?: boolean;
   action?: "review" | "start" | null;
   idx: number;
+  onActionClick?: () => void;
 }) {
   // For the first card, always show 100% completed
   const percent = idx === 0 ? 100 : unit.mastery || 0;
@@ -944,12 +947,24 @@ function LessonCard({
       </div>
       <div className="flex justify-end mt-4">
         {action === "review" && (
-          <button className="bg-gray-200 text-[#1D5554] font-bold px-6 py-2 rounded-xl shadow hover:bg-gray-300 transition-all">
+          <button
+            className="bg-gray-200 text-[#1D5554] font-bold px-6 py-2 rounded-xl shadow hover:bg-gray-300 transition-all"
+            onClick={(e) => {
+              e.stopPropagation();
+              onActionClick && onActionClick();
+            }}
+          >
             Review
           </button>
         )}
         {action === "start" && (
-          <button className="bg-[#1D5554] text-white font-bold px-6 py-2 rounded-xl shadow hover:bg-[#17403f] transition-all">
+          <button
+            className="bg-[#1D5554] text-white font-bold px-6 py-2 rounded-xl shadow hover:bg-[#17403f] transition-all"
+            onClick={(e) => {
+              e.stopPropagation();
+              onActionClick && onActionClick();
+            }}
+          >
             Start
           </button>
         )}
@@ -966,12 +981,18 @@ const moduleIcons = {
 };
 
 export default function CardLessons() {
+  const router = useRouter();
   const [showAll, setShowAll] = useState(false); // default is collapsed (show more)
   const [moduleIdx, setModuleIdx] = useState(0);
   const currentModule = modules[moduleIdx];
   const visibleUnits = showAll
     ? currentModule.units
     : currentModule.units.slice(0, 2);
+
+  const handleUnitClick = (unit: Unit) => {
+    const unitSlug = unit.title.toLowerCase().replace(/\s+/g, "-");
+    router.push(`/learn/${currentModule.key}/${unitSlug}`);
+  };
 
   // Divider titles for Listening
   const listeningUnitTitles = [
@@ -1133,6 +1154,7 @@ export default function CardLessons() {
                   locked={idx >= 2}
                   action={idx === 0 ? "review" : idx === 1 ? "start" : null}
                   idx={idx}
+                  onActionClick={() => handleUnitClick(unit)}
                 />
                 {/* Lines between cards: solid after first, dashed after others */}
                 {idx !== limitedVisibleUnits.length - 1 && (
