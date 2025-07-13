@@ -2,7 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { FaArrowLeft, FaPlay, FaFireAlt } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaPlay,
+  FaFireAlt,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
 
@@ -92,8 +98,10 @@ export default function LearnUnitPage() {
   const [currentUnit, setCurrentUnit] = useState<Unit | null>(null);
   const [currentModule, setCurrentModule] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<"about" | "transcript">("about");
+  const [aboutTab, setAboutTab] = useState<"about" | "transcript">("about");
+  const [qaTab, setQaTab] = useState<"questions" | "tips">("questions");
   const [userXP, setUserXP] = useState(0);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     const foundModule = modules.find((m) => m.key === skill);
@@ -188,7 +196,7 @@ export default function LearnUnitPage() {
         </div>
       </header>
       {/* Profile Summary Bar */}
-      <div className="w-full bg-gray-200 px-4 md:px-12 py-6 flex flex-row justify-between items-start gap-8">
+      <div className="w-full bg-gray-50 px-4 md:px-12 py-6 flex flex-row justify-between items-start gap-8">
         {/* Left: Empty for spacing (removed welcome message) */}
         <div className="flex-1" />
         {/* Right: Streak, XP, Level */}
@@ -257,151 +265,203 @@ export default function LearnUnitPage() {
         </div>
       </div>
       <div className="flex flex-1">
-        {/* Sidebar: Lesson Navigation */}
-        <aside className="w-96 max-w-sm min-w-[350px] bg-white p-0 hidden md:flex flex-col items-stretch">
-          <div className="rounded-2xl shadow-lg m-4 flex flex-col h-full bg-white">
-            {/* Breadcrumbs and navigation */}
-            <div className="px-6 pt-6 pb-2">
-              <div className="text-xs text-gray-500 font-semibold mb-1">
-                COURSE: IELTS {currentModule.label?.toUpperCase()} &gt; UNIT 1
-              </div>
-              <div className="flex items-center gap-2 mb-2">
-                <button
-                  className="p-1 rounded hover:bg-gray-100 text-gray-400"
-                  title="Previous Lesson"
-                >
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
-                    <path
-                      d="M15 19l-7-7 7-7"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-                <span className="text-sm font-bold text-[#1D5554] truncate">
-                  Lesson 1: {currentUnit.lessons[0]}
+        {sidebarOpen && (
+          <aside
+            className="relative bg-white border border-gray-100 mx-auto mt-8 mb-12 ml-8 hidden md:flex flex-col items-stretch transition-all duration-300 rounded-2xl overflow-hidden"
+            style={{ width: 500, height: 600 }}
+          >
+            {/* Sidebar Content */}
+            <div className="flex flex-col h-full bg-white overflow-hidden">
+              {/* Header */}
+              <div className="flex items-center gap-3 px-6 pt-6 pb-2">
+                <Image
+                  src="/img/duo-picmain.svg"
+                  alt="Section Icon"
+                  width={40}
+                  height={40}
+                />
+                <span className="font-bold text-2xl text-[#1D5554]">
+                  SAT Reading and Writing
                 </span>
-                <button
-                  className="p-1 rounded hover:bg-gray-100 text-gray-400"
-                  title="Next Lesson"
-                >
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
-                    <path
-                      d="M9 5l7 7-7 7"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
               </div>
-            </div>
-            {/* Lessons List */}
-            <ul className="flex-1 overflow-y-auto px-2 py-2">
-              {currentUnit.lessons.map((lesson, idx) => (
-                <li key={lesson} className="py-1">
+              {/* Breadcrumbs and navigation */}
+              <div className="px-6 pt-2 pb-1">
+                <div className="text-base text-gray-500 font-semibold mb-1 text-center">
+                  IELTS ACADEMIC {currentModule.label?.toUpperCase()} &gt; UNIT
+                  1
+                </div>
+                <div className="flex items-center gap-1 mb-1 mt-2">
                   <button
-                    className={`w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-all text-left ${
-                      idx === 0
-                        ? "bg-[#e6f4f3] border-l-4 border-[#1D5554] text-[#1D5554] font-bold shadow-sm"
-                        : "hover:bg-gray-50 text-gray-700"
-                    }`}
-                    disabled={idx > 1}
+                    className="p-1 rounded hover:bg-gray-100 text-gray-400"
+                    title="Previous Lesson"
                   >
-                    {/* Icon */}
-                    <span className="inline-flex items-center justify-center w-6 h-6">
-                      {idx === 0 ? (
-                        <svg
-                          width="20"
-                          height="20"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <rect
-                            x="4"
-                            y="4"
-                            width="16"
-                            height="16"
-                            rx="4"
-                            fill="#1D5554"
-                          />
-                          <path
-                            d="M8 12.5l2.5 2.5 5-5"
-                            stroke="#fff"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      ) : idx === 1 ? (
-                        <svg
-                          width="20"
-                          height="20"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <rect
-                            x="4"
-                            y="4"
-                            width="16"
-                            height="16"
-                            rx="4"
-                            fill="#e6f4f3"
-                          />
-                          <path
-                            d="M9 12l2 2 4-4"
-                            stroke="#1D5554"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      ) : (
-                        <svg
-                          width="20"
-                          height="20"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <rect
-                            x="4"
-                            y="4"
-                            width="16"
-                            height="16"
-                            rx="4"
-                            fill="#f3f4f6"
-                          />
-                          <path
-                            d="M12 8v4l2 2"
-                            stroke="#9ca3af"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      )}
-                    </span>
-                    <span className="flex-1 truncate">{lesson}</span>
-                    {/* Status badge */}
-                    {idx === 0 && (
-                      <span className="ml-2 text-xs font-semibold bg-[#1D5554] text-white px-2 py-0.5 rounded-full">
-                        Mastered
-                      </span>
-                    )}
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                      <path
+                        d="M15 19l-7-7 7-7"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                   </button>
-                </li>
-              ))}
-            </ul>
-            {/* Footer breadcrumbs/links */}
-            <div className="px-6 py-4 text-xs text-gray-400">
-              <div className="mb-2">
-                Test prep &gt; IELTS {currentModule.label} &gt; Unit 1 &gt;{" "}
-                {currentUnit.title}
+                  <span className="text-lg font-bold text-[#1D5554] truncate">
+                    Lesson 1: {currentUnit.lessons[0]}
+                  </span>
+                  <button
+                    className="p-1 rounded hover:bg-gray-100 text-gray-400"
+                    title="Next Lesson"
+                  >
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                      <path
+                        d="M9 5l7 7-7 7"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
-              <div className="flex gap-2 flex-wrap">
+              {/* Lessons List */}
+              <ul className="flex-1 overflow-y-auto px-2 py-2 divide-y divide-gray-100">
+                {currentUnit.lessons.map((lesson, idx) => (
+                  <li key={lesson} className="py-4 px-2">
+                    <button
+                      className={`w-full flex items-center gap-4 px-6 py-3 rounded-lg transition-all text-left ${
+                        idx === 0
+                          ? "bg-[#e6f4f3] border-l-4 border-[#1D5554] text-[#1D5554] font-bold shadow-sm"
+                          : "hover:bg-gray-50 text-gray-700"
+                      } text-lg font-medium`}
+                      disabled={idx > 1}
+                    >
+                      {/* Icon */}
+                      <span className="inline-flex items-center justify-center w-7 h-7">
+                        {idx === 0 ? (
+                          <svg
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <rect
+                              x="4"
+                              y="4"
+                              width="16"
+                              height="16"
+                              rx="4"
+                              fill="#1D5554"
+                            />
+                            <path
+                              d="M8 12.5l2.5 2.5 5-5"
+                              stroke="#fff"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        ) : idx === 1 ? (
+                          <svg
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <rect
+                              x="4"
+                              y="4"
+                              width="16"
+                              height="16"
+                              rx="4"
+                              fill="#e6f4f3"
+                            />
+                            <path
+                              d="M9 12l2 2 4-4"
+                              stroke="#1D5554"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <rect
+                              x="4"
+                              y="4"
+                              width="16"
+                              height="16"
+                              rx="4"
+                              fill="#f3f4f6"
+                            />
+                            <path
+                              d="M12 8v4l2 2"
+                              stroke="#9ca3af"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        )}
+                      </span>
+                      <span className="flex-1 truncate text-left text-lg font-medium">
+                        {lesson}
+                      </span>
+                      {/* Status badge */}
+                      {idx === 0 && (
+                        <span className="ml-2 text-base font-semibold bg-[#1D5554] text-white px-3 py-1 rounded-full">
+                          Mastered
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              {/* Footer breadcrumbs/links */}
+              {/* Footer breadcrumbs/links */}
+              <div className="bg-gray-100 rounded-xl px-6 py-4 mb-4 ml-4 mr-4 text-center">
+                {/* Breadcrumbs as links */}
+                <div className="mb-2 flex flex-wrap justify-center items-center gap-1 text-base">
+                  <a
+                    href="#"
+                    className="text-[#1D5554] hover:underline font-light"
+                  >
+                    Test prep
+                  </a>
+                  <span>&gt;</span>
+                  <a
+                    href="#"
+                    className="text-[#1D5554] hover:underline font-light"
+                  >
+                    IELTS {currentModule.label}
+                  </a>
+                  <span>&gt;</span>
+                  <a
+                    href="#"
+                    className="text-[#1D5554] hover:underline font-light"
+                  >
+                    Unit 1
+                  </a>
+                  <span>&gt;</span>
+                  <a
+                    href="#"
+                    className="text-[#1D5554] hover:underline font-light"
+                  >
+                    {currentUnit.title}
+                  </a>
+                </div>
+              </div>
+              {/* Copyright */}
+              <div className="text-xs text-gray-400 mb-2 text-center">
+                © 2025 Lexico Academy
+              </div>
+              {/* Terms/links */}
+              <div className="flex flex-wrap justify-center gap-4 mb-6 text-xs text-gray-500">
                 <a href="#" className="hover:underline">
                   Terms of use
                 </a>
@@ -413,115 +473,166 @@ export default function LearnUnitPage() {
                 </a>
               </div>
             </div>
-          </div>
-        </aside>
+          </aside>
+        )}
         {/* Main Content */}
-        <main className="flex-1 p-4 md:p-8">
-          {/* Video/Main Content */}
-          <div className="w-full max-w-3xl mx-auto flex flex-col items-center mb-6">
-            <div className="relative w-full aspect-video bg-gray-200 rounded-xl flex items-center justify-center overflow-hidden shadow-lg">
-              <Image
-                src="/img/duo-pic1.webp"
-                alt="Lesson preview"
-                width={1280}
-                height={720}
-                className="object-cover w-full h-full opacity-90"
-              />
-              <button className="absolute inset-0 flex items-center justify-center group">
-                <span className="bg-white rounded-full shadow-lg p-5 group-hover:scale-110 transition-transform">
-                  <FaPlay className="text-[#1D5554] text-4xl" />
-                </span>
-              </button>
-            </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-[#1D5554] mt-6 mb-2 text-center">
-              {currentUnit.title}
-            </h1>
-            <p className="text-gray-600 text-lg text-center mb-2">
-              {currentUnit.description ||
-                "Master this lesson with strategies, examples, and practice."}
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center text-sm text-gray-500 mb-2">
-              <span className="bg-[#e6f4f3] px-3 py-1 rounded-full">
-                {currentUnit.lessons.length} lessons
-              </span>
-              {currentUnit.duration && (
-                <span className="bg-[#e6f4f3] px-3 py-1 rounded-full">
-                  {currentUnit.duration} min
-                </span>
+        <main className="flex-1 flex items-center justify-center ml-8 mr-8">
+          <div className="bg-white h-full w-full max-w-8xl mx-auto flex flex-col relative">
+            {/* Sidebar toggle button inside the main card */}
+            <button
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-30 p-2 bg-white border border-gray-200 rounded-r-full shadow-md hover:bg-gray-100 transition-all"
+              title={sidebarOpen ? "Collapse sidebar" : "Open sidebar"}
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+            >
+              {sidebarOpen ? (
+                <FaChevronLeft className="text-2xl text-gray-500" />
+              ) : (
+                <FaChevronRight className="text-2xl text-gray-500" />
               )}
-              <span className="bg-[#e6f4f3] px-3 py-1 rounded-full">
-                {currentUnit.mastery}% complete
-              </span>
-            </div>
-          </div>
-          {/* Tabs */}
-          <div className="mb-6 flex gap-8 justify-center">
-            <button
-              className={`pb-2 px-2 font-semibold text-lg border-b-2 transition-all ${
-                tab === "about"
-                  ? "border-[#1D5554] text-[#1D5554]"
-                  : "border-transparent text-gray-500 hover:text-[#1D5554]"
-              }`}
-              onClick={() => setTab("about")}
-            >
-              About
             </button>
-            <button
-              className={`pb-2 px-2 font-semibold text-lg border-b-2 transition-all ${
-                tab === "transcript"
-                  ? "border-[#1D5554] text-[#1D5554]"
-                  : "border-transparent text-gray-500 hover:text-[#1D5554]"
-              }`}
-              onClick={() => setTab("transcript")}
-            >
-              Transcript
-            </button>
-          </div>
-          {/* Tab Content */}
-          {tab === "about" ? (
-            <div className="max-w-3xl mx-auto">
-              <div className="bg-white rounded-xl shadow p-6 mb-6">
-                <h2 className="font-bold text-xl mb-2 text-[#1D5554]">
-                  Lesson Summary
-                </h2>
-                <p className="text-gray-700 mb-2">
-                  Learn the best way to approach this lesson. Start by
-                  identifying the claim, then restate it in your own words, then
-                  find the best support in the choices.
-                </p>
-                <ul className="list-disc ml-6 text-gray-600">
-                  <li>Identify the claim</li>
-                  <li>Create a phrase</li>
-                  <li>Test the choices</li>
-                </ul>
-              </div>
-              {/* Q&A Section */}
-              <div className="bg-white rounded-xl shadow p-6 mb-6">
-                <h3 className="font-semibold mb-2 text-[#1D5554]">
-                  Questions & Answers
-                </h3>
-                <input
-                  className="w-full border rounded p-2 mb-2"
-                  placeholder="Ask a question..."
+            {/* Video/Main Content */}
+            <div className="w-full flex flex-col items-center mb-6">
+              <h1 className="text-2xl md:text-3xl font-extrabold text-[#1D5554] mt-8 mb-6 text-center">
+                {currentUnit.title}
+              </h1>
+              <div
+                className={`relative w-full aspect-video bg-gray-200 mx-auto flex items-center justify-center overflow-hidden shadow-lg rounded-2xl ${
+                  sidebarOpen ? "max-w-4xl" : "max-w-6xl"
+                }`}
+              >
+                <Image
+                  src="/img/duo-pic1.webp"
+                  alt="Lesson preview"
+                  width={1280}
+                  height={720}
+                  className="object-cover w-full h-full opacity-90"
                 />
-                <div className="text-gray-500 text-sm mb-2">
-                  No questions yet.
+                <button className="absolute inset-0 flex items-center justify-center group">
+                  <span className="bg-white rounded-full shadow-lg p-5 group-hover:scale-110 transition-transform">
+                    <FaPlay className="text-[#1D5554] text-4xl" />
+                  </span>
+                </button>
+              </div>
+            </div>
+            {/* Tabs and About/Transcript Section */}
+            <div className="mt-8 max-w-5xl w-full mx-auto">
+              <div className="bg-white rounded-xl p-6 mb-8">
+                <div className="flex justify-left gap-8 mb-4">
+                  <button
+                    className={`pb-2 px-2 font-bold tracking-tight text-xl border-b-2 transition-all ${
+                      aboutTab === "about"
+                        ? "border-[#1D5554] text-[#1D5554]"
+                        : "border-transparent text-gray-500 hover:text-[#1D5554]"
+                    }`}
+                    onClick={() => setAboutTab("about")}
+                  >
+                    About
+                  </button>
+                  <button
+                    className={`pb-2 px-2 font-bold tracking-tight text-xl border-b-2 transition-all ${
+                      aboutTab === "transcript"
+                        ? "border-[#1D5554] text-[#1D5554]"
+                        : "border-transparent text-gray-500 hover:text-[#1D5554]"
+                    }`}
+                    onClick={() => setAboutTab("transcript")}
+                  >
+                    Transcript
+                  </button>
                 </div>
+                {aboutTab === "about" ? (
+                  <>
+                    <h2 className="font-bold text-xl mb-2 text-[#1D5554]">
+                      Lesson Summary
+                    </h2>
+                    <p className="text-gray-700 mb-2 text-xl">
+                      Learn the best way to approach this lesson. Start by
+                      identifying the claim, then restate it in your own words,
+                      then find the best support in the choices.
+                    </p>
+                    <ul className="list-disc ml-6 text-gray-600 mb-6 text-xl">
+                      <li>Identify the claim</li>
+                      <li>Create a phrase</li>
+                      <li>Test the choices</li>
+                    </ul>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="font-bold text-xl mb-2 text-[#1D5554]">
+                      Transcript
+                    </h2>
+                    <p className="text-gray-700 text-xl">
+                      This is a placeholder transcript for the lesson video. The
+                      full transcript will appear here for accessibility and
+                      review.
+                    </p>
+                  </>
+                )}
+              </div>
+              {/* Questions/Tips & Thanks Section */}
+              <div className="bg-white rounded-xl p-6">
+                <div className="flex justify-left gap-8 mb-4">
+                  <button
+                    className={`pb-2 px-2 font-bold tracking-tight text-xl border-b-2 transition-all ${
+                      qaTab === "questions"
+                        ? "border-[#1D5554] text-[#1D5554]"
+                        : "border-transparent text-gray-500 hover:text-[#1D5554]"
+                    }`}
+                    onClick={() => setQaTab("questions")}
+                  >
+                    Questions
+                  </button>
+                  <button
+                    className={`pb-2 px-2 font-bold tracking-tight text-xl border-b-2 transition-all ${
+                      qaTab === "tips"
+                        ? "border-[#1D5554] text-[#1D5554]"
+                        : "border-transparent text-gray-500 hover:text-[#1D5554]"
+                    }`}
+                    onClick={() => setQaTab("tips")}
+                  >
+                    Tips & Thanks
+                  </button>
+                </div>
+                {qaTab === "questions" ? (
+                  <>
+                    <label
+                      className="block text-gray-700 font-semibold mb-1 text-xl"
+                      htmlFor="question-input"
+                    >
+                      Question
+                    </label>
+                    <div className="flex items-start gap-3 mb-2">
+                      {user?.imageUrl ? (
+                        <Image
+                          src={user.imageUrl}
+                          alt="User avatar"
+                          width={40}
+                          height={40}
+                          className="w-10 h-10 rounded-full object-cover border"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-gray-200 border" />
+                      )}
+                      <textarea
+                        id="question-input"
+                        className="w-full border p-2 rounded resize-y min-h-[48px] text-base"
+                        placeholder="Ask a question..."
+                        rows={2}
+                      />
+                    </div>
+                    <div className="text-gray-500 text-sm mb-2 text-lg mt-4 mb-4">
+                      No questions yet.
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-gray-500 text-sm mb-4 mt-4 text-lg">
+                      No tips or thanks yet.
+                    </div>
+                  </>
+                )}
               </div>
             </div>
-          ) : (
-            <div className="max-w-3xl mx-auto">
-              <div className="bg-white rounded-xl shadow p-6">
-                <h2 className="font-bold text-xl mb-2 text-[#1D5554]">
-                  Transcript
-                </h2>
-                <p className="text-gray-700">
-                  This is a placeholder transcript for the lesson video. The
-                  full transcript will appear here for accessibility and review.
-                </p>
-              </div>
-            </div>
-          )}
+          </div>
         </main>
       </div>
     </div>

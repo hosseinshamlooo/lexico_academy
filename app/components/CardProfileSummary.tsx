@@ -26,7 +26,7 @@ export default function CardProfileSummary({
   const progress = totalSkills > 0 ? skillsUnlocked / totalSkills : 0;
 
   return (
-    <div className="w-full bg-gray-200 rounded-none px-4 md:px-12 py-6 flex flex-row justify-between items-start gap-8 border-b border-gray-100">
+    <div className="w-full bg-gray-50 rounded-none px-4 md:px-12 py-6 flex flex-row justify-between items-start gap-8 border-b border-gray-100">
       {/* Left: Avatar and Welcome */}
       <div className="flex flex-row items-start gap-6 flex-1 min-w-0 ml-40">
         <div className="w-20 h-20 overflow-hidden flex-shrink-0">
