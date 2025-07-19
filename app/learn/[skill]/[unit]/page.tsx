@@ -475,9 +475,14 @@ export default function LearnUnitPage() {
             </div>
           </aside>
         )}
-        {/* Main Content */}
-        <main className="flex-1 flex items-center justify-center ml-8 mr-8">
-          <div className="bg-white h-full w-full max-w-8xl mx-auto flex flex-col relative">
+        {/* Main Content + Right Panel */}
+        <main className="flex-1 flex flex-row gap-8 items-start justify-center ml-8 mr-8">
+          {/* Main Content */}
+          <div
+            className={`bg-white w-full mx-auto flex flex-col relative rounded-2xl transition-all duration-300 ${
+              sidebarOpen ? "max-w-7xl" : "max-w-screen-2xl"
+            } h-[600px]`}
+          >
             {/* Sidebar toggle button inside the main card */}
             <button
               className="absolute left-0 top-1/2 -translate-y-1/2 z-30 p-2 bg-white border border-gray-200 rounded-r-full shadow-md hover:bg-gray-100 transition-all"
@@ -491,12 +496,12 @@ export default function LearnUnitPage() {
               )}
             </button>
             {/* Video/Main Content */}
-            <div className="w-full flex flex-col items-center mb-6">
+            <div className="w-full flex flex-col items-center mb-6 rounded-2xl">
               <h1 className="text-2xl md:text-3xl font-extrabold text-[#1D5554] mt-8 mb-6 text-center">
                 {currentUnit.title}
               </h1>
               <div
-                className={`relative w-full aspect-video bg-gray-200 mx-auto flex items-center justify-center overflow-hidden shadow-lg rounded-2xl ${
+                className={`relative w-full aspect-video bg-gray-200 mx-auto flex items-center justify-center overflow-hidden border rounded-2xl ${
                   sidebarOpen ? "max-w-4xl" : "max-w-6xl"
                 }`}
               >
@@ -633,6 +638,43 @@ export default function LearnUnitPage() {
               </div>
             </div>
           </div>
+          {/* Right Panel */}
+          <aside
+            className={`hidden lg:flex flex-col gap-6 bg-white border border-gray-200 rounded-xl p-4 mt-8 ml-2 transition-all duration-300 ${
+              sidebarOpen
+                ? "w-[420px] min-w-[320px] max-w-lg"
+                : "w-[600px] min-w-[400px] max-w-2xl"
+            } h-[800px]`}
+          >
+            <div>
+              <label
+                htmlFor="lesson-notes"
+                className="block text-gray-700 font-semibold mb-2"
+              >
+                Notes
+              </label>
+              <textarea
+                id="lesson-notes"
+                className="w-full border rounded p-2 min-h-[120px] resize-y mb-2"
+                placeholder="Write your notes here..."
+              />
+              <button className="w-full bg-[#1D5554] text-white font-semibold py-2 rounded-lg hover:bg-[#17403f] transition-colors mb-2">
+                Save Entry
+              </button>
+            </div>
+            <div className="border-t pt-4">
+              <div className="text-gray-700 font-semibold mb-2">Status</div>
+              <button className="w-full border border-[#1D5554] text-[#1D5554] font-semibold py-2 rounded-lg hover:bg-[#e6f4f3] transition-colors">
+                Mark Lesson as Finished
+              </button>
+            </div>
+            <div className="border-t pt-4">
+              <div className="text-gray-700 font-semibold mb-2">
+                Next Lesson
+              </div>
+              <div className="text-gray-500 text-sm">(Coming soon)</div>
+            </div>
+          </aside>
         </main>
       </div>
     </div>
