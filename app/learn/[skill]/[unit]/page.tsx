@@ -65,24 +65,96 @@ const modules = [
 function LearningSkeleton() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <div className="h-16 bg-white border-b animate-pulse" />
+      {/* Header Skeleton */}
+      <div className="w-full flex items-center justify-between px-8 py-4 bg-white shadow-sm animate-pulse">
+        <div className="h-8 w-32 bg-gray-200 rounded" />
+        <div className="h-8 w-48 bg-gray-200 rounded" />
+        <div className="h-8 w-32 bg-gray-200 rounded" />
+      </div>
+      {/* Profile Summary Skeleton */}
+      <div className="w-full bg-gray-50 px-4 md:px-12 py-6 flex flex-row justify-between items-start gap-8 border-b border-gray-100 animate-pulse">
+        <div className="flex-1" />
+        <div className="flex flex-col items-end gap-4 flex-shrink-0 w-full max-w-xl mr-40 mt-4">
+          <div className="flex items-center gap-6 w-full justify-end">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse" />
+              <div className="h-6 w-10 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 w-16 bg-gray-200 rounded animate-pulse" />
+            </div>
+            <div className="w-px h-10 bg-gray-200" />
+            <div className="flex items-center gap-1">
+              <div className="h-6 w-16 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 w-10 bg-gray-200 rounded animate-pulse" />
+            </div>
+            <div className="w-px h-10 bg-gray-200" />
+            <div className="flex flex-col items-start min-w-[240px]">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="h-6 w-24 bg-gray-200 rounded animate-pulse" />
+              </div>
+              <div className="flex items-center w-full gap-3">
+                <div className="relative flex-1 h-3 rounded-full bg-gray-200" />
+                <div className="w-5 h-5 bg-gray-200 rounded-full shadow animate-pulse" />
+                <div className="h-4 w-8 bg-gray-200 rounded animate-pulse" />
+                <div className="h-4 w-12 bg-gray-200 rounded animate-pulse" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Main Content Area */}
       <div className="flex flex-1">
-        <div className="w-72 bg-white border-r p-6 hidden md:block">
-          <div className="h-8 bg-gray-200 rounded mb-4 animate-pulse" />
+        {/* Sidebar Skeleton */}
+        <aside className="relative bg-white border border-gray-100 mx-auto mt-8 mb-12 ml-8 hidden md:flex flex-col items-stretch transition-all duration-300 rounded-2xl overflow-hidden min-w-[220px] max-w-xs w-64 h-[600px] animate-pulse">
+          <div className="h-8 bg-gray-200 rounded m-6 mb-4" />
           {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className="h-6 bg-gray-200 rounded mb-3 animate-pulse"
-            />
+            <div key={i} className="h-6 bg-gray-200 rounded mx-6 mb-3" />
           ))}
-        </div>
-        <div className="flex-1 p-8">
-          <div className="h-80 bg-gray-200 rounded-xl mb-8 animate-pulse" />
-          <div className="h-10 bg-gray-200 rounded w-1/2 mb-4 animate-pulse" />
-          <div className="h-4 bg-gray-200 rounded w-1/3 mb-2 animate-pulse" />
-          <div className="h-4 bg-gray-200 rounded w-2/3 mb-2 animate-pulse" />
-          <div className="h-4 bg-gray-200 rounded w-1/2 mb-2 animate-pulse" />
-        </div>
+          <div className="flex-1" />
+          <div className="bg-gray-100 rounded-xl px-6 py-4 m-4">
+            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+            <div className="h-4 bg-gray-200 rounded w-1/2" />
+          </div>
+        </aside>
+        {/* Main Content + Right Panel */}
+        <main className="flex-1 flex flex-row gap-8 items-start justify-center ml-8 mr-8">
+          {/* Main Content Skeleton */}
+          <div className="bg-white w-full mx-auto flex flex-col relative rounded-2xl transition-all duration-300 max-w-7xl h-[600px] animate-pulse">
+            <div className="w-full flex flex-col items-center mb-6 rounded-2xl">
+              <div className="h-8 bg-gray-200 rounded w-2/3 mt-8 mb-6 animate-pulse" />
+              <div className="relative w-full aspect-video bg-gray-200 mx-auto flex items-center justify-center overflow-hidden rounded-2xl max-w-3xl animate-pulse" />
+            </div>
+            <div className="mt-8 max-w-5xl w-full mx-auto">
+              <div className="bg-gray-100 rounded-xl p-6 mb-8">
+                <div className="h-6 bg-gray-200 rounded w-1/3 mb-4 animate-pulse" />
+                <div className="h-4 bg-gray-200 rounded w-1/2 mb-2 animate-pulse" />
+                <div className="h-4 bg-gray-200 rounded w-2/3 mb-2 animate-pulse" />
+                <div className="h-4 bg-gray-200 rounded w-1/2 mb-2 animate-pulse" />
+              </div>
+              <div className="bg-gray-100 rounded-xl p-6">
+                <div className="h-6 bg-gray-200 rounded w-1/3 mb-4 animate-pulse" />
+                <div className="h-4 bg-gray-200 rounded w-1/2 mb-2 animate-pulse" />
+                <div className="h-4 bg-gray-200 rounded w-2/3 mb-2 animate-pulse" />
+                <div className="h-4 bg-gray-200 rounded w-1/2 mb-2 animate-pulse" />
+              </div>
+            </div>
+          </div>
+          {/* Notes/Status Card Skeleton */}
+          <aside className="hidden lg:flex flex-col gap-6 bg-white border border-gray-200 rounded-xl p-4 min-w-[320px] max-w-lg h-[800px] mt-0 animate-pulse">
+            <div>
+              <div className="h-6 bg-gray-200 rounded w-1/2 mb-4 animate-pulse" />
+              <div className="h-24 bg-gray-100 rounded mb-2 animate-pulse" />
+              <div className="h-10 bg-gray-200 rounded w-full mb-2 animate-pulse" />
+            </div>
+            <div className="border-t pt-4 mt-4">
+              <div className="h-5 bg-gray-200 rounded w-1/3 mb-2 animate-pulse" />
+              <div className="h-10 bg-gray-200 rounded w-full mb-2 animate-pulse" />
+            </div>
+            <div className="border-t pt-4 mt-4">
+              <div className="h-5 bg-gray-200 rounded w-1/3 mb-2 animate-pulse" />
+              <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse" />
+            </div>
+          </aside>
+        </main>
       </div>
     </div>
   );
