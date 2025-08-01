@@ -1,7 +1,7 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 import {
   FaPlay,
-  FaCheckCircle,
   FaClock,
   FaStar,
   FaLock,
@@ -130,8 +130,37 @@ const sectionIcons = [
   { icon: <FaMicrophone className="text-[#1D5554]" />, label: "Speaking" },
 ];
 
-function TestCard({ test }) {
-  const getDifficultyColor = (difficulty) => {
+interface Test {
+  id: number;
+  title: string;
+  description: string;
+  duration: string;
+  questions: number;
+  difficulty: string;
+  status: string;
+  score: number | null;
+  maxScore: number;
+  completedAt: string | null;
+  estimatedScore: number | null;
+}
+
+function TestCard({ test }: { test: Test }) {
+  const router = useRouter();
+
+  const handleCardClick = () => {
+    if (test.status !== "locked") {
+      router.push(`/mock-test/${test.id}`);
+    }
+  };
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click when button is clicked
+    if (test.status !== "locked") {
+      router.push(`/mock-test/${test.id}`);
+    }
+  };
+
+  const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
       case "easy":
         return "text-green-600 bg-green-100";
@@ -141,28 +170,6 @@ function TestCard({ test }) {
         return "text-red-600 bg-red-100";
       default:
         return "text-gray-600 bg-gray-100";
-    }
-  };
-
-  const getStatusIcon = () => {
-    switch (test.status) {
-      case "completed":
-        return <FaCheckCircle className="text-green-500 text-2xl" />;
-      case "locked":
-        return <FaLock className="text-gray-400 text-2xl" />;
-      default:
-        return <FaPlay className="text-[#1D5554] text-2xl" />;
-    }
-  };
-
-  const getStatusText = () => {
-    switch (test.status) {
-      case "completed":
-        return "Completed";
-      case "locked":
-        return "Locked";
-      default:
-        return "Start Test";
     }
   };
 
@@ -178,7 +185,10 @@ function TestCard({ test }) {
   };
 
   return (
-    <div className="relative bg-white rounded-3xl p-6 w-full min-w-[320px] max-w-md transition-all duration-300 border border-gray-200 shadow-md flex flex-col group hover:scale-y-105 hover:-translate-y-2 hover:shadow-2xl hover:bg-[#1D5554] hover:border-[#1D5554] hover:text-white cursor-pointer">
+    <div
+      className="relative bg-white rounded-3xl p-6 w-full min-w-[320px] max-w-md transition-all duration-300 border border-gray-200 shadow-md flex flex-col group hover:scale-y-105 hover:-translate-y-2 hover:shadow-2xl hover:bg-[#1D5554] hover:border-[#1D5554] hover:text-white cursor-pointer"
+      onClick={handleCardClick}
+    >
       {/* Title and difficulty */}
       <div className="flex items-center justify-between mb-2">
         <h3
@@ -220,7 +230,7 @@ function TestCard({ test }) {
           <span>{test.questions} questions</span>
         </div>
       </div>
-      {test.status === "completed" && (
+      {test.status === "completed" && test.score !== null && (
         <div className="mb-4 p-3 bg-green-50 rounded-lg">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-green-700">
@@ -241,14 +251,12 @@ function TestCard({ test }) {
       )}
       <div className="flex items-center justify-between mt-2">
         <div className="flex items-center gap-2">
-          {getStatusIcon()}
-          <span className="text-sm font-medium text-gray-700 group-hover:text-white">
-            {getStatusText()}
-          </span>
+          {/* Removed status icon and text from left side */}
         </div>
         <button
           className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 ${getStatusButtonClass()}`}
           disabled={test.status === "locked"}
+          onClick={handleButtonClick}
         >
           {test.status === "completed" ? (
             <>

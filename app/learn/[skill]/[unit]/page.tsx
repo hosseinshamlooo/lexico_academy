@@ -740,14 +740,22 @@ export default function LearnUnitPage() {
                 Mark Lesson as Finished
               </button>
             </div>
-            <div className="border-t pt-4">
-              <div className="text-gray-700 font-semibold mb-2">
-                Next Lesson
-              </div>
-              <div className="text-gray-500 text-sm">(Coming soon)</div>
-            </div>
+            {/* Removed Next Lesson section */}
           </aside>
         </main>
+      </div>
+      {/* Sticky Up Next Banner */}
+      <div className="fixed bottom-0 left-0 w-full z-50 pointer-events-none">
+        <div className="w-full pointer-events-auto">
+          <div className="bg-white border-t-[3px] border-gray-200 shadow-lg px-4 py-3 flex items-center justify-end gap-4">
+            <button
+              className="bg-[#1D5554] hover:bg-[#17403f] text-white font-semibold px-8 py-3 rounded-lg text-lg shadow transition-colors"
+              style={{ minWidth: 300 }}
+            >
+              Up next: video
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
