@@ -133,8 +133,10 @@ export default function ListeningTestPage() {
   const handleSubmitAnswers = () => {
     if (confirm("Are you sure you want to submit your answers?")) {
       setSubmitted(true);
-      // Handle answer submission logic here
-      alert("Answers submitted!");
+      // Navigate to reading preview after submission
+      setTimeout(() => {
+        router.push(`/mock-test/${testId}/reading-preview`);
+      }, 2000);
     }
   };
 
@@ -174,7 +176,7 @@ export default function ListeningTestPage() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Header Bar */}
-      <header className="w-full flex items-center px-42 py-4 bg-white shadow-sm relative border-2 border-gray-300">
+      <header className="w-full flex items-center px-42 py-4 bg-white relative border-2 border-gray-300">
         <button
           onClick={handleExit}
           className="flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary-selected)] transition-colors z-10"
