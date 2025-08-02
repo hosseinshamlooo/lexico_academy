@@ -63,7 +63,7 @@ export default function MicCheckPage() {
           {/* Prompt Box */}
           <div className="bg-gray-100 rounded-lg p-6 mb-8">
             <p className="text-lg text-gray-700 text-center">
-              &ldquo;Hello introduce yourself.&rdquo;
+              &ldquo;Briefly introduce yourself.&rdquo;
             </p>
           </div>
 

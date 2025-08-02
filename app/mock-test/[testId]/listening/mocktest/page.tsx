@@ -2,16 +2,16 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 import {
-  FaArrowLeft,
-  FaCheck,
-  FaBrain,
+  FaDoorOpen,
   FaChevronLeft,
   FaChevronRight,
   FaPlay,
   FaPause,
   FaVolumeUp,
 } from "react-icons/fa";
+import { FaClock } from "react-icons/fa6";
 
 // Mock test data
 const testData = {
@@ -89,6 +89,7 @@ export default function ListeningTestPage() {
   }>({});
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioProgress, setAudioProgress] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
@@ -129,10 +130,11 @@ export default function ListeningTestPage() {
     console.log("Navigate to question:", questionIndex);
   };
 
-  const handleFinishSection = () => {
-    if (confirm("Are you sure you want to finish this section?")) {
-      // Navigate to next part or finish test
-      alert("Section completed!");
+  const handleSubmitAnswers = () => {
+    if (confirm("Are you sure you want to submit your answers?")) {
+      setSubmitted(true);
+      // Handle answer submission logic here
+      alert("Answers submitted!");
     }
   };
 
@@ -161,33 +163,47 @@ export default function ListeningTestPage() {
     setAudioProgress(0);
   };
 
+  const allQuestionsAnswered = () => {
+    return testData.questions.every(
+      (question) =>
+        selectedAnswers[question.id] &&
+        selectedAnswers[question.id].trim() !== ""
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Header Bar */}
-      <div className="bg-gray-800 px-6 py-4 flex items-center justify-between">
+      <header className="w-full flex items-center px-42 py-4 bg-white shadow-sm relative border-2 border-gray-300">
         <button
           onClick={handleExit}
-          className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
+          className="flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary-selected)] transition-colors z-10"
         >
-          <FaArrowLeft className="text-lg" />
-          <span className="font-semibold">EXIT</span>
+          <FaDoorOpen className="text-xl" />
+          <span className="font-bold tracking-tighter">EXIT</span>
         </button>
 
-        <div className="flex items-center gap-4 text-white">
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 bg-white rounded-full"></div>
-            <span className="font-semibold">{formatTime(timeLeft)} LEFT</span>
+            <Image
+              src="/img/duo-picmain.svg"
+              alt="Lexico Logo"
+              width={32}
+              height={32}
+            />
+            <span className="text-2xl font-extrabold text-[var(--color-primary)] tracking-tighter">
+              Lexico Academy
+            </span>
           </div>
         </div>
 
-        <button
-          onClick={handleFinishSection}
-          className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
-        >
-          <span className="font-semibold">FINISH SECTION</span>
-          <FaCheck className="text-lg" />
-        </button>
-      </div>
+        <div className="flex items-center gap-2 ml-auto">
+          <FaClock className="text-[var(--color-primary)] text-xl" />
+          <span className="font-extrabold tracking-tighter text-[var(--color-primary)]">
+            {formatTime(timeLeft)}
+          </span>
+        </div>
+      </header>
 
       {/* Main Content */}
       <div className="flex-1 p-6">
@@ -329,7 +345,7 @@ export default function ListeningTestPage() {
                                     e.target.value
                                   )
                                 }
-                                className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                                className="w-4 h-4 text-[#1D5554] border-gray-300 focus:ring-[#1D5554] accent-[#1D5554]"
                               />
                               <span className="font-bold text-base mr-2 text-[var(--color-primary)]">
                                 {String.fromCharCode(65 + optionIndex)}
@@ -356,63 +372,76 @@ export default function ListeningTestPage() {
                   </div>
                 ))}
               </div>
+
+              {/* Submit Answers Button */}
+              <div className="mt-6 pt-4 border-t border-gray-200 flex-shrink-0">
+                {!submitted ? (
+                  <button
+                    onClick={handleSubmitAnswers}
+                    disabled={!allQuestionsAnswered()}
+                    className="w-full bg-[#1D5554] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#174342] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Submit Answers
+                  </button>
+                ) : (
+                  <div className="text-center py-3">
+                    <span className="text-green-600 font-medium">
+                      Answers submitted successfully!
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Footer Navigation */}
-      <div className="bg-gray-800 px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* Part Navigation */}
-          <div className="flex items-center gap-6">
-            {[1, 2, 3, 4].map((part) => (
-              <div key={part} className="flex flex-col items-center">
-                <span className="text-white text-sm font-semibold mb-2">
-                  Part {part}
-                </span>
-                <div className="flex gap-1">
-                  {Array.from({ length: 10 }, (_, i) => {
-                    const questionNumber = (part - 1) * 10 + i + 1;
-                    const isCurrentQuestion =
-                      questionNumber === testData.currentQuestion;
-                    const isAnswered = selectedAnswers[questionNumber];
+      <header className="w-full flex items-center px-8 py-4 bg-white shadow-sm relative sticky bottom-0 z-50">
+        <div className="flex items-center gap-6">
+          {[1, 2, 3, 4].map((part) => (
+            <div key={part} className="flex flex-col items-center">
+              <span className="text-[var(--color-primary)] text-sm font-semibold mb-2">
+                Part {part}
+              </span>
+              <div className="flex gap-1">
+                {Array.from({ length: 10 }, (_, i) => {
+                  const questionNumber = (part - 1) * 10 + i + 1;
+                  const isCurrentQuestion =
+                    questionNumber === testData.currentQuestion;
+                  const isAnswered = selectedAnswers[questionNumber];
 
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => handleQuestionNavigation(i)}
-                        className={`w-6 h-6 rounded-full text-xs font-bold transition-colors ${
-                          isCurrentQuestion
-                            ? "bg-blue-500 text-white"
-                            : isAnswered
-                            ? "bg-green-500 text-white"
-                            : "bg-gray-600 text-white hover:bg-gray-500"
-                        }`}
-                      >
-                        {questionNumber}
-                      </button>
-                    );
-                  })}
-                </div>
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => handleQuestionNavigation(i)}
+                      className={`w-6 h-6 rounded-full text-xs font-bold transition-colors ${
+                        isCurrentQuestion
+                          ? "bg-[#1D5554] text-white"
+                          : isAnswered
+                          ? "bg-[#1D5554] text-white"
+                          : "bg-gray-300 text-gray-600 hover:bg-gray-400"
+                      }`}
+                    >
+                      {questionNumber}
+                    </button>
+                  );
+                })}
               </div>
-            ))}
-          </div>
-
-          {/* Navigation Arrows */}
-          <div className="flex items-center gap-3">
-            <button className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white hover:bg-gray-600 transition-colors">
-              <FaChevronLeft />
-            </button>
-            <button className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white hover:bg-gray-600 transition-colors">
-              <FaChevronRight />
-            </button>
-            <button className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white hover:bg-gray-600 transition-colors">
-              <FaBrain />
-            </button>
-          </div>
+            </div>
+          ))}
         </div>
-      </div>
+
+        {/* Navigation Arrows */}
+        <div className="flex items-center gap-3 ml-auto">
+          <button className="w-10 h-10 bg-[#1D5554] rounded-full flex items-center justify-center text-white hover:bg-[#174342] transition-colors">
+            <FaChevronLeft />
+          </button>
+          <button className="w-10 h-10 bg-[#1D5554] rounded-full flex items-center justify-center text-white hover:bg-[#174342] transition-colors">
+            <FaChevronRight />
+          </button>
+        </div>
+      </header>
     </div>
   );
 }
